@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package controller;
 
 import java.io.IOException;
@@ -14,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import static utils.Constants.*;
 import model.Employee;
 import model.DBActions;
@@ -39,9 +36,9 @@ public class controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println("COUCOU JE SUIS DANS LE CONTROLEUR AHAHAHAHAHAHAHAHAHAHAHAHAHAHA");
+        
         if (request.getParameter("action") == null) {
-            request.getRequestDispatcher(JSP_ADD).forward(request, response);
+            request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
         }
         String action = request.getParameter("action");
         
@@ -55,6 +52,8 @@ public class controller extends HttpServlet {
             
                 if (dba.checkCredentials(userInput)) {
                     request.setAttribute("empList", dba.getEmployees());
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", userInput);
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                 } else {
                     request.setAttribute("errKey", ERR_MESSAGE);
@@ -72,26 +71,32 @@ public class controller extends HttpServlet {
                 System.out.println("we add");
                 request.getRequestDispatcher(JSP_ADD).forward(request, response);
                 break;
+            case "Save":
+                DBActions dba2 = new DBActions();
+                Employee addEmployee = new Employee();
+                addEmployee.setName(request.getParameter("inputNom"));
+                addEmployee.setFirstname(request.getParameter("inputPrenom"));
+                addEmployee.setHomePhone(request.getParameter("inputTelDom"));
+                addEmployee.setMobilePhone(request.getParameter("inputTelMob"));
+                addEmployee.setWorkPhone(request.getParameter("inputTelPro"));
+                addEmployee.setAdress(request.getParameter("inputAdresse"));
+                addEmployee.setPostalCode(request.getParameter("inputCodePostal"));
+                addEmployee.setCity(request.getParameter("inputVille"));
+                addEmployee.setEmail(request.getParameter("inputAdresseMail"));
+                dba2.createEmployee(addEmployee);
+                
+                request.setAttribute("empList", dba2.getEmployees());
+                
+                request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
+                
+                break;
+            case "Cancel":
+                request.setAttribute("empList", dba.getEmployees());
+                request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
             default:
                 request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
                 
         }
-        /*if (request.getParameter("action") == null) {
-            request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
-        } else {
-            dba = new DBActions();
-            
-            Employee userInput = new Employee();
-            userInput.setName(request.getParameter("loginField"));
-            userInput.setFirstname(request.getParameter("pwdField"));
-            
-            if (dba.checkCredentials(userInput)) {
-                request.setAttribute("empList", dba.getEmployees());
-                request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
-            } else {
-                request.setAttribute("errKey", ERR_MESSAGE);
-                request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
-            }*/
 
         }
     

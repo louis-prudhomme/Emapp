@@ -51,6 +51,17 @@ public class DBActions {
         return rs;
 
     }
+    
+    public ResultSet getResultSet2(String query) {
+        stmt = getStatement();
+        try {
+           stmt.executeUpdate(query);
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+        return rs;
+
+    }
 
     public ArrayList<Employee> getEmployee() {
         listEmployees = new ArrayList<>();
@@ -105,6 +116,20 @@ public class DBActions {
             System.out.println(e.getMessage());
         }
         return listEmployees;
+    }
+    
+    public void createEmployee(Employee e){
+        String name = e.getName();
+        String firstname = e.getFirstname();
+        String telhome = e.getHomePhone();
+        String telmob = e.getMobilePhone();
+        String telpro = e.getWorkPhone();
+        String adress = e.getAdress();
+        String postalCode = e.getPostalCode();
+        String city = e.getCity();
+        String email = e.getEmail();
+        String query = "INSERT INTO EMPLOYEES(NAME, FIRSTNAME, TELHOME, TELMOB, TELPRO, ADRESS, POSTALCODE, CITY, EMAIL) VALUES ('"+name+"','"+firstname+"','"+telhome+"','"+telmob+"','"+telpro+"','"+adress+"','"+postalCode+"','"+city+"','"+email+"')"; 
+        getResultSet2(query);
     }
     
     

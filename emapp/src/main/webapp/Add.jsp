@@ -21,43 +21,43 @@
             <div class="form-group row">
                 <label for="InputNom" class="col-sm-2 col-form-label">Nom</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputNom" placeholder="Nom">
+                    <input type="text" class="form-control" name="inputNom" placeholder="Nom">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPrenom" class="col-sm-2 col-form-label">Prénom</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputPrenom" placeholder="Prénom">
+                    <input type="text" class="form-control" name="inputPrenom" placeholder="Prénom">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputTelDom" class="col-sm-2 col-form-label">Tél dom</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputTelDom" placeholder="Tél dom">
+                    <input type="text" class="form-control" name="inputTelDom" placeholder="Tél dom">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputTelMob" class="col-sm-2 col-form-label">Tél mob</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputTelMob" placeholder="Tél Mob">
+                    <input type="text" class="form-control" name="inputTelMob" placeholder="Tél Mob">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputTelPro" class="col-sm-2 col-form-label">Tél pro</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputTelPro" placeholder="Tél pro">
+                    <input type="text" class="form-control" name="inputTelPro" placeholder="Tél pro">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputAdresse" class="col-sm-2 col-form-label">Adresse</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputAdresse" placeholder="Adresse">
+                    <input type="text" class="form-control" name="inputAdresse" placeholder="Adresse">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputCodePostal" class="col-sm-2 col-form-label">Code Postal</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputCodePostal" placeholder="Code Postal">
+                    <input type="text" class="form-control" name="inputCodePostal" placeholder="Code Postal">
                 </div>
             </div>
             <div class="form-row">                
@@ -65,13 +65,13 @@
                    <label for="inputVille" class="">Ville</label> 
                 </div>
                 <div class="form-group col-md-3"> 
-                   <input type="text" class="form-control" id="inputVille" placeholder="Ville"> 
+                   <input type="text" class="form-control" name="inputVille" placeholder="Ville"> 
                 </div>
                 <div class="form-group col-sm-3">
                    <label for="inputAdresseMail" class="center-block">Adresse e-mail</label>
                 </div>
                 <div class="form-group col-md-3">
-                   <input type="text" class="form-control" id="inputAdresseMail" placeholder="adresse e-mail">
+                   <input type="text" class="form-control" name="inputAdresseMail" placeholder="adresse e-mail">
                 </div>
             </div>
             <div class="form-row">

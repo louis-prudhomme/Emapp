@@ -11,7 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Home</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        
+        <link type="text/css" rel="stylesheet" href="CssCode.css">
     </head>
     <body>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -22,26 +22,28 @@
             <c:out value="${errKey}" />       
         </div>
     </c:if>
-    <div class="container"> 
-  <form name="registering" action="controller">
-   
-  <div class="form-group row">
-    <label for="exampleInputEmail1" class="col-sm-2 col-form-label">Login : </label>
-    <div class="col-sm-10">
-    <input type='text' name='loginField' placeholder="Login">
+
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+    </br>
+    <!-- Icon -->
+    <div class="fadeIn first">
+        <img class="resize" src="https://pngimage.net/wp-content/uploads/2018/06/logo-user-png-6.png" id="icon" alt="User Icon"  />
     </div>
+    </br>
+    <!-- Login Form -->
+    <form name="registering" action="controller">
+      <input type='text' name='loginField' class="fadeIn second" placeholder="Login">      
+      <input type='text' name='pwdField' class="fadeIn third" placeholder="Password">
+      <input type='submit' class="fadeIn fourth" name='action' value='Login'>
+    </form>
+
+    <!-- Remind Passowrd -->
+    <div id="formFooter">
+      <a class="underlineHover" href="#">Forgot Password?</a>
+    </div>
+
   </div>
-  <div class="form-group row">
-    <label for="exampleInputPassword1" class="col-sm-2 col-form-label">Password : </label>
-    <div class="col-sm-10">
-    <input type='text' name='pwdField' placeholder="Password">
-    </div>
-  </div>     
-      <div class="form-group">
-        <input type='submit' class="btn btn-primary center-block" name='action' value='Login'>         
-      </div>
-</form>
-</body>
-     
-</div> 
+</div>
 </html>
