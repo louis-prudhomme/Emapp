@@ -34,8 +34,8 @@
     </br>
     <!-- Login Form -->
     <form name="registering" action="controller">
-      <input type='text' name='loginField' class="fadeIn second" placeholder="Login">      
-      <input type='text' name='pwdField' class="fadeIn third" placeholder="Password">
+      <input type='text' name='loginField' class="fadeIn second" placeholder="Login" required>       
+      <input type='text' name='pwdField' class="fadeIn third" placeholder="Password" required>
       <input type='submit' class="fadeIn fourth" name='action' value='Login'>
     </form>
 

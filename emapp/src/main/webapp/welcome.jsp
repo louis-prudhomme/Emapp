@@ -21,22 +21,27 @@
        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <h1>List of Employees</h1>
+        
+        <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+            <button id = "logOutButton" type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm">
+                <span class="glyphicon glyphicon-log-out"></span> Log out
+            </button>
+             <h1>List of Employees</h1>
+        </nav>
+       
         </br>
         <p>Hello ${user.getFirstname()}! Your session is active </p>
                
         
 
+        <!--Logout button-->
         
-        <button id = "logOutButton" type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm">
-          <span class="glyphicon glyphicon-log-out"></span> Log out
-        </button>
         
         </br>
         <form name="welcome" action="controller">
             
     
-
+        <!--Pop up for the logout-->
         <div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm">
                 <div class="modal-content">
@@ -71,10 +76,12 @@
                     <c:if test="${!employee.name.equals('admin')}">
         
                         <tr> 
-                            <td> 
+                            <td>
+                                
                             <div class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" id="check">   
-                            </div>                           
+                                <input type="radio" class="form-check-input" name = "check" value= ${employee.id}>   
+                            </div> 
+                                
                             </td>
                             <td>  ${employee.name}</td>
                             <td>  ${employee.firstname}    </td>

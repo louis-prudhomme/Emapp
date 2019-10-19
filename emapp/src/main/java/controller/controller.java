@@ -39,20 +39,19 @@ public class controller extends HttpServlet {
         
         if (request.getParameter("action") == null) {
             request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
-        }
+            
+        }else{       
         String action = request.getParameter("action");
-        
+        HttpSession session = request.getSession();
         switch(action){
             case "Login" :
-                dba = new DBActions();
-            
+                dba = new DBActions();           
                 Employee userInput = new Employee();
                 userInput.setName(request.getParameter("loginField"));
                 userInput.setFirstname(request.getParameter("pwdField"));
             
                 if (dba.checkCredentials(userInput)) {
-                    request.setAttribute("empList", dba.getEmployees());
-                    HttpSession session = request.getSession();
+                    request.setAttribute("empList", dba.getEmployees(QUERY_SEL_EMPLOYEES));
                     session.setAttribute("user", userInput);
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                 } else {
@@ -61,18 +60,20 @@ public class controller extends HttpServlet {
                 }
                 break;
             case "Delete":
-                System.out.println("we delete");
+                String id = request.getParameter("check");
+                dba.deleteEmployee(id);                
+                request.setAttribute("empList", dba.getEmployees(QUERY_SEL_EMPLOYEES));
+                request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                 break;
             case "Details":
-                System.out.println("we ask for details");
-                
-                break;
-            case "Add":
-                System.out.println("we add");
+                String idD = request.getParameter("check");               
+                session.setAttribute("employeeChecked",dba.getEmployeeDetails(idD));              
                 request.getRequestDispatcher(JSP_ADD).forward(request, response);
                 break;
-            case "Save":
-                DBActions dba2 = new DBActions();
+            case "Add":
+                request.getRequestDispatcher(JSP_ADD).forward(request, response);
+                break;
+            case "Save":  
                 Employee addEmployee = new Employee();
                 addEmployee.setName(request.getParameter("inputNom"));
                 addEmployee.setFirstname(request.getParameter("inputPrenom"));
@@ -83,19 +84,26 @@ public class controller extends HttpServlet {
                 addEmployee.setPostalCode(request.getParameter("inputCodePostal"));
                 addEmployee.setCity(request.getParameter("inputVille"));
                 addEmployee.setEmail(request.getParameter("inputAdresseMail"));
-                dba2.createEmployee(addEmployee);
                 
-                request.setAttribute("empList", dba2.getEmployees());
-                
+                if(session.getAttribute("employeeChecked")!=null){                  
+                    dba.updateEmployee(((Employee) session.getAttribute("employeeChecked")).getId(), addEmployee);
+                    session.removeAttribute("employeeChecked");
+                }else{                               
+                    dba.createEmployee(addEmployee);              
+                }
+                request.setAttribute("empList", dba.getEmployees(QUERY_SEL_EMPLOYEES)); 
                 request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                 
                 break;
             case "Cancel":
-                request.setAttribute("empList", dba.getEmployees());
+                if(session.getAttribute("employeeChecked")!=null){                  
+                    session.removeAttribute("employeeChecked");
+                }
+                request.setAttribute("empList", dba.getEmployees(QUERY_SEL_EMPLOYEES));
                 request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
             default:
                 request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
-                
+        }      
         }
 
         }
