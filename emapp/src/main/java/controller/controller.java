@@ -2,6 +2,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Properties;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,6 +38,16 @@ public class controller extends HttpServlet {
         
         response.setContentType("text/html;charset=UTF-8");
         
+        Properties prop = new Properties();
+        input = getServletContext().getResourceAsStream(PROP_FILE_PATH);
+        prop.load(input);
+        
+        dbUrl = prop.getProperty("dbUrl");
+        dbUser = prop.getProperty("dbUser");
+        dbPwd = prop.getProperty("dbPwd");
+        dba = new DBActions(dbUrl, dbUser, dbPwd);
+        
+        
         if (request.getParameter("action") == null) {
             request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
             
@@ -44,8 +55,7 @@ public class controller extends HttpServlet {
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
         switch(action){
-            case "Login" :
-                dba = new DBActions();           
+            case "Login" :                     
                 Employee userInput = new Employee();
                 userInput.setName(request.getParameter("loginField"));
                 userInput.setFirstname(request.getParameter("pwdField"));
