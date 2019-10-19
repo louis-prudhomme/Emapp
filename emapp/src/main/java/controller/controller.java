@@ -66,9 +66,14 @@ public class controller extends HttpServlet {
                 request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                 break;
             case "Details":
-                String idD = request.getParameter("check");               
-                session.setAttribute("employeeChecked",dba.getEmployeeDetails(idD));              
-                request.getRequestDispatcher(JSP_ADD).forward(request, response);
+                String idD = request.getParameter("check"); 
+                if(idD != null){
+                    session.setAttribute("employeeChecked",dba.getEmployeeDetails(idD));              
+                    request.getRequestDispatcher(JSP_ADD).forward(request, response);
+                }else{
+                    request.setAttribute("empList", dba.getEmployees(QUERY_SEL_EMPLOYEES));
+                    request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
+                }
                 break;
             case "Add":
                 request.getRequestDispatcher(JSP_ADD).forward(request, response);
@@ -92,8 +97,7 @@ public class controller extends HttpServlet {
                     dba.createEmployee(addEmployee);              
                 }
                 request.setAttribute("empList", dba.getEmployees(QUERY_SEL_EMPLOYEES)); 
-                request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
-                
+                request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);               
                 break;
             case "Cancel":
                 if(session.getAttribute("employeeChecked")!=null){                  
