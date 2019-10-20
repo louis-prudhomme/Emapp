@@ -267,10 +267,6 @@ public abstract class DBObject {
      * @return all the records
      * @throws PreparedQueryException
      * @throws SQLException
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     * @throws InstantiationException
      * @throws DBObjectException
      */
     public static <T extends DBObject> ArrayList<T> selectAll(DBLink dbLink, Class<T> target) throws SQLException, PreparedQueryException, DBObjectException {

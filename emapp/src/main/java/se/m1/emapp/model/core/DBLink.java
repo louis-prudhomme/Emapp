@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class DBLink {
     /**
      * default driver
-     * //todo put that a proper configuration file (pom ?)
+     * //todo put that in a proper configuration file (pom ?)
      */
     private static final String DEFAULT_DRIVER = "com.mysql.jdbc.Driver";
 
@@ -81,7 +81,7 @@ public class DBLink {
     /**
      * issues a new prepared query
      * @param query string with wildcards ( "?" )
-     * @param expectedParameterTypes
+     * @param expectedParameterTypes list of the expected parameters types
      * @return
      * @throws SQLException
      * @throws WrongPreparedQueryParemeterCountException if the parameter count doesn't match with the query

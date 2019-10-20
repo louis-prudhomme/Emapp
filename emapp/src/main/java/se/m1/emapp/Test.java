@@ -1,5 +1,6 @@
 package se.m1.emapp;
 
+import se.m1.emapp.model.business.AppDbHelper;
 import se.m1.emapp.model.business.Employee;
 import se.m1.emapp.model.core.DBLink;
 
@@ -13,27 +14,8 @@ public class Test {
 
             dbLink.connect();
 
-            ArrayList<Employee> employees = Employee.selectAll(dbLink, Employee.class);
-
-            for(Employee e: employees) {
-                System.out.println(e.getName());
-            }
-
-            employees.get(1).setName("marilyn manson");
-            employees.get(1).update();
-
-            Employee e1 = new Employee(dbLink, employees.get(1).getId());
-            e1.read();
-            System.out.println(e1.getName());
-
-            Employee e2 = new Employee(dbLink, "jar jar binks");
-            e2.create();
-
-            employees = Employee.selectAll(dbLink, Employee.class);
-
-            for(Employee e: employees) {
-                System.out.println(e.getName());
-            }
+            Employee employee = new AppDbHelper(dbLink).checkCredentials("jar jar", "binks");
+            System.out.println(employee.getName());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -8,16 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//TODO
-/*
-check credentials
-employees crud
-    create
-    read
-    update
-    delete
- */
-
 /**
  * represents a prepared query ;
  * is essentially a java prepared statement throwing exception when type mismatch
