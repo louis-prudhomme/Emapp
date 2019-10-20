@@ -1,4 +1,4 @@
-package se.m1.emapp.model;
+package se.m1.emapp.model.core;
 
 public enum PreparedStatementTypes {
     BOOLEAN,

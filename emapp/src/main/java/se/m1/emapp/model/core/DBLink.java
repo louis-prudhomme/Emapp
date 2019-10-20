@@ -1,7 +1,7 @@
-package se.m1.emapp.model;
+package se.m1.emapp.model.core;
 
-import se.m1.emapp.model.exception.DriverNotFoundException;
-import se.m1.emapp.model.exception.WrongPreparedQueryParemeterCountException;
+import se.m1.emapp.model.core.exception.DriverNotFoundException;
+import se.m1.emapp.model.core.exception.WrongPreparedQueryParemeterCountException;
 
 import java.sql.*;
 import java.util.ArrayList;

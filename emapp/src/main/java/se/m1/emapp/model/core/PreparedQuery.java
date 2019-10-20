@@ -1,6 +1,6 @@
-package se.m1.emapp.model;
+package se.m1.emapp.model.core;
 
-import se.m1.emapp.model.exception.*;
+import se.m1.emapp.model.core.exception.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,6 +67,43 @@ public class PreparedQuery {
     }
 
     /**
+     *
+     * @param id executes a query with only the id as parameter
+     * @return result of the query, usually the number of affected lines (should be one ?)
+     * @throws PreparedQueryException
+     * @throws SQLException
+     */
+    public int executeUpdate(int id) throws PreparedQueryException, SQLException {
+        ArrayList<String> p = new ArrayList<>();
+        p.add(String.valueOf(id));
+        return this.executeUpdate(p);
+    }
+
+    /**
+     *
+     * @return result of the query, usually the number of affected lines (should be one ?)
+     * @throws PreparedQueryException
+     * @throws SQLException
+     */
+    public int executeUpdate() throws PreparedQueryException, SQLException {
+        ArrayList<String> p = new ArrayList<>();
+        expectedParameterTypes = new ArrayList<>();
+        return this.executeUpdate(p);
+    }
+
+    /**
+     *
+     * @return result of the query, usually the number of affected lines (should be one ?)
+     * @throws PreparedQueryException
+     * @throws SQLException
+     */
+    public ResultSet executeQuery() throws PreparedQueryException, SQLException {
+        ArrayList<String> p = new ArrayList<>();
+        expectedParameterTypes = new ArrayList<>();
+        return this.executeQuery(p);
+    }
+
+    /**
      * executes a query with the given parameters
      * @param parameters list of the given parameters
      * @return result of the query
@@ -74,6 +111,29 @@ public class PreparedQuery {
      * @throws SQLException
      */
     public ResultSet executeQuery(ArrayList<String> parameters) throws PreparedQueryException, SQLException {
+        checkQuery(parameters);
+        return preparedStatement.executeQuery();
+    }
+
+    /**
+     * executes a query with the given parameters
+     * @param parameters list of the given parameters
+     * @return result of the query
+     * @throws PreparedQueryException
+     * @throws SQLException
+     */
+    public int executeUpdate(ArrayList<String> parameters) throws PreparedQueryException, SQLException {
+        checkQuery(parameters);
+        return preparedStatement.executeUpdate();
+    }
+
+    /**
+     * checks incoming parameters for the query
+     * @param parameters list of the desired parameters for the next execution
+     * @throws PreparedQueryException
+     * @throws SQLException
+     */
+    private void checkQuery(ArrayList<String> parameters) throws PreparedQueryException, SQLException {
         preparedStatement.clearParameters();
         if(parameters.size() > expectedParameterTypes.size()) {
             throw new TooMuchPreparedQueryParametersException();
@@ -85,7 +145,6 @@ public class PreparedQuery {
             } catch (NumberFormatException e) {
                 throw new WrongPreparedQueryParameterException();
             }
-            return preparedStatement.executeQuery();
         }
     }
 
@@ -120,7 +179,7 @@ public class PreparedQuery {
      * @return
      */
     public static boolean doesQueryMatchesExpectedParameters(String query, ArrayList<PreparedStatementTypes> preparedStatementTypes) {
-        return preparedStatementTypes.size() != query.chars().filter(shar -> shar == '?').count();
+        return preparedStatementTypes.size() == query.chars().filter(shar -> shar == '?').count();
     }
 
     /**
@@ -129,6 +188,6 @@ public class PreparedQuery {
      * @return
      */
     public static boolean doesQueryMatchesExpectedParameters(String query) {
-        return 1 != query.chars().filter(shar -> shar == '?').count();
+        return 1 >= query.chars().filter(shar -> shar == '?').count();
     }
 }
