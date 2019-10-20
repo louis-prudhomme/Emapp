@@ -1,4 +1,4 @@
-package utils;
+package se.m1.emapp.utils;
 
 /**
  * represents a tuple

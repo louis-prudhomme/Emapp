@@ -1,7 +1,7 @@
 package se.m1.emapp.model.core;
 
 import se.m1.emapp.model.core.exception.*;
-import utils.Tuple;
+import se.m1.emapp.utils.Tuple;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -106,7 +106,7 @@ public abstract class DBObject {
      * @throws DBObjectException
      * @throws SQLException
      */
-    protected void parseResultSet(ResultSet resultSet) throws DBObjectException, SQLException {
+    void parseResultSet(ResultSet resultSet) throws DBObjectException, SQLException {
         HashMap<String, Tuple<Class, Object>> fieldsAndValues = getFieldsAndValues();
         for (String field : fieldsAndValues.keySet()) {
             if(!field.equals("id")) {
@@ -235,7 +235,7 @@ public abstract class DBObject {
                 return PreparedStatementTypes.FLOAT;
             case "String":
                 return PreparedStatementTypes.STRING;
-            case "Boolean":
+            case "boolean":
                 return PreparedStatementTypes.BOOLEAN;
             default:
                 throw new DBObjectCannotDetectFieldType();

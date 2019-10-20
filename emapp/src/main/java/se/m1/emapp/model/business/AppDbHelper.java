@@ -5,7 +5,6 @@ import se.m1.emapp.model.core.PreparedQuery;
 import se.m1.emapp.model.core.PreparedStatementTypes;
 import se.m1.emapp.model.core.exception.DBObjectException;
 import se.m1.emapp.model.core.exception.PreparedQueryException;
-import se.m1.emapp.model.core.exception.WrongPreparedQueryParemeterCountException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,18 +30,21 @@ public class AppDbHelper {
 
     /**
      * returns a matching employee
-     * @param name duh
      * @param firstName duh
+     * @param lastName duh
      * @return matching employee
      * @throws SQLException
      * @throws PreparedQueryException
      */
-    public Employee checkCredentials(String name, String firstName) throws SQLException, PreparedQueryException, DBObjectException {
-        String query = "SELECT id FROM EMPLOYEE WHERE name = ? AND firstname = ?";
-        ArrayList<PreparedStatementTypes> parametersTypes = new ArrayList<>(Arrays.asList(PreparedStatementTypes.STRING,PreparedStatementTypes.STRING));
-        ArrayList<String> parameters = new ArrayList<>(Arrays.asList(name, firstName));
+    public Employee checkCredentials(String firstName, String lastName) throws SQLException, PreparedQueryException, DBObjectException {
+        String query = "SELECT id FROM EMPLOYEE WHERE firstName = ? AND lastName = ?";
+
+        ArrayList<PreparedStatementTypes> parametersTypes = new ArrayList<>(Arrays.asList(PreparedStatementTypes.STRING, PreparedStatementTypes.STRING));
+        ArrayList<String> parameters = new ArrayList<>(Arrays.asList(firstName, lastName));
+
         PreparedQuery preparedQuery = dbLink.prepareQuery(query, parametersTypes);
         ResultSet resultSet = preparedQuery.executeQuery(parameters);
+
         if(resultSet.next()) {
             Employee e = new Employee(dbLink, resultSet.getInt("id"));
             e.read();
