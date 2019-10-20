@@ -23,9 +23,9 @@ public class DBActions {
     ArrayList<Employee> listEmployees;
     
     
-    public DBActions(){
+    public DBActions(String dbUrl, String dbUser, String dbPwd){
         try {
-            conn = DriverManager.getConnection(URL, USER, PWD);
+            conn = DriverManager.getConnection(dbUrl, dbUser, dbPwd);
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
