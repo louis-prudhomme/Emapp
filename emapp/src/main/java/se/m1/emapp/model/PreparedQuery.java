@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 //TODO
 /*
@@ -17,16 +18,61 @@ employees crud
     delete
  */
 
+/**
+ * represents a prepared query ;
+ * is essentially a java prepared statement throwing exception when type mismatch
+ * it cleans itself before each execution and can thus be reused
+ */
 public class PreparedQuery {
+    /**
+     * corresponding prepared statement
+     */
     private PreparedStatement preparedStatement;
 
+    /**
+     * types expected for query evaluation
+     */
     private ArrayList<PreparedStatementTypes> expectedParameterTypes;
 
+    /**
+     * this constructor serves when the only parameter in the query is an id
+     * @param preparedStatement corresponding prepared statement
+     */
+    PreparedQuery(PreparedStatement preparedStatement) {
+        this.preparedStatement = preparedStatement;
+        this.expectedParameterTypes = new ArrayList<>(Arrays.asList(PreparedStatementTypes.INT));
+    }
+
+    /**
+     * default constructor
+     * @param preparedStatement corresponding prepared statement
+     * @param expectedParameterTypes types expected for query evaluation
+     */
     PreparedQuery(PreparedStatement preparedStatement, ArrayList<PreparedStatementTypes> expectedParameterTypes) {
         this.preparedStatement = preparedStatement;
         this.expectedParameterTypes = expectedParameterTypes;
     }
 
+    /**
+     *
+     * @param id executes a query with only the id as parameter
+     * @return result of the query, usually the number of affected lines (should be one ?)
+     * @throws PreparedQueryException
+     * @throws SQLException
+     */
+    public ResultSet executeQuery(int id) throws PreparedQueryException, SQLException {
+        ArrayList<String> p = new ArrayList<>();
+        p.add(String.valueOf(id));
+        return this.executeQuery(p);
+    }
+
+    /**
+     * executes a query with the given parameters
+     * @param parameters list of the given parameters
+     * @return result of the query
+     * @throws PreparedQueryException
+     * @throws SQLException
+     */
     public ResultSet executeQuery(ArrayList<String> parameters) throws PreparedQueryException, SQLException {
         preparedStatement.clearParameters();
         if(parameters.size() > expectedParameterTypes.size()) {
@@ -35,7 +81,7 @@ public class PreparedQuery {
             throw new TooFewPreparedQueryParametersException();
         } else {
             try {
-                treatParameters(parameters);
+                this.treatParameters(parameters);
             } catch (NumberFormatException e) {
                 throw new WrongPreparedQueryParameterException();
             }
@@ -43,6 +89,11 @@ public class PreparedQuery {
         }
     }
 
+    /**
+     * enforces type check on the query’s parameters
+     * @param parameters given parameters
+     * @throws SQLException
+     */
     private void treatParameters(ArrayList<String> parameters) throws SQLException {
         for (int i = 0; i < parameters.size(); i++) {
             switch (expectedParameterTypes.get(i)){
@@ -60,5 +111,24 @@ public class PreparedQuery {
                     preparedStatement.setString(i + 1, parameters.get(i));
             }
         }
+    }
+
+    /**
+     * checks if a query has the correct amount of parameters
+     * @param query target query
+     * @param preparedStatementTypes
+     * @return
+     */
+    public static boolean doesQueryMatchesExpectedParameters(String query, ArrayList<PreparedStatementTypes> preparedStatementTypes) {
+        return preparedStatementTypes.size() != query.chars().filter(shar -> shar == '?').count();
+    }
+
+    /**
+     * checks if a query has one parameter (id targeted queries)
+     * @param query target query
+     * @return
+     */
+    public static boolean doesQueryMatchesExpectedParameters(String query) {
+        return 1 != query.chars().filter(shar -> shar == '?').count();
     }
 }
