@@ -1,6 +1,7 @@
 package se.m1.emapp.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +14,8 @@ import se.m1.emapp.model.business.AppDbHelper;
 import se.m1.emapp.model.business.Employee;
 import se.m1.emapp.model.core.DBLink;
 import se.m1.emapp.model.core.DBObject;
+import se.m1.emapp.model.core.exception.DBObjectException;
+import se.m1.emapp.model.core.exception.PreparedQueryException;
 
 
 public class Controller extends HttpServlet {
@@ -105,10 +108,11 @@ public class Controller extends HttpServlet {
                     }
                     break;
                 case "Add":
+                    session.setAttribute("employeeChecked", new Employee(dbLink, 0));
                     request.getRequestDispatcher(JSP_ADD).forward(request, response);
                     break;
                 case "Save":
-                    if (session.getAttribute("employeeChecked") != null) {
+                    if (((Employee)session.getAttribute("employeeChecked")).getId() != 0) {
                         Employee employee = new Employee(dbLink, ((Employee)session.getAttribute("employeeChecked")).getId(), request.getParameter("inputFirstName"),
                                 request.getParameter("inputLastName"), request.getParameter("inputHomePhone"),
                                 request.getParameter("inputMobilePhone"), request.getParameter("inputWorkPhone"),
@@ -129,10 +133,14 @@ public class Controller extends HttpServlet {
                                 request.getParameter("inputCity"), request.getParameter("inputEmail"), false);
                         try {
                             employee.create();
-                            session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    }
+                    try {
+                        session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                     break;
