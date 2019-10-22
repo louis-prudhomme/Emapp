@@ -24,7 +24,7 @@ public class Credential extends DBObject {
         this.pwd = pwd;
     }
     
-    public Credential(DBLink dbLink){
+    public Credential(DBLink dbLink, String login, String pwd){
         super(dbLink);
         this.login = login;
         this.pwd = pwd;
