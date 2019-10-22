@@ -1,9 +1,3 @@
-<%-- 
-    Document   : goodbye
-    Created on : 22 oct. 2019, 15:13:35
-    Author     : melaniemarques
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

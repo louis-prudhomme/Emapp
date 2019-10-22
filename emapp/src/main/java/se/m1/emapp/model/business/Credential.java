@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package se.m1.emapp.model.business;
+
 import se.m1.emapp.model.core.DBLink;
 import se.m1.emapp.model.core.DBObject;
-/**
- *
- * @author melaniemarques
- */
+
 public class Credential extends DBObject {
     private String login;
     private String pwd;
