@@ -45,11 +45,11 @@ public class Controller extends HttpServlet {
             this.dbLink = DBLink.getNewInstance(properties.getProperty("dbUrl"), properties.getProperty("dbUser"), properties.getProperty("dbPwd"));
             this.dbLink.connect();
         } catch (DBLDriverNotFoundException | DBLUnderlyingException e) {
-            request.getRequestDispatcher(JSP_ERROR_PAGE).forward(request, response);
+            request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
         }
 
         if (request.getParameter("action") == null) {
-            request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
+            request.getRequestDispatcher(JSP_ERROR_PAGE).forward(request, response);
         } else {
             action = request.getParameter("action");
             session = request.getSession();
@@ -83,24 +83,34 @@ public class Controller extends HttpServlet {
                     }
                     break;
                 case "Delete":
-                    int id = Integer.parseInt(request.getParameter("check"));
-                    try {
-                        new Employee(dbLink, id).delete();
-                        session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
-                    } catch (DatabaseCommunicationException e) {
-                        throw new ServletException(e);
+                    if(request.getParameter("check")==null){
+                        request.setAttribute("errCheck", ERR_CHECK);
+                    }else
+                    {           
+                        int id = Integer.parseInt(request.getParameter("check"));          
+                        try {
+                            new Employee(dbLink, id).delete();
+                            session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
+                        } catch (DatabaseCommunicationException e) {
+                            throw new ServletException(e);
+                        }
                     }
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                     break;
                 case "Details":
-                    int idD = Integer.parseInt(request.getParameter("check"));
-                    try {
-                        Employee employee = new Employee(dbLink, idD);
-                        employee.read();
-                        session.setAttribute("employeeChecked", employee);
-                        request.getRequestDispatcher(JSP_ADD).forward(request, response);
-                    } catch (DatabaseCommunicationException e) {
-                        throw new ServletException(e);
+                    if(request.getParameter("check")==null){
+                        request.setAttribute("errCheck", ERR_CHECK);
+                        request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
+                    }else{
+                        int idD = Integer.parseInt(request.getParameter("check"));
+                        try {
+                            Employee employee = new Employee(dbLink, idD);
+                            employee.read();
+                            session.setAttribute("employeeChecked", employee);
+                            request.getRequestDispatcher(JSP_ADD).forward(request, response);
+                        } catch (DatabaseCommunicationException e) {
+                            throw new ServletException(e);
+                        }
                     }
                     break;
                 case "Add":

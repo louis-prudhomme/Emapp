@@ -18,7 +18,7 @@
 <body>
         <!-- Error Page -->
             <div class="error">
-                <div class="container-floud">
+                <div class="container-fluid">
                     <div class="col-xs-12 ground-color text-center">
                         <div class="container-error-404">
                             <div class="clip"><div class="shadow"><span class="digit thirdDigit"></span></div></div>
