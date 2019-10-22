@@ -49,7 +49,7 @@ public class controller extends HttpServlet {
         
         
         if (request.getParameter("action") == null) {
-            request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
+            request.getRequestDispatcher("WEB-INF/errorPage.jsp").forward(request, response);
             
         }else{       
         String action = request.getParameter("action");
