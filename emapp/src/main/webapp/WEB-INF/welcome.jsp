@@ -24,7 +24,11 @@
                 </button>
                  <h1>List of Employees</h1>
             </nav>
-
+        <c:if test="${!empty errCheck}">
+        <div class="alert alert-danger" role="alert">
+            <c:out value="${errCheck}" />
+        </div>
+        </c:if>
         <div class="container">
 
             <p>Hello ${user.login}! Your session is active</p>
