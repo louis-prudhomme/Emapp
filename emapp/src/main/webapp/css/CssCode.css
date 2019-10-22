@@ -226,6 +226,7 @@ input[type=text]:placeholder {
   -webkit-animation-delay: 1s;
   -moz-animation-delay: 1s;
   animation-delay: 1s;
+  
 }
 
 /* Simple CSS3 Fade-in Animation */
@@ -259,9 +260,15 @@ input[type=text]:placeholder {
 #icon {
   width:60%;
 }
-
-img.resize {
-  max-width:25%;
-  max-height:25%;
+img.resize{
+  max-width:35%;
+  max-height:35%;
+  padding: 30px 0px 25px 10px; 
 }
+
+#goodbye{
+    padding: 20px 10px 10px 10px;
+    color:#708090;
+}
+
 

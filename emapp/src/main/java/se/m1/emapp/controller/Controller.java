@@ -48,7 +48,7 @@ public class Controller extends HttpServlet {
         }
 
         if (request.getParameter("action") == null) {
-            request.getRequestDispatcher(JSP_ERROR_PAGE).forward(request, response);
+            request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
         } else {
             action = request.getParameter("action");
             session = request.getSession();
@@ -56,7 +56,13 @@ public class Controller extends HttpServlet {
                 case "Login":
                     String login = request.getParameter("loginField");
                     String password = request.getParameter("pwdField");
-
+                    
+                    if(login.equals("") || password.equals(""))
+                    {
+                        request.setAttribute("errKey", ERR_MESSAGE_FIELD_EMPTY);
+                        request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
+                    }
+                    
                     helper = new AppDbHelper(dbLink);
                     user = null;
 
@@ -75,7 +81,7 @@ public class Controller extends HttpServlet {
                         session.setAttribute("user", user);
                         request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                     } else {
-                        request.setAttribute("errKey", ERR_MESSAGE);
+                        request.setAttribute("errKey", ERR_MESSAGE_INVALID_CREDENTIALS);
                         request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
                     }
                     break;
@@ -161,6 +167,8 @@ public class Controller extends HttpServlet {
                     }
 
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
+                case "LogOut":
+                    request.getRequestDispatcher(JSP_GOODBYE_PAGE).forward(request, response);
                 default:
                     request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
             }
