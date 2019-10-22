@@ -61,7 +61,7 @@
                         </tr>
 
                         <c:forEach items="${empList}" var="employee">
-                        <c:if test="${!employee.adminStatus}">
+                        
                         <tr>
                             <td>
                                 <div class="form-group form-check">
@@ -78,7 +78,7 @@
                             <td> ${employee.city} </td>
                             <td> ${employee.email} </td>
                         </tr>
-                        </c:if>
+                      
                         </c:forEach>
                     </table>
                 </div>
