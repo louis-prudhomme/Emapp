@@ -1,52 +1,53 @@
-<%-- 
-    Document   : errorPage
-    Created on : 22 oct. 2019, 08:53:49
-    Author     : melaniemarques
---%>
+<jsp:useBean id="errorMessage" scope="request" type="java.lang.String"/>
+<jsp:useBean id="firstDigit" scope="request" type="java.lang.Integer"/>
+<jsp:useBean id="secondDigit" scope="request" type="java.lang.Integer"/>
+<jsp:useBean id="thirdDigit" scope="request" type="java.lang.Integer"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>ERROR</title>
+        <title>Error</title>
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     </head>
     <link href="css/cssErrorPage.css" rel='stylesheet' type='text/css'>
-<body>
+    <body>
         <!-- Error Page -->
-            <div class="error">
-                <div class="container-floud">
-                    <div class="col-xs-12 ground-color text-center">
-                        <div class="container-error-404">
-                            <div class="clip"><div class="shadow"><span class="digit thirdDigit"></span></div></div>
-                            <div class="clip"><div class="shadow"><span class="digit secondDigit"></span></div></div>
-                            <div class="clip"><div class="shadow"><span class="digit firstDigit"></span></div></div>
-                            <div class="msg">OH!<span class="triangle"></span></div>
+        <div class="error">
+            <div class="container-fluid">
+                <div class="col-xs-12 ground-color text-center">
+                    <div class="container-error-404">
+                        <div class="clip">
+                            <div class="shadow"><span class="digit thirdDigit"></span></div>
                         </div>
-                        <h2 class="h1">Sorry! Page not found</h2>
+                        <div class="clip">
+                            <div class="shadow"><span class="digit secondDigit"></span></div>
+                        </div>
+                        <div class="clip">
+                            <div class="shadow"><span class="digit firstDigit"></span></div>
+                        </div>
+                        <div class="msg">OH!<span class="triangle"></span></div>
                     </div>
+                    <h2 class="h1">${errorMessage}</h2>
                 </div>
             </div>
-        
-        
+        </div>
         <form action="${pageContext.request.contextPath}/se.m1.emapp.controller">
             <div class="error-actions">
                 <input type="submit" class="btn btn-primary btn-lg" name="action" value="Take Me Home">      
             </div>
         </form>
-        
-        
-        
         <!-- Error Page JS-->
         <script type="text/javascript">
              function randomNum()
-        {
-            "use strict";
-            return Math.floor(Math.random() * 9)+1;
-        }
+            {
+                "use strict";
+                return Math.floor(Math.random() * 9)+1;
+            }
+
             var loop1,loop2,loop3,time=30, i=0, number, selector3 = document.querySelector('.thirdDigit'), selector2 = document.querySelector('.secondDigit'),
                 selector1 = document.querySelector('.firstDigit');
             loop3 = setInterval(function()
@@ -55,7 +56,7 @@
                 if(i > 40)
                 {
                     clearInterval(loop3);
-                    selector3.textContent = 4;
+                    selector3.textContent = ${firstDigit};
                 }else
                 {
                     selector3.textContent = randomNum();
@@ -68,7 +69,7 @@
                 if(i > 80)
                 {
                     clearInterval(loop2);
-                    selector2.textContent = 0;
+                    selector2.textContent = ${secondDigit};
                 }else
                 {
                     selector2.textContent = randomNum();
@@ -81,7 +82,7 @@
                 if(i > 100)
                 {
                     clearInterval(loop1);
-                    selector1.textContent = 4;
+                    selector1.textContent = ${thirdDigit};
                 }else
                 {
                     selector1.textContent = randomNum();
@@ -89,5 +90,5 @@
                 }
             }, time);
         </script>
-</body>
+    </body>
 </html>

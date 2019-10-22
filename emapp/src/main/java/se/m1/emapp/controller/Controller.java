@@ -11,13 +11,11 @@ import static se.m1.emapp.utils.Constants.*;
 
 import se.m1.emapp.model.business.AppDbHelper;
 import se.m1.emapp.model.business.Employee;
+import se.m1.emapp.model.core.exception.dbLink.DBLException;
 import se.m1.emapp.model.exception.EmptyResultException;
 import se.m1.emapp.model.core.DBLink;
 import se.m1.emapp.model.core.DBObject;
 import se.m1.emapp.model.core.exception.DatabaseCommunicationException;
-import se.m1.emapp.model.core.exception.dbLink.DBLDriverNotFoundException;
-import se.m1.emapp.model.core.exception.dbLink.DBLUnderlyingException;
-
 
 public class Controller extends HttpServlet {
     private Properties properties;
@@ -44,8 +42,8 @@ public class Controller extends HttpServlet {
         try {
             this.dbLink = DBLink.getNewInstance(properties.getProperty("dbUrl"), properties.getProperty("dbUser"), properties.getProperty("dbPwd"));
             this.dbLink.connect();
-        } catch (DBLDriverNotFoundException | DBLUnderlyingException e) {
-            request.getRequestDispatcher(JSP_ERROR_PAGE).forward(request, response);
+        } catch (DBLException e) {
+            sendError(request, response, e);
         }
 
         if (request.getParameter("action") == null) {
@@ -76,7 +74,7 @@ public class Controller extends HttpServlet {
                         request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
 
                     } catch (DatabaseCommunicationException e) {
-                        throw new ServletException(e);
+                        sendError(request, response, e);
                     } catch (EmptyResultException e) {
                         request.setAttribute("errKey", ERR_MESSAGE_INVALID_CREDENTIALS);
                         request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
@@ -88,7 +86,7 @@ public class Controller extends HttpServlet {
                         new Employee(dbLink, id).delete();
                         session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
                     } catch (DatabaseCommunicationException e) {
-                        throw new ServletException(e);
+                        sendError(request, response, e);
                     }
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                     break;
@@ -100,7 +98,7 @@ public class Controller extends HttpServlet {
                         session.setAttribute("employeeChecked", employee);
                         request.getRequestDispatcher(JSP_ADD).forward(request, response);
                     } catch (DatabaseCommunicationException e) {
-                        throw new ServletException(e);
+                        sendError(request, response, e);
                     }
                     break;
                 case "Add":
@@ -119,7 +117,7 @@ public class Controller extends HttpServlet {
                             session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
                             session.removeAttribute("employeeChecked");
                         } catch (DatabaseCommunicationException e) {
-                            throw new ServletException(e);
+                            sendError(request, response, e);
                         }
                     } else {
                         Employee employee = new Employee(dbLink, request.getParameter("inputFirstName"),
@@ -130,13 +128,13 @@ public class Controller extends HttpServlet {
                         try {
                             employee.create();
                         } catch (DatabaseCommunicationException e) {
-                            throw new ServletException(e);
+                            sendError(request, response, e);
                         }
                     }
                     try {
                         session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
                     } catch (DatabaseCommunicationException e) {
-                        throw new ServletException(e);
+                        sendError(request, response, e);
                     }
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                     break;
@@ -147,7 +145,7 @@ public class Controller extends HttpServlet {
                     try {
                         session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
                     } catch (DatabaseCommunicationException e) {
-                        throw new ServletException(e);
+                        sendError(request, response, e);
                     }
 
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
@@ -183,6 +181,15 @@ public class Controller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
+    }
+
+    private void sendError(HttpServletRequest request, HttpServletResponse response, Exception errorText) throws ServletException, IOException
+    {
+        request.setAttribute("errorMessage", errorText.getMessage());
+        request.setAttribute("firstDigit", 5);
+        request.setAttribute("secondDigit", 0);
+        request.setAttribute("thirdDigit", 0);
+        request.getRequestDispatcher(JSP_ERROR_PAGE).forward(request, response);
     }
 
     /**
