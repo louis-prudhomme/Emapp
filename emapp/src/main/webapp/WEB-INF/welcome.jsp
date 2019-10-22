@@ -18,15 +18,16 @@
        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <div>
-            <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+                    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
                 <button id = "logOutButton" type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm">
                     <span class="glyphicon glyphicon-log-out"></span> Log out
                 </button>
                  <h1>List of Employees</h1>
             </nav>
 
-            <p>Hello ${user.login}! Are you having a nice day ?</p>
+        <div class="container">
+
+            <p>Hello ${user.login}! Your session is active</p>
 
             <!--Logout button-->
             <form name="welcome" action="${pageContext.request.contextPath}/se.m1.emapp.controller">
@@ -63,11 +64,13 @@
                         <c:forEach items="${empList}" var="employee">
                         
                         <tr>
-                            <td>
-                                <div class="form-group form-check">
-                                    <input type="radio" class="form-check-input" name="check" value= ${employee.id}>
-                                </div>
+                            <c:if test="${user.login.equals('admin')&& user.pwd.equals('admin')}">
+                                <td>
+                                    <div class="form-group form-check">
+                                        <input type="radio" class="form-check-input" name="check" value= ${employee.id}>
+                                    </div>
                             </td>
+                            </c:if>
                             <td> ${employee.firstName} </td>
                             <td> ${employee.lastName} </td>
                             <td> ${employee.homePhone} </td>
@@ -77,14 +80,24 @@
                             <td> ${employee.postalCode} </td>
                             <td> ${employee.city} </td>
                             <td> ${employee.email} </td>
+                            
                         </tr>
                       
                         </c:forEach>
+                        
+                        
                     </table>
+                    <c:if test="${empList.size()==0}">
+                      <div class="alert alert-danger" role="alert">
+                           The company has no employee!
+                      </div>
+                    </c:if>
+                    
                 </div>
+                    
 
-                <c:if test="${user.login.equals('admin')}">
-                <div class="container">
+                <c:if test="${user.login.equals('admin')&& user.pwd.equals('admin')}">
+                <div>
                     <input type='submit' class="btn btn-primary" name="action" value="Delete"/>
                     <input type='submit' class="btn btn-primary" name="action" value="Details"/>
                     <input type='submit' class="btn btn-primary" name="action" value="Add"/>
@@ -92,5 +105,6 @@
                 </c:if>
             </form>
         </div>
+                    
     </body>
 </html>

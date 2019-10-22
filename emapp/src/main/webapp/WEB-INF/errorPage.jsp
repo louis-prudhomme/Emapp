@@ -9,7 +9,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>ERROR</title>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     </head>
     <link href="css/cssErrorPage.css" rel='stylesheet' type='text/css'>
 <body>
@@ -27,7 +30,17 @@
                     </div>
                 </div>
             </div>
-        <!-- Error Page -->
+        
+        
+        <form action="${pageContext.request.contextPath}/se.m1.emapp.controller">
+            <div class="error-actions">
+                <input type="submit" class="btn btn-primary btn-lg" name="action" value="Take Me Home">      
+            </div>
+        </form>
+        
+        
+        
+        <!-- Error Page JS-->
         <script type="text/javascript">
              function randomNum()
         {
