@@ -1,6 +1,8 @@
 package se.m1.emapp.model.core.exception.dbLink;
 
-public abstract class DBLException extends Exception {
+import se.m1.emapp.model.core.exception.DatabaseCommunicationException;
+
+public abstract class DBLException extends DatabaseCommunicationException {
     public DBLException() {
     }
 

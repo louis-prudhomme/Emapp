@@ -1,6 +1,8 @@
 package se.m1.emapp.model.core.exception.dbObject;
 
-public abstract class DBOException extends Exception {
+import se.m1.emapp.model.core.exception.DatabaseCommunicationException;
+
+public abstract class DBOException extends DatabaseCommunicationException {
     public DBOException() {
     }
 
