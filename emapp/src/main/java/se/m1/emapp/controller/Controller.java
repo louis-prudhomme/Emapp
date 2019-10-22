@@ -1,7 +1,6 @@
 package se.m1.emapp.controller;
 import se.m1.emapp.model.business.Credential;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,8 +13,6 @@ import se.m1.emapp.model.business.AppDbHelper;
 import se.m1.emapp.model.business.Employee;
 import se.m1.emapp.model.core.DBLink;
 import se.m1.emapp.model.core.DBObject;
-import se.m1.emapp.model.core.exception.DBObjectException;
-import se.m1.emapp.model.core.exception.PreparedQueryException;
 
 
 public class Controller extends HttpServlet {

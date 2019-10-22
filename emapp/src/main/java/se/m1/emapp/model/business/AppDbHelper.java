@@ -3,8 +3,8 @@ package se.m1.emapp.model.business;
 import se.m1.emapp.model.core.DBLink;
 import se.m1.emapp.model.core.PreparedQuery;
 import se.m1.emapp.model.core.PreparedStatementTypes;
-import se.m1.emapp.model.core.exception.DBObjectException;
-import se.m1.emapp.model.core.exception.PreparedQueryException;
+import se.m1.emapp.model.core.exception.dbObject.DBOException;
+import se.m1.emapp.model.core.exception.preparedQuery.PQException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,9 +34,9 @@ public class AppDbHelper {
      * @param lastName duh
      * @return matching employee
      * @throws SQLException
-     * @throws PreparedQueryException
+     * @throws PQException
      */
-    public Credential checkCredentials(String firstName, String lastName) throws SQLException, PreparedQueryException, DBObjectException {
+    public Credential checkCredentials(String firstName, String lastName) throws SQLException, PQException, DBOException {
         String query = "SELECT id FROM CREDENTIAL WHERE LOGIN = ? AND PWD = ?";
 
         ArrayList<PreparedStatementTypes> parametersTypes = new ArrayList<>(Arrays.asList(PreparedStatementTypes.STRING, PreparedStatementTypes.STRING));

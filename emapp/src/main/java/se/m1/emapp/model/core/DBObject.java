@@ -1,6 +1,9 @@
 package se.m1.emapp.model.core;
 
-import se.m1.emapp.model.core.exception.*;
+import se.m1.emapp.model.core.exception.dbObject.*;
+import se.m1.emapp.model.core.exception.dbLink.DBLException;
+import se.m1.emapp.model.core.exception.dbLink.DBLUnderlyingException;
+import se.m1.emapp.model.core.exception.preparedQuery.PQException;
 import se.m1.emapp.utils.Tuple;
 
 import java.lang.reflect.Constructor;
@@ -46,11 +49,10 @@ public abstract class DBObject {
 
     /**
      * creates a record for the object in the database
-     * @throws DBObjectException
-     * @throws PreparedQueryException
-     * @throws SQLException
+     * @throws DBOException
+     * @throws PQException
      */
-    public void create() throws DBObjectException, PreparedQueryException, SQLException {
+    public int create() throws PQException, DBOException, DBLException {
         HashMap<String, Tuple<Class, Object>> fieldsAndValues = getFieldsAndValues();
 
         ArrayList<String> fieldValues = new ArrayList<>();
@@ -82,31 +84,37 @@ public abstract class DBObject {
         query.append(")");
 
         PreparedQuery preparedQuery = dbLink.prepareQuery(query.toString(), fieldTypes);
-        preparedQuery.executeUpdate(fieldValues);
+        return preparedQuery.executeUpdate(fieldValues);
     }
 
     /**
      * reads the object record in the database
      * @throws SQLException
-     * @throws PreparedQueryException
+     * @throws PQException
      */
-    public void read() throws SQLException, PreparedQueryException, DBObjectException {
+    public void read() throws PQException, DBOException, DBLException {
         String query = "SELECT * FROM " +
                 this.getClass().getSimpleName() +
                 " WHERE ID = ?";
         PreparedQuery preparedQuery = dbLink.prepareQuery(query);
         ResultSet resultSet = preparedQuery.executeQuery(id);
-        resultSet.next();
-        parseResultSet(resultSet);
+        try {
+            resultSet.next();
+            parseResultSet(resultSet);
+        } catch (SQLException e) {
+            throw new DBOUnexploitableResultSetException(e);
+        }
     }
 
     /**
      * parses the results of a query into the field of the object
      * @param resultSet of the query
-     * @throws DBObjectException
-     * @throws SQLException
+     * @throws DBOUnreachableSetter when the field corresponding setter is unreachable
+     * @throws DBOCannotParseFieldException when the field cannot be parsed
+     * @throws DBOCannotDetectFieldType when the field is not recognized
+     * @throws DBOUnreachableGetter when the field corresponding getter is unreachable
      */
-    void parseResultSet(ResultSet resultSet) throws DBObjectException, SQLException {
+    void parseResultSet(ResultSet resultSet) throws DBOUnreachableMethod, DBOCannotParseFieldException, DBOCannotDetectFieldType {
         HashMap<String, Tuple<Class, Object>> fieldsAndValues = getFieldsAndValues();
         for (String field : fieldsAndValues.keySet()) {
             if(!field.equals("id")) {
@@ -114,8 +122,8 @@ public abstract class DBObject {
                 try {
                     Method setter = this.getClass().getDeclaredMethod(setterName, fieldsAndValues.get(field).a);
                     parseResult(resultSet, setter, field, fieldsAndValues.get(field).a);
-                } catch (DBObjectCannotDetectFieldType | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                    throw new DBObjectUnreachableSetter(e);
+                } catch(NoSuchMethodException e) {
+                    throw new DBOUnreachableSetter(e);
                 }
             }
         }
@@ -127,36 +135,41 @@ public abstract class DBObject {
      * @param setter method to set value
      * @param field name of the targeted field
      * @param type type of the field
-     * @throws SQLException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
-     * @throws DBObjectCannotDetectFieldType
+     * @throws DBOCannotDetectFieldType when the type of the field cannot be detected
+     * @throws DBOCannotParseFieldException when the field cannot be parsed
+     * @throws DBOUnreachableSetter when the parser cannot be reached (or invoked)
      */
-    private void parseResult(ResultSet resultSet, Method setter, String field, Class type) throws SQLException, InvocationTargetException, IllegalAccessException, DBObjectCannotDetectFieldType {
-        switch (parseJavaType(type)) {
-            case INT:
-                setter.invoke(this, resultSet.getInt(field));
-                break;
-            case FLOAT:
-                setter.invoke(this, resultSet.getFloat(field));
-                break;
-            case BOOLEAN:
-                setter.invoke(this, resultSet.getBoolean(field));
-                break;
-            case STRING:
-            default:
-                setter.invoke(this, resultSet.getString(field));
-                break;
+    private void parseResult(ResultSet resultSet, Method setter, String field, Class type) throws DBOCannotDetectFieldType, DBOCannotParseFieldException, DBOUnreachableSetter {
+        try {
+            switch (parseJavaType(type)) {
+                case INT:
+                    setter.invoke(this, resultSet.getInt(field));
+                    break;
+                case FLOAT:
+                    setter.invoke(this, resultSet.getFloat(field));
+                    break;
+                case BOOLEAN:
+                    setter.invoke(this, resultSet.getBoolean(field));
+                    break;
+                case STRING:
+                    setter.invoke(this, resultSet.getString(field));
+                    break;
+                default:
+                    throw new DBOCannotDetectFieldType();
+            }
+        } catch (SQLException e) {
+            throw new DBOCannotParseFieldException(e);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new DBOUnreachableSetter(e);
         }
     }
 
     /**
      * updates the object record in the database
-     * @throws DBObjectException
-     * @throws SQLException
-     * @throws PreparedQueryException
+     * @throws DBOException
+     * @throws PQException
      */
-    public void update() throws DBObjectException, SQLException, PreparedQueryException {
+    public int update() throws DBOException, PQException, DBLException {
         HashMap<String, Tuple<Class, Object>> fieldsAndValues = getFieldsAndValues();
         StringBuilder query = new StringBuilder();
         query.append("UPDATE ");
@@ -182,28 +195,30 @@ public abstract class DBObject {
         query.append(" WHERE ID = ?");
 
         PreparedQuery preparedQuery = dbLink.prepareQuery(query.toString());
-        preparedQuery.executeUpdate(id);
+        return preparedQuery.executeUpdate(id);
     }
 
     /**
      * deletes the object record in the database
-     * @throws SQLException
-     * @throws PreparedQueryException
+     * @throws PQException prepared query exception, usually when parameters are incorrect
+     * @throws DBLUnderlyingException problem with the database
      */
-    public void delete() throws SQLException, PreparedQueryException {
+    public int delete() throws PQException, DBLException {
         String query = "DELETE FROM " +
                 this.getClass().getSimpleName() +
                 " WHERE ID = ?";
         PreparedQuery preparedQuery = dbLink.prepareQuery(query);
-        preparedQuery.executeUpdate(id);
+        return preparedQuery.executeUpdate(id);
     }
 
     /**
      * gets all the classe's fields and return their names, types and values for the ongoing instance
+     * for each reflection-obtained field of the class,
+     * it will try to obtain and invoke the corresponding getter
      * @return hashmap of the classe's fields
-     * @throws DBObjectException if either a field cannot be found or it cannot be matched with a prepared statement type
+     * @throws DBOUnreachableGetter if either a getter cannot be found, accessed or invoked
      */
-    private HashMap<String, Tuple<Class, Object>> getFieldsAndValues() throws DBObjectException {
+    private HashMap<String, Tuple<Class, Object>> getFieldsAndValues() throws DBOUnreachableGetter {
         HashMap<String, Tuple<Class, Object>> fieldsAndValues = new HashMap<>();
 
         fieldsAndValues.put("id", new Tuple<>(Integer.class, id));
@@ -214,7 +229,7 @@ public abstract class DBObject {
                 Method getter = this.getClass().getDeclaredMethod(getterName);
                 fieldsAndValues.put(f.getName(), new Tuple<>(f.getType(), getter.invoke(this)));
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                throw new DBObjectUnreachableGetter(e);
+                throw new DBOUnreachableGetter(e);
             }
         }
 
@@ -225,9 +240,9 @@ public abstract class DBObject {
      * converts java types to prepared statement types to allow generic query generation
      * @param type of the field
      * @return prepared statement type matching the initial field
-     * @throws DBObjectCannotDetectFieldType if there is not matching prepared statement type
+     * @throws DBOCannotDetectFieldType if there is not matching prepared statement type
      */
-    private PreparedStatementTypes parseJavaType(Class type) throws DBObjectCannotDetectFieldType {
+    private PreparedStatementTypes parseJavaType(Class type) throws DBOCannotDetectFieldType {
         switch (type.getSimpleName()) {
             case "Integer":
                 return PreparedStatementTypes.INT;
@@ -238,7 +253,7 @@ public abstract class DBObject {
             case "boolean":
                 return PreparedStatementTypes.BOOLEAN;
             default:
-                throw new DBObjectCannotDetectFieldType();
+                throw new DBOCannotDetectFieldType();
         }
     }
 
@@ -261,20 +276,24 @@ public abstract class DBObject {
 
     /**
      * selects all the records for a certain type of dbobject
+     * 1 selects everything in the table corresponding to the class given in parameter,
+     * 2 then creates a corresponding class
+     * 3 and askes it to parse all the remaining informations
      * @param dbLink database connection
      * @param target dbobject
      * @param <T> dbobject
      * @return all the records
-     * @throws PreparedQueryException
-     * @throws SQLException
-     * @throws DBObjectException
+     * @throws PQException prepared query exception, usually when a parameter is incorrect
+     * @throws DBLUnderlyingException problem with database connection, usually when its closed
+     * @throws DBOException problem with the data object, usually a missing field / getter / setter / constructor or database column
      */
-    public static <T extends DBObject> ArrayList<T> selectAll(DBLink dbLink, Class<T> target) throws SQLException, PreparedQueryException, DBObjectException {
+    public static <T extends DBObject> ArrayList<T> selectAll(DBLink dbLink, Class<T> target) throws PQException, DBLUnderlyingException, DBOException {
         ArrayList<T> objects = new ArrayList<>();
 
         String query = "SELECT * FROM " + target.getSimpleName();
         PreparedQuery preparedQuery = dbLink.prepareQuery(query);
         ResultSet resultSet = preparedQuery.executeQuery();
+
         try {
             Constructor<T> constructor = target.getConstructor(DBLink.class, Integer.class);
             while (resultSet.next()) {
@@ -282,7 +301,9 @@ public abstract class DBObject {
                 objects.get(objects.size() - 1).parseResultSet(resultSet);
             }
         } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            throw new DBObjectUnreachableConstructor(e);
+            throw new DBOUnreachableConstructor(e);
+        } catch (SQLException e) {
+            throw new DBOUnexploitableResultSetException(e);
         }
 
         return objects;

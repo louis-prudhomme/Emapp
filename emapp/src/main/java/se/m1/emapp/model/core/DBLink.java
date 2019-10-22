@@ -1,7 +1,8 @@
 package se.m1.emapp.model.core;
 
-import se.m1.emapp.model.core.exception.DriverNotFoundException;
-import se.m1.emapp.model.core.exception.WrongPreparedQueryParemeterCountException;
+import se.m1.emapp.model.core.exception.dbLink.DBLDriverNotFoundException;
+import se.m1.emapp.model.core.exception.dbLink.DBLUnderlyingException;
+import se.m1.emapp.model.core.exception.preparedQuery.PQWrongParameterException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -33,9 +34,9 @@ public class DBLink {
      * @param databaseUsername user of the db
      * @param databasePassword pwd of the db
      * @return new dblink instance ; it has to be opened manually
-     * @throws DriverNotFoundException if the driver is not found
+     * @throws DBLDriverNotFoundException if the driver is not found
      */
-    public static DBLink getNewInstance(String databaseUrl, String databaseUsername, String databasePassword) throws DriverNotFoundException {
+    public static DBLink getNewInstance(String databaseUrl, String databaseUsername, String databasePassword) throws DBLDriverNotFoundException {
         registerDriver();
         return new DBLink(databaseUrl, databaseUsername, databasePassword);
     }
@@ -54,68 +55,87 @@ public class DBLink {
 
     /**
      * opens connection to the database
-     * @throws SQLException if an unexpected error occurs
+     * @throws DBLUnderlyingException ¯\_(ツ)_/¯
      */
-    public void connect() throws SQLException {
-        this.connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
+    public void connect() throws DBLUnderlyingException {
+        try {
+            this.connection = DriverManager.getConnection(databaseUrl, databaseUsername, databasePassword);
+        } catch (SQLException e) {
+            throw new DBLUnderlyingException(e);
+        }
     }
 
     /**
      * checks if the connection to the database is opened
-     * @return true if open
-     * @throws SQLException ¯\_(ツ)_/¯
+     * @return true if open, false if not
+     * @throws DBLUnderlyingException ¯\_(ツ)_/¯
      */
-    public boolean isOpen() throws SQLException {
-        return !this.connection.isClosed();
+    public boolean isOpen() throws DBLUnderlyingException {
+        try {
+            return !this.connection.isClosed();
+        } catch (SQLException e) {
+            throw new DBLUnderlyingException(e);
+        }
     }
 
     /**
      * closes the connection to the database
      * should be reopenable
-     * @throws SQLException usually when the connection is already closed
+     * @throws DBLUnderlyingException usually when the connection is already closed
      */
-    public void close() throws SQLException {
-        this.connection.close();
+    public void close() throws DBLUnderlyingException {
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            throw new DBLUnderlyingException(e);
+        }
     }
 
     /**
      * issues a new prepared query
      * @param query string with wildcards ( "?" )
      * @param expectedParameterTypes list of the expected parameters types
-     * @return
-     * @throws SQLException
-     * @throws WrongPreparedQueryParemeterCountException if the parameter count doesn't match with the query
+     * @return new query with the specified string and parameters
+     * @throws PQWrongParameterException if the parameter count doesn't match with the query
+     * @throws DBLUnderlyingException underlying connection exception
      */
-    public PreparedQuery prepareQuery(String query, ArrayList<PreparedStatementTypes> expectedParameterTypes) throws SQLException, WrongPreparedQueryParemeterCountException {
+    public PreparedQuery prepareQuery(String query, ArrayList<PreparedStatementTypes> expectedParameterTypes) throws PQWrongParameterException, DBLUnderlyingException {
         if(!PreparedQuery.doesQueryMatchesExpectedParameters(query, expectedParameterTypes)){
-            throw new WrongPreparedQueryParemeterCountException();
+            throw new PQWrongParameterException();
         }
-        return new PreparedQuery(connection.prepareStatement(query), expectedParameterTypes);
+        try {
+            return new PreparedQuery(connection.prepareStatement(query), expectedParameterTypes);
+        } catch (SQLException e) {
+            throw new DBLUnderlyingException(e);
+        }
     }
 
     /**
      * issues a new prepared query (id-oriented, should only contain one wildcard)
      * @param query string with wildcards ( "?" )
      * @return a new prepared query
-     * @throws SQLException
-     * @throws WrongPreparedQueryParemeterCountException if there is more than one wildcard in the query
+     * @throws PQWrongParameterException if there is more than one wildcard in the query
      */
-    public PreparedQuery prepareQuery(String query) throws SQLException, WrongPreparedQueryParemeterCountException {
+    public PreparedQuery prepareQuery(String query) throws PQWrongParameterException, DBLUnderlyingException {
         if(!PreparedQuery.doesQueryMatchesExpectedParameters(query)){
-            throw new WrongPreparedQueryParemeterCountException();
+            throw new PQWrongParameterException();
         }
-        return new PreparedQuery(connection.prepareStatement(query));
+        try {
+            return new PreparedQuery(connection.prepareStatement(query));
+        } catch (SQLException e) {
+            throw new DBLUnderlyingException(e);
+        }
     }
 
     /**
      * registers the driver to insure it is correctly used
-     * @throws DriverNotFoundException if an error occurs
+     * @throws DBLDriverNotFoundException if the driver cannot be found, loaded or registered
      */
-    private static void registerDriver() throws DriverNotFoundException {
+    private static void registerDriver() throws DBLDriverNotFoundException {
         try {
             Class.forName(DEFAULT_DRIVER);
         } catch (ClassNotFoundException e) {
-            throw new DriverNotFoundException(e);
+            throw new DBLDriverNotFoundException(e);
         }
     }
 
