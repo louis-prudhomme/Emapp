@@ -4,6 +4,15 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
+    Created on : 22 oct. 2019, 14:16:35
+    Author     : melaniemarques
+*/
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
     Created on : 22 oct. 2019, 08:59:49
     Author     : melaniemarques
 */
@@ -11,6 +20,7 @@ and open the template in the editor.
 *
 {
   font-family: 'PT Sans Caption', sans-serif, 'arial', 'Times New Roman';
+  text-align: center;
 }
 /* Error Page */
     .error .clip .shadow
@@ -39,7 +49,7 @@ and open the template in the editor.
     }
     .error .msg /*Contrall*/
     {
-        top: -190px;
+        top: -197px;
         left: 30%;
         width: 80px;
         height: 80px;
@@ -49,7 +59,7 @@ and open the template in the editor.
     .error span.triangle    /*Contrall*/
     {
         top: 70%;
-        left: 0%;
+        RIGHT: 0%;
         border-left: 20px solid #535353;
         border-top: 15px solid transparent;
         border-bottom: 15px solid transparent;
@@ -232,4 +242,6 @@ and open the template in the editor.
 
     hr
     { margin: 0px; padding: 0px; border-top: 1px dashed #999; }
-/*--------------------------------------------FrameWork------------------------*/
+
+    .error-actions {margin-top:15px;margin-bottom:15px;}
+

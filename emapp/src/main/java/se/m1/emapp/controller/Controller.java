@@ -21,6 +21,10 @@ import se.m1.emapp.model.core.exception.PreparedQueryException;
 public class Controller extends HttpServlet {
     private Properties properties;
     private DBLink dbLink;
+    private String action;
+    private HttpSession session;
+    private AppDbHelper helper;
+    private Credential user;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,17 +48,17 @@ public class Controller extends HttpServlet {
         }
 
         if (request.getParameter("action") == null) {
-            request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
+            request.getRequestDispatcher(JSP_ERROR_PAGE).forward(request, response);
         } else {
-            String action = request.getParameter("action");
-            HttpSession session = request.getSession();
+            action = request.getParameter("action");
+            session = request.getSession();
             switch (action) {
                 case "Login":
                     String login = request.getParameter("loginField");
                     String password = request.getParameter("pwdField");
 
-                    AppDbHelper helper = new AppDbHelper(dbLink);
-                    Credential user = null;
+                    helper = new AppDbHelper(dbLink);
+                    user = null;
 
                     try {
                         user = helper.checkCredentials(login, password);
