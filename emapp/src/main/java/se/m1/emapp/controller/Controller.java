@@ -75,9 +75,6 @@ public class Controller extends HttpServlet {
 
                         request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
 
-                  
-                        
-
                     } catch (DatabaseCommunicationException e) {
                         throw new ServletException(e);
                     } catch (EmptyResultException e) {
