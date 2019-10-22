@@ -96,7 +96,7 @@ public abstract class DBObject {
                 " WHERE ID = ?";
         PreparedQuery preparedQuery = dbLink.prepareQuery(query);
         ResultSet resultSet = preparedQuery.executeQuery(id);
-        resultSet.first();
+        resultSet.next();
         parseResultSet(resultSet);
     }
 

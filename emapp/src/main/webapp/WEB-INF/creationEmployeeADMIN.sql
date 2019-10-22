@@ -7,5 +7,5 @@
  * Author:  melaniemarques
  * Created: 22 oct. 2019
  */
-ALTER TABLE EMPLOYEE ALTER ID SET INCREMENT BY 1;
-INSERT INTO EMPLOYEE(FIRSTNAME, LASTNAME, ADMINSTATUS) VALUES ('Oliver', 'QUEEN', TRUE)
+
+INSERT INTO EMPLOYEE(firstname, lastname, adminStatus) VALUES ('Oliver', 'QUEEN', TRUE);

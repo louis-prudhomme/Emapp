@@ -1,5 +1,5 @@
 <jsp:useBean id="empList" scope="session" type="java.util.ArrayList"/>
-<jsp:useBean id="user" scope="session" type="se.m1.emapp.model.business.Employee"/>
+<jsp:useBean id="user" scope="session" type="se.m1.emapp.model.business.Credential"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -26,7 +26,7 @@
                  <h1>List of Employees</h1>
             </nav>
 
-            <p>Hello ${user.firstName}! Are you having a nice day ?</p>
+            <p>Hello ${user.login}! Are you having a nice day ?</p>
 
             <!--Logout button-->
             <form name="welcome" action="${pageContext.request.contextPath}/se.m1.emapp.controller">
@@ -83,7 +83,7 @@
                     </table>
                 </div>
 
-                <c:if test="${user.adminStatus}">
+                <c:if test="${user.login.equals('admin')}">
                 <div class="container">
                     <input type='submit' class="btn btn-primary" name="action" value="Delete"/>
                     <input type='submit' class="btn btn-primary" name="action" value="Details"/>

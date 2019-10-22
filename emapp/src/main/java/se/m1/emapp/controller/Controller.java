@@ -1,5 +1,5 @@
 package se.m1.emapp.controller;
-
+import se.m1.emapp.model.business.Credential;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -54,7 +54,7 @@ public class Controller extends HttpServlet {
                     String password = request.getParameter("pwdField");
 
                     AppDbHelper helper = new AppDbHelper(dbLink);
-                    Employee user = null;
+                    Credential user = null;
 
                     try {
                         user = helper.checkCredentials(login, password);

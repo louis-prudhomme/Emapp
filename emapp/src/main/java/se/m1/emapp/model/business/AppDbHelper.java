@@ -36,8 +36,8 @@ public class AppDbHelper {
      * @throws SQLException
      * @throws PreparedQueryException
      */
-    public Employee checkCredentials(String firstName, String lastName) throws SQLException, PreparedQueryException, DBObjectException {
-        String query = "SELECT id FROM EMPLOYEE WHERE firstName = ? AND lastName = ?";
+    public Credential checkCredentials(String firstName, String lastName) throws SQLException, PreparedQueryException, DBObjectException {
+        String query = "SELECT id FROM CREDENTIAL WHERE LOGIN = ? AND PWD = ?";
 
         ArrayList<PreparedStatementTypes> parametersTypes = new ArrayList<>(Arrays.asList(PreparedStatementTypes.STRING, PreparedStatementTypes.STRING));
         ArrayList<String> parameters = new ArrayList<>(Arrays.asList(firstName, lastName));
@@ -46,7 +46,7 @@ public class AppDbHelper {
         ResultSet resultSet = preparedQuery.executeQuery(parameters);
 
         if(resultSet.next()) {
-            Employee e = new Employee(dbLink, resultSet.getInt("id"));
+            Credential e = new Credential(dbLink, resultSet.getInt("id"));
             e.read();
             return e;
         } else {
