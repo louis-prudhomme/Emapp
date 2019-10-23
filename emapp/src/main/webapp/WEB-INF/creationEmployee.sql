@@ -5,6 +5,7 @@ CREATE TABLE employee (
   lastname varchar(128),
   homePhone varchar(128),
   mobilePhone varchar(128),
+  workPhone varchar(128),
   address varchar(128),
   postalCode varchar(128),
   city varchar(128),
