@@ -3,6 +3,8 @@ package se.m1.emapp.model.business;
 import se.m1.emapp.model.core.DBLink;
 import se.m1.emapp.model.core.DBObject;
 
+import java.util.ArrayList;
+
 public class Employee extends DBObject {
     private String firstName;
     private String lastName;

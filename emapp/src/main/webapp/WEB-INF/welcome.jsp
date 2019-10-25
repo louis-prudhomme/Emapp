@@ -1,4 +1,4 @@
-<jsp:useBean id="empList" scope="session" type="java.util.ArrayList"/>
+<jsp:useBean id="empList" scope="request" type="java.util.ArrayList"/>
 <jsp:useBean id="user" scope="session" type="se.m1.emapp.model.business.Credential"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -40,9 +40,9 @@
                     <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                             <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
-                            <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log-off?</div>
+                            <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log out?</div>
                             <div class="modal-footer">
-                                <input type='submit' class="btn btn-primary btn-block" name="action" value="LogOut"/>
+                                <input type='submit' class="btn btn-primary btn-block" name="action" value="Logout"/>
                             </div>
                         </div>
                     </div>

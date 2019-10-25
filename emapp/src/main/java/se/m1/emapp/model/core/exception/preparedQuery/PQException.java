@@ -1,8 +1,8 @@
 package se.m1.emapp.model.core.exception.preparedQuery;
 
-import se.m1.emapp.model.core.exception.DatabaseCommunicationException;
+import se.m1.emapp.model.core.exception.DBComException;
 
-public abstract class PQException extends DatabaseCommunicationException {
+public abstract class PQException extends DBComException {
     public PQException() {
         super();
     }
