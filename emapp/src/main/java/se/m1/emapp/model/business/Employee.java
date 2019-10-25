@@ -1,92 +1,159 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package se.m1.emapp.model.business;
 
-import se.m1.emapp.model.core.DBLink;
-import se.m1.emapp.model.core.DBObject;
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class Employee extends DBObject {
-    private String firstName;
-    private String lastName;
-    private String homePhone;
-    private String mobilePhone;
-    private String workPhone;
+@Entity
+@Table(name = "EMPLOYEE")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Employee.findAll", query = "SELECT e FROM Employee e"),
+    @NamedQuery(name = "Employee.findById", query = "SELECT e FROM Employee e WHERE e.id = :id"),
+    @NamedQuery(name = "Employee.findByFirstname", query = "SELECT e FROM Employee e WHERE e.firstname = :firstname"),
+    @NamedQuery(name = "Employee.findByLastname", query = "SELECT e FROM Employee e WHERE e.lastname = :lastname"),
+    @NamedQuery(name = "Employee.findByHomephone", query = "SELECT e FROM Employee e WHERE e.homephone = :homephone"),
+    @NamedQuery(name = "Employee.findByMobilephone", query = "SELECT e FROM Employee e WHERE e.mobilephone = :mobilephone"),
+    @NamedQuery(name = "Employee.findByAddress", query = "SELECT e FROM Employee e WHERE e.address = :address"),
+    @NamedQuery(name = "Employee.findByPostalcode", query = "SELECT e FROM Employee e WHERE e.postalcode = :postalcode"),
+    @NamedQuery(name = "Employee.findByCity", query = "SELECT e FROM Employee e WHERE e.city = :city"),
+    @NamedQuery(name = "Employee.findByEmail", query = "SELECT e FROM Employee e WHERE e.email = :email"),
+    @NamedQuery(name = "Employee.findByAdminstatus", query = "SELECT e FROM Employee e WHERE e.adminstatus = :adminstatus")})
+
+public class Employee implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "ID")
+    private Integer id;
+    @Size(max = 128)
+    @Column(name = "FIRSTNAME")
+    private String firstname;
+    @Size(max = 128)
+    @Column(name = "LASTNAME")
+    private String lastname;
+    @Size(max = 128)
+    @Column(name = "HOMEPHONE")
+    private String homephone;
+    @Size(max = 128)
+    @Column(name = "MOBILEPHONE")
+    private String mobilephone;
+    @Size(max = 128)
+    @Column(name = "WORKPHONE")
+    private String workphone;
+    @Size(max = 128)
+    @Column(name = "ADDRESS")
     private String address;
-    private String postalCode;
+    @Size(max = 128)
+    @Column(name = "POSTALCODE")
+    private String postalcode;
+    @Size(max = 128)
+    @Column(name = "CITY")
     private String city;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 128)
+    @Column(name = "EMAIL")
     private String email;
-    private boolean adminStatus;
+    @Column(name = "ADMINSTATUS")
+    private Boolean adminstatus;
 
-    public Employee(DBLink dbLink, Integer id) {
-        super(dbLink, id);
+    public Employee() {
     }
 
-    public Employee(DBLink dbLink, Integer id, String firstName, String lastName, String homePhone, String mobilePhone, String workPhone, String address, String postalCode, String city, String email, boolean adminStatus) {
-        super(dbLink, id);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.homePhone = homePhone;
-        this.mobilePhone = mobilePhone;
-        this.workPhone = workPhone;
+    public Employee(Integer id) {
+        this.id = id;
+    }
+    public Employee(Integer id, String Firstname, String Lastname, String HomePhone, String MobilePhone, String WorkPhone, String address, String PostalCode, String City, String email ){
+        this.id = id;
         this.address = address;
-        this.postalCode = postalCode;
-        this.city = city;
+        this.city = City;
         this.email = email;
-        this.adminStatus = adminStatus;
+        this.firstname = Firstname;
+        this.lastname = Lastname;
+        this.homephone = HomePhone;
+        this.mobilephone = MobilePhone;
+        this.workphone = WorkPhone;
+        this.postalcode = PostalCode;
+        
+    }
+    
+    public Employee(String Firstname, String Lastname, String HomePhone, String MobilePhone, String WorkPhone, String address, String PostalCode, String City, String email ){
+        this.address = address;
+        this.city = City;
+        this.email = email;
+        this.lastname = Lastname;
+        this.firstname = Firstname;
+        this.homephone = HomePhone;
+        this.mobilephone = MobilePhone;
+        this.workphone = WorkPhone;
+        this.postalcode = PostalCode;
+       
     }
 
-    public Employee(DBLink dbLink, String firstName, String lastName, String homePhone, String mobilePhone, String workPhone, String address, String postalCode, String city, String email, boolean adminStatus) {
-        super(dbLink);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.homePhone = homePhone;
-        this.mobilePhone = mobilePhone;
-        this.workPhone = workPhone;
-        this.address = address;
-        this.postalCode = postalCode;
-        this.city = city;
-        this.email = email;
-        this.adminStatus = adminStatus;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFirstName() {
-        return firstName;
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String firstname) {
+        this.firstname = firstname;
     }
 
     public String getLastName() {
-        return lastName;
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastName(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getHomePhone() {
-        return homePhone;
+        return homephone;
     }
 
-    public void setHomePhone(String homePhone) {
-        this.homePhone = homePhone;
+    public void setHomePhone(String homephone) {
+        this.homephone = homephone;
     }
 
     public String getMobilePhone() {
-        return mobilePhone;
+        return mobilephone;
     }
 
-    public void setMobilePhone(String mobilePhone) {
-        this.mobilePhone = mobilePhone;
+    public void setMobilePhone(String mobilephone) {
+        this.mobilephone = mobilephone;
     }
-
+    
     public String getWorkPhone() {
-        return workPhone;
+        return workphone;
     }
 
-    public void setWorkPhone(String workPhone) {
-        this.workPhone = workPhone;
+    public void setWorkPhone(String workphone) {
+        this.workphone = workphone;
     }
-
+    
     public String getAddress() {
         return address;
     }
@@ -96,11 +163,11 @@ public class Employee extends DBObject {
     }
 
     public String getPostalCode() {
-        return postalCode;
+        return postalcode;
     }
 
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+    public void setPostalCode(String postalcode) {
+        this.postalcode = postalcode;
     }
 
     public String getCity() {
@@ -119,11 +186,37 @@ public class Employee extends DBObject {
         this.email = email;
     }
 
-    public boolean getAdminStatus() {
-        return adminStatus;
+    public Boolean getAdminStatus() {
+        return adminstatus;
     }
 
-    public void setAdminStatus(boolean adminStatus) {
-        this.adminStatus = adminStatus;
+    public void setAdminStatus(Boolean adminstatus) {
+        this.adminstatus = adminstatus;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Employee)) {
+            return false;
+        }
+        Employee other = (Employee) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "se.m1.emapp.model.business.Employee[ id=" + id + " ]";
+    }
+    
 }

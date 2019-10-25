@@ -36,7 +36,7 @@ public class AppDbHelper {
      * @throws DatabaseCommunicationException underlying mechanisms failing
      * @throws EmptyResultException when no credentials where found for the specified parameters
      */
-    public Credential checkCredentials(String firstName, String lastName) throws DatabaseCommunicationException, EmptyResultException {
+    /*public Credential checkCredentials(String firstName, String lastName) throws DatabaseCommunicationException, EmptyResultException {
         String query = "SELECT id FROM CREDENTIAL WHERE LOGIN = ? AND PWD = ?";
 
         ArrayList<PreparedStatementTypes> parametersTypes = new ArrayList<>(Arrays.asList(PreparedStatementTypes.STRING, PreparedStatementTypes.STRING));
@@ -53,5 +53,5 @@ public class AppDbHelper {
         } catch (SQLException e) {
             throw new EmptyResultException(e);
         }
-    }
+    }*/
 }

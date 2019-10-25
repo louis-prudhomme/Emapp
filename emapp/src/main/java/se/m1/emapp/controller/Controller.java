@@ -15,15 +15,17 @@ import se.m1.emapp.model.core.exception.dbLink.DBLException;
 import se.m1.emapp.model.exception.EmptyResultException;
 import se.m1.emapp.model.core.DBLink;
 import se.m1.emapp.model.core.DBObject;
+import se.m1.emapp.model.core.JPAManager;
 import se.m1.emapp.model.core.exception.DatabaseCommunicationException;
 
 public class Controller extends HttpServlet {
-    private Properties properties;
-    private DBLink dbLink;
+    //private Properties properties;
+    //private DBLink dbLink;
     private String action;
     private HttpSession session;
-    private AppDbHelper helper;
+    //private AppDbHelper helper;
     private Credential user;
+    private JPAManager jpa;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,18 +38,15 @@ public class Controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        this.properties = new Properties();
-        properties.load(getServletContext().getResourceAsStream(PROP_FILE_PATH));
-
-        try {
-            this.dbLink = DBLink.getNewInstance(properties.getProperty("dbUrl"), properties.getProperty("dbUser"), properties.getProperty("dbPwd"));
-            this.dbLink.connect();
-        } catch (DBLException e) {
-            sendError(request, response, e);
-        }
+        /*try {Class.forName("com.mysql.jdbc.Driver");} 
+        catch (ClassNotFoundException e) {
+            throw new ServletException(e);
+        }*/
+        user = null;
+        jpa = new JPAManager();
 
         if (request.getParameter("action") == null) {
-            request.getRequestDispatcher(JSP_ERROR_PAGE).forward(request, response);
+            request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
         } else {
             action = request.getParameter("action");
             session = request.getSession();
@@ -61,21 +60,14 @@ public class Controller extends HttpServlet {
                         request.setAttribute("errKey", ERR_MESSAGE_FIELD_EMPTY);
                         request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
                     }
+                    user = new Credential(login, password);
                     
-                    helper = new AppDbHelper(dbLink);
-                    user = null;
-
-                    try {
-                        user = helper.checkCredentials(login, password);
-
-                        session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
+                    if(jpa.checkCredentials(user))
+                    {
+                        session.setAttribute("empList", jpa.getAll());
                         session.setAttribute("user", user);
-
                         request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
-
-                    } catch (DatabaseCommunicationException e) {
-                        sendError(request, response, e);
-                    } catch (EmptyResultException e) {
+                    }else{
                         request.setAttribute("errKey", ERR_MESSAGE_INVALID_CREDENTIALS);
                         request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
                     }
@@ -85,12 +77,9 @@ public class Controller extends HttpServlet {
                         request.setAttribute("errCheck", ERR_CHECK);
                     } else {
                         int id = Integer.parseInt(request.getParameter("check"));          
-                        try {
-                            new Employee(dbLink, id).delete();
-                            session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
-                        } catch (DatabaseCommunicationException e) {
-                            sendError(request, response, e);
-                        }
+                        
+                            jpa.removeEmployee(new Employee( id));                           
+                            session.setAttribute("empList", jpa.getAll());
                     }
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                     break;
@@ -100,62 +89,46 @@ public class Controller extends HttpServlet {
                         request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                     } else {
                         int idD = Integer.parseInt(request.getParameter("check"));
-                        try {
-                            Employee employee = new Employee(dbLink, idD);
-                            employee.read();
-                            session.setAttribute("employeeChecked", employee);
+                            session.setAttribute("employeeChecked", jpa.read(idD));
                             request.getRequestDispatcher(JSP_ADD).forward(request, response);
-                        } catch (DatabaseCommunicationException e) {
-                            sendError(request, response, e);
-                        }
                     }
                     break;
                 case "Add":
-                    session.setAttribute("employeeChecked", new Employee(dbLink, 0));
+                    session.setAttribute("employeeChecked", new Employee(0));
                     request.getRequestDispatcher(JSP_ADD).forward(request, response);
                     break;
                 case "Save":
                     if (((Employee)session.getAttribute("employeeChecked")).getId() != 0) {
-                        Employee employee = new Employee(dbLink, ((Employee)session.getAttribute("employeeChecked")).getId(), request.getParameter("inputFirstName"),
+                        Employee employee = new Employee(((Employee)session.getAttribute("employeeChecked")).getId(), request.getParameter("inputFirstName"),
                                 request.getParameter("inputLastName"), request.getParameter("inputHomePhone"),
                                 request.getParameter("inputMobilePhone"), request.getParameter("inputWorkPhone"),
                                 request.getParameter("inputAddress"), request.getParameter("inputPostalCode"),
-                                request.getParameter("inputCity"), request.getParameter("inputEmail"), false);
-                        try {
-                            employee.update();
-                            session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
+                                request.getParameter("inputCity"), request.getParameter("inputEmail"));
+                        
+                                System.out.println(request.getParameter("inputLastName")+"klqsflkfjmjqfjm<qfjsmQJfm   ");
+                                
+                            jpa.modifyEmployee(employee);
+                            session.setAttribute("empList", jpa.getAll());
                             session.removeAttribute("employeeChecked");
-                        } catch (DatabaseCommunicationException e) {
-                            sendError(request, response, e);
-                        }
                     } else {
-                        Employee employee = new Employee(dbLink, request.getParameter("inputFirstName"),
+                        Employee employee = new Employee(request.getParameter("inputFirstName"),
                                 request.getParameter("inputLastName"), request.getParameter("inputHomePhone"),
                                 request.getParameter("inputMobilePhone"), request.getParameter("inputWorkPhone"),
                                 request.getParameter("inputAddress"), request.getParameter("inputPostalCode"),
-                                request.getParameter("inputCity"), request.getParameter("inputEmail"), false);
-                        try {
-                            employee.create();
-                        } catch (DatabaseCommunicationException e) {
-                            sendError(request, response, e);
-                        }
+                                request.getParameter("inputCity"), request.getParameter("inputEmail"));
+                        System.out.println("klqsflkfjmjqfjm<qfjsmQJfm"+employee.getLastName());
+                        jpa.createEmployee(employee);
+                            
                     }
-                    try {
-                        session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
-                    } catch (DatabaseCommunicationException e) {
-                        sendError(request, response, e);
-                    }
+                    session.setAttribute("empList", jpa.getAll());
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                     break;
                 case "Cancel":
                     if (session.getAttribute("employeeChecked") != null) {
                         session.removeAttribute("employeeChecked");
                     }
-                    try {
-                        session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
-                    } catch (DatabaseCommunicationException e) {
-                        sendError(request, response, e);
-                    }
+                        session.setAttribute("empList", jpa.getAll());
+
 
                     request.getRequestDispatcher(JSP_WELCOME_PAGE).forward(request, response);
                 case "LogOut":
