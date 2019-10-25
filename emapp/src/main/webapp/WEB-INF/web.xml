@@ -6,7 +6,7 @@
     
     <servlet>
         <servlet-name>controller</servlet-name>
-        <servlet-class>se.m1.emapp.controller.TheOneServlet</servlet-class>
+        <servlet-class>se.m1.emapp.TheOneServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>controller</servlet-name>
