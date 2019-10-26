@@ -53,56 +53,81 @@ public class EmployeeController implements IController {
                 session.setAttribute("employeeChecked", new Employee(dbLink, 0));
                 return JSP_ADD;
             case DETAILS:
-                try {
-                    int id = Integer.parseInt(request.getParameter("check"));
-                    Employee employee = new Employee(dbLink, id);
-                    employee.read();
-                    session.setAttribute("employeeChecked", employee);
-                } catch (DBComException e) {
-                    TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
-                    return JSP_ERROR_PAGE;
-                } catch (NumberFormatException e) {
-                    //fires if there's an a error with the id
-                    request.setAttribute("errCheck", ERR_CHECK);
-                    return JSP_WELCOME_PAGE;
-                }
-                return JSP_ADD;
+                return details();
             case DELETE:
-                try {
-                    int id = Integer.parseInt(request.getParameter("check"));
-                    new Employee(dbLink, id).delete();
-                } catch (DBComException e) {
-                    TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
-                    return JSP_ERROR_PAGE;
-                } catch (NumberFormatException e) {
-                    //fires if there's an a error with the id
-                    request.setAttribute("errCheck", ERR_CHECK);
-                }
-                return JSP_WELCOME_PAGE;
+                return delete();
             case COMMIT:
-                //we check if the employee is either a fake one (id = 0) or not
-                //if fake, then it is a create request ; otherwise, this is an update
-                int id = session.getAttribute("employeeChecked") != null ? ((Employee)session.getAttribute("employeeChecked")).getId() : 0;
-                Employee employee = new Employee(dbLink, id, request.getParameter("inputFirstName"),
-                         request.getParameter("inputLastName"),  request.getParameter("inputHomePhone"),
-                         request.getParameter("inputMobilePhone"),  request.getParameter("inputWorkPhone"),
-                         request.getParameter("inputAddress"),  request.getParameter("inputPostalCode"),
-                         request.getParameter("inputCity"),  request.getParameter("inputEmail"), false);
-                try {
-                    if(id != 0) {
-                        employee.update();
-                    } else {
-                        employee.create();
-                    }
-                } catch (DBComException e) {
-                    TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
-                    return JSP_ERROR_PAGE;
-                }
-                return JSP_WELCOME_PAGE;
+                return commit();
             case CANCEL:
                 session.removeAttribute("employeeChecked");
             default:
                 return JSP_WELCOME_PAGE;
         }
+    }
+
+    /**
+     * handles the commit request
+     * @return next page
+     */
+    private String commit() {
+
+        //we check if the employee is either a fake one (id = 0) or not
+        //if fake, then it is a create request ; otherwise, this is an update
+        int id = session.getAttribute("employeeChecked") != null ? ((Employee)session.getAttribute("employeeChecked")).getId() : 0;
+        Employee employee = new Employee(dbLink, id, request.getParameter("inputFirstName"),
+                request.getParameter("inputLastName"),  request.getParameter("inputHomePhone"),
+                request.getParameter("inputMobilePhone"),  request.getParameter("inputWorkPhone"),
+                request.getParameter("inputAddress"),  request.getParameter("inputPostalCode"),
+                request.getParameter("inputCity"),  request.getParameter("inputEmail"), false);
+        try {
+            if(id != 0) {
+                employee.update();
+            } else {
+                employee.create();
+            }
+        } catch (DBComException e) {
+            TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
+            return JSP_ERROR_PAGE;
+        }
+        return JSP_WELCOME_PAGE;
+    }
+
+    /**
+     * handles the details request
+     * @return next page
+     */
+    private String details() {
+        try {
+            int id = Integer.parseInt(request.getParameter("check"));
+            Employee employee = new Employee(dbLink, id);
+            employee.read();
+            session.setAttribute("employeeChecked", employee);
+        } catch (DBComException e) {
+            TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
+            return JSP_ERROR_PAGE;
+        } catch (NumberFormatException e) {
+            //fires if there's an a error with the id
+            request.setAttribute("errCheck", ERR_CHECK);
+            return JSP_WELCOME_PAGE;
+        }
+        return JSP_ADD;
+    }
+
+    /**
+     * handles the delete request
+     * @return next page
+     */
+    private String delete() {
+        try {
+            int id = Integer.parseInt(request.getParameter("check"));
+            new Employee(dbLink, id).delete();
+        } catch (DBComException e) {
+            TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
+            return JSP_ERROR_PAGE;
+        } catch (NumberFormatException e) {
+            //fires if there's an a error with the id
+            request.setAttribute("errCheck", ERR_CHECK);
+        }
+        return JSP_WELCOME_PAGE;
     }
 }
