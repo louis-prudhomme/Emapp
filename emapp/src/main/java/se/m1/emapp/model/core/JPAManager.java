@@ -17,11 +17,7 @@ public class JPAManager
     private EntityManager em;
     private TypedQuery<Employee> queryEmployee;
     private TypedQuery<Credential> queryCredential;
-    
-    public JPAManager(){
-
-    }
-    
+  
     //Creation of an employee
     public void createEmployee(Employee e){ 
         emf= Persistence.createEntityManagerFactory("my_persistence_unit") ;
