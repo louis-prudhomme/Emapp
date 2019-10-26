@@ -1,7 +1,7 @@
 <jsp:useBean id="errorMessage" scope="request" type="java.lang.String"/>
-<jsp:useBean id="firstDigit" scope="request" type="java.lang.Integer"/>
-<jsp:useBean id="secondDigit" scope="request" type="java.lang.Integer"/>
-<jsp:useBean id="thirdDigit" scope="request" type="java.lang.Integer"/>
+<jsp:useBean id="firstDigit" scope="request" type="java.lang.Character"/>
+<jsp:useBean id="secondDigit" scope="request" type="java.lang.Character"/>
+<jsp:useBean id="thirdDigit" scope="request" type="java.lang.Character"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

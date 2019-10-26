@@ -13,6 +13,6 @@ public class Constants {
     public static final String ERR_MESSAGE_INVALID_CREDENTIALS = "Connection failed! Verify your login/password and try again. ";
     public static final String ERR_CHECK = "Please check an item.";
     
-    
-
+    public static final String DB_COM_ERROR_CODE = "500";
+    public static final String USER_WRONG_PAGE_CODE = "404";
 }

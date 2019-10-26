@@ -10,6 +10,11 @@ public enum WordOfPower {
     LOGOUT,
     NULL;
 
+    /**
+     * parses from string
+     * @param s string
+     * @return a word
+     */
     public static WordOfPower fromString(String s) {
         if(s == null) return NULL;
         for (WordOfPower w : WordOfPower.values()) {
