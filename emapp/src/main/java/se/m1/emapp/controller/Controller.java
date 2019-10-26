@@ -130,7 +130,6 @@ public class Controller extends HttpServlet {
                 default:
                     request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
             }
-
         }
     }
 
