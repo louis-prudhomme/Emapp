@@ -31,8 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Employee.findByAddress", query = "SELECT e FROM Employee e WHERE e.address = :address"),
     @NamedQuery(name = "Employee.findByPostalcode", query = "SELECT e FROM Employee e WHERE e.postalcode = :postalcode"),
     @NamedQuery(name = "Employee.findByCity", query = "SELECT e FROM Employee e WHERE e.city = :city"),
-    @NamedQuery(name = "Employee.findByEmail", query = "SELECT e FROM Employee e WHERE e.email = :email"),
-    @NamedQuery(name = "Employee.findByAdminstatus", query = "SELECT e FROM Employee e WHERE e.adminstatus = :adminstatus")})
+    @NamedQuery(name = "Employee.findByEmail", query = "SELECT e FROM Employee e WHERE e.email = :email")})
 
 public class Employee implements Serializable {
 
@@ -70,9 +69,6 @@ public class Employee implements Serializable {
     @Size(max = 128)
     @Column(name = "EMAIL")
     private String email;
-    @Column(name = "ADMINSTATUS")
-    private Boolean adminstatus;
-
     public Employee() {
     }
 
@@ -103,6 +99,7 @@ public class Employee implements Serializable {
         this.mobilephone = MobilePhone;
         this.workphone = WorkPhone;
         this.postalcode = PostalCode;
+       
        
     }
 
@@ -184,14 +181,6 @@ public class Employee implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Boolean getAdminStatus() {
-        return adminstatus;
-    }
-
-    public void setAdminStatus(Boolean adminstatus) {
-        this.adminstatus = adminstatus;
     }
 
     @Override

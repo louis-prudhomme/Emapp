@@ -5,12 +5,12 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>se.m1.emapp.model.business.Employee</class>
     <class>se.m1.emapp.model.business.Credential</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/JEEPRJ"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:8889/JEEPRJ?useUnicode=true;&amp;useJDBCCompliantTimezoneShift=true;&amp;useLegacyDatetimeCode=false;&amp;serverTimezone=UTC"/>
       <property name="javax.persistence.jdbc.user" value="jee"/>
-      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
-      <property name="javax.persistence.jdbc.password" value="jee"/>
-      
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="jee"/>    
     </properties>
   </persistence-unit>
 </persistence>

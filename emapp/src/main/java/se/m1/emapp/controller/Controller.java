@@ -9,12 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import static se.m1.emapp.utils.Constants.*;
 
-import se.m1.emapp.model.business.AppDbHelper;
 import se.m1.emapp.model.business.Employee;
 import se.m1.emapp.model.core.exception.dbLink.DBLException;
 import se.m1.emapp.model.exception.EmptyResultException;
-import se.m1.emapp.model.core.DBLink;
-import se.m1.emapp.model.core.DBObject;
 import se.m1.emapp.model.core.JPAManager;
 import se.m1.emapp.model.core.exception.DatabaseCommunicationException;
 
@@ -104,8 +101,6 @@ public class Controller extends HttpServlet {
                                 request.getParameter("inputMobilePhone"), request.getParameter("inputWorkPhone"),
                                 request.getParameter("inputAddress"), request.getParameter("inputPostalCode"),
                                 request.getParameter("inputCity"), request.getParameter("inputEmail"));
-                        
-                                System.out.println(request.getParameter("inputLastName")+"klqsflkfjmjqfjm<qfjsmQJfm   ");
                                 
                             jpa.modifyEmployee(employee);
                             session.setAttribute("empList", jpa.getAll());
@@ -116,7 +111,6 @@ public class Controller extends HttpServlet {
                                 request.getParameter("inputMobilePhone"), request.getParameter("inputWorkPhone"),
                                 request.getParameter("inputAddress"), request.getParameter("inputPostalCode"),
                                 request.getParameter("inputCity"), request.getParameter("inputEmail"));
-                        System.out.println("klqsflkfjmjqfjm<qfjsmQJfm"+employee.getLastName());
                         jpa.createEmployee(employee);
                             
                     }
@@ -136,6 +130,7 @@ public class Controller extends HttpServlet {
                 default:
                     request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
             }
+
         }
     }
 
