@@ -1,8 +1,8 @@
 package fr.efrei.se.emapp.api.model.core.exception.dbLink;
 
-import fr.efrei.se.emapp.api.model.core.exception.DatabaseCommunicationException;
+import  fr.efrei.se.emapp.api.model.core.exception.DBComException;
 
-public abstract class DBLException extends DatabaseCommunicationException {
+public abstract class DBLException extends DBComException {
     public DBLException() {
     }
 

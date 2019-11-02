@@ -2,7 +2,7 @@ package fr.efrei.se.emapp.api;
 
 import fr.efrei.se.emapp.api.model.business.Employee;
 import fr.efrei.se.emapp.api.model.core.DBLink;
-import fr.efrei.se.emapp.api.model.core.exception.DatabaseCommunicationException;
+import fr.efrei.se.emapp.api.model.core.exception.DBComException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -24,7 +24,7 @@ public class EmployeeResource {
      */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() throws DatabaseCommunicationException {
+    public String getIt() throws DBComException {
         List<Employee> employees = Employee.selectAll(getLink(), Employee.class);
         StringBuilder res = new StringBuilder();
         for (Employee e : employees) {
@@ -35,7 +35,7 @@ public class EmployeeResource {
         return res.toString();
     }
 
-    private DBLink getLink() throws DatabaseCommunicationException {
+    private DBLink getLink() throws DBComException {
         DBLink dbLink = DBLink.getNewInstance("jdbc:mysql://localhost:3306/JEEPRJ", "test", "password");
         dbLink.connect();
         return dbLink;

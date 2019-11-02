@@ -3,6 +3,8 @@ package fr.efrei.se.emapp.api.model.business;
 import fr.efrei.se.emapp.api.model.core.DBLink;
 import fr.efrei.se.emapp.api.model.core.DBObject;
 
+import java.util.ArrayList;
+
 public class Employee extends DBObject {
     private String firstName;
     private String lastName;

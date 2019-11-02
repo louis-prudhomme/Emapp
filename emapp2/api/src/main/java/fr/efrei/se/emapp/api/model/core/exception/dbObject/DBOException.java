@@ -1,8 +1,8 @@
 package fr.efrei.se.emapp.api.model.core.exception.dbObject;
 
-import fr.efrei.se.emapp.api.model.core.exception.DatabaseCommunicationException;
+import  fr.efrei.se.emapp.api.model.core.exception.DBComException;
 
-public abstract class DBOException extends DatabaseCommunicationException {
+public abstract class DBOException extends DBComException {
     public DBOException() {
     }
 

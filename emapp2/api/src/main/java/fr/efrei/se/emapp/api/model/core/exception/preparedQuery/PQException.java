@@ -1,8 +1,8 @@
 package fr.efrei.se.emapp.api.model.core.exception.preparedQuery;
 
-import fr.efrei.se.emapp.api.model.core.exception.DatabaseCommunicationException;
+import fr.efrei.se.emapp.api.model.core.exception.DBComException;
 
-public abstract class PQException extends DatabaseCommunicationException {
+public abstract class PQException extends DBComException {
     public PQException() {
         super();
     }

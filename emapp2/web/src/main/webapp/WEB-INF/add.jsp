@@ -1,4 +1,10 @@
+<<<<<<< HEAD:emapp2/web/src/main/webapp/WEB-INF/add.jsp
 <jsp:useBean id="employeeChecked" scope="session" type="fr.efrei.se.emapp.api.model.business.Employee"/>
+=======
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="se.m1.emapp.model.business.Employee" %>
+<jsp:useBean id="employeeChecked" scope="session" type="se.m1.emapp.model.business.Employee"/>
+>>>>>>> master:emapp/src/main/webapp/WEB-INF/add.jsp
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -32,7 +38,7 @@
                         <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
                         <div class="modal-body"><i class="fa fa-question-circle"></i> Do you really want to log out?</div>
                         <div class="modal-footer">
-                            <input type='submit' class="btn btn-primary btn-block" name="action" value="LogOut"/>
+                            <input type='submit' class="btn btn-primary btn-block" name="action" value="Logout"/>
                         </div>
                     </div>
                 </div>
@@ -94,7 +100,7 @@
             <div class="form-group row">
                 <div class="form-group col-sm-10"></div>
                 <div class="form-group col-sm-2">
-                    <input type='submit' class="btn btn-primary" name='action' value='Save'>
+                    <input type='submit' class="btn btn-primary" name='action' value='Commit'>
                     <input type='submit' class="btn btn-light" name='action' value='Cancel'>
                 </div>
             </div>

@@ -1,10 +1,11 @@
 package fr.efrei.se.emapp.api.model.business;
 
+import fr.efrei.se.emapp.api.model.core.exception.DBComException;
+import fr.efrei.se.emapp.api.model.exception.EmptyParameterException;
 import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
 import fr.efrei.se.emapp.api.model.core.DBLink;
 import fr.efrei.se.emapp.api.model.core.PreparedQuery;
 import fr.efrei.se.emapp.api.model.core.PreparedStatementTypes;
-import fr.efrei.se.emapp.api.model.core.exception.DatabaseCommunicationException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,10 +34,13 @@ public class AppDbHelper {
      * @param firstName duh
      * @param lastName duh
      * @return matching employee
-     * @throws DatabaseCommunicationException underlying mechanisms failing
+     * @throws DBComException underlying mechanisms failing
      * @throws EmptyResultException when no credentials where found for the specified parameters
      */
-    public Credential checkCredentials(String firstName, String lastName) throws DatabaseCommunicationException, EmptyResultException {
+    public Credential checkCredentials(String firstName, String lastName) throws DBComException, EmptyResultException, EmptyParameterException {
+        if(firstName.equals("") || lastName.equals("")) {
+            throw new EmptyParameterException();
+        }
         String query = "SELECT id FROM CREDENTIAL WHERE LOGIN = ? AND PWD = ?";
 
         ArrayList<PreparedStatementTypes> parametersTypes = new ArrayList<>(Arrays.asList(PreparedStatementTypes.STRING, PreparedStatementTypes.STRING));

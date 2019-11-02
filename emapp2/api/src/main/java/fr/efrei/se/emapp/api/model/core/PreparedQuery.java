@@ -1,7 +1,6 @@
 package fr.efrei.se.emapp.api.model.core;
 
 import fr.efrei.se.emapp.api.model.core.exception.preparedQuery.*;
-import fr.efrei.se.jee.model.core.exception.preparedQuery.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
