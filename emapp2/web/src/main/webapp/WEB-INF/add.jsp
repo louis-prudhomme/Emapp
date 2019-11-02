@@ -1,4 +1,4 @@
-<jsp:useBean id="employeeChecked" scope="session" type="fr.efrei.se.jee.model.business.Employee"/>
+<jsp:useBean id="employeeChecked" scope="session" type="fr.efrei.se.emapp.api.model.business.Employee"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

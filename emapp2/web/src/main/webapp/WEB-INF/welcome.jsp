@@ -1,5 +1,4 @@
 <jsp:useBean id="empList" scope="session" type="java.util.ArrayList"/>
-<jsp:useBean id="user" scope="session" type="fr.efrei.se.jee.model.business.Credential"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -31,8 +30,6 @@
         </c:if>
         <div class="container">
 
-            <p>Hello ${user.login}! Your session is active</p>
-
             <!--Logout button-->
             <form name="welcome" action="${pageContext.request.contextPath}/se.m1.emapp.controller">
             <!--Pop up for the logout-->
@@ -56,13 +53,6 @@
                             <td><b>SEL</b></td>
                             <td><b>FIRSTNAME</b></td>
                             <td><b>LASTNAME</b></td>
-                            <td><b>HOME PHONE</b></td>
-                            <td><b>MOBILE PHONE</b></td>
-                            <td><b>WORK PHONE</b></td>
-                            <td><b>ADDRESS</b></td>
-                            <td><b>POSTAL CODE</b></td>
-                            <td><b>CITY</b></td>
-                            <td><b>EMAIL</b></td>
                         </tr>
 
                         <c:forEach items="${empList}" var="employee">
@@ -77,13 +67,6 @@
                             </c:if>
                             <td> ${employee.firstName} </td>
                             <td> ${employee.lastName} </td>
-                            <td> ${employee.homePhone} </td>
-                            <td> ${employee.mobilePhone} </td>
-                            <td> ${employee.workPhone} </td>
-                            <td> ${employee.address} </td>
-                            <td> ${employee.postalCode} </td>
-                            <td> ${employee.city} </td>
-                            <td> ${employee.email} </td>
                             
                         </tr>
                       

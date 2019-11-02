@@ -6,7 +6,7 @@
 
   <servlet>
     <servlet-name>controller</servlet-name>
-    <servlet-class>fr.efrei.se.jee.controller.Controller</servlet-class>
+    <servlet-class>fr.efrei.se.emapp.web.controller.Controller</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>controller</servlet-name>
