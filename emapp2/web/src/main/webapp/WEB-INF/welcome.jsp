@@ -1,9 +1,4 @@
-<<<<<<< HEAD:emapp2/web/src/main/webapp/WEB-INF/welcome.jsp
 <jsp:useBean id="empList" scope="session" type="java.util.ArrayList"/>
-=======
-<jsp:useBean id="empList" scope="request" type="java.util.ArrayList"/>
-<jsp:useBean id="user" scope="session" type="se.m1.emapp.model.business.Credential"/>
->>>>>>> master:emapp/src/main/webapp/WEB-INF/welcome.jsp
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
