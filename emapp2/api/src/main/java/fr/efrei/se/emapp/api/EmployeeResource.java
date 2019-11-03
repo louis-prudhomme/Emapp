@@ -10,9 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-/**
- * Root resource (exposed at "employee" path)
- */
 @Path("employee")
 public class EmployeeResource {
 
