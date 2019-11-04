@@ -1,4 +1,4 @@
-<jsp:useBean id="empList" scope="session" type="java.util.ArrayList"/>
+<jsp:useBean id="empList" scope="request" type="java.util.ArrayList"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -58,13 +58,11 @@
                         <c:forEach items="${empList}" var="employee">
                         
                         <tr>
-                            <c:if test="${user.login.equals('admin')&& user.pwd.equals('admin')}">
                                 <td>
                                     <div class="form-group form-check">
                                         <input type="radio" class="form-check-input" name="check" value= ${employee.id}>
                                     </div>
                             </td>
-                            </c:if>
                             <td> ${employee.firstName} </td>
                             <td> ${employee.lastName} </td>
                             
@@ -81,15 +79,13 @@
                     </c:if>
                     
                 </div>
-                    
 
-                <c:if test="${user.login.equals('admin')&& user.pwd.equals('admin')}">
+
                 <div>
                     <input type='submit' class="btn btn-primary" name="action" value="Delete"/>
                     <input type='submit' class="btn btn-primary" name="action" value="Details"/>
                     <input type='submit' class="btn btn-primary" name="action" value="Add"/>
                 </div>
-                </c:if>
             </form>
         </div>
                     

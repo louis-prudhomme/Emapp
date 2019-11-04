@@ -1,10 +1,4 @@
-<<<<<<< HEAD:emapp2/web/src/main/webapp/WEB-INF/add.jsp
-<jsp:useBean id="employeeChecked" scope="session" type="fr.efrei.se.emapp.api.model.business.Employee"/>
-=======
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="se.m1.emapp.model.business.Employee" %>
-<jsp:useBean id="employeeChecked" scope="session" type="se.m1.emapp.model.business.Employee"/>
->>>>>>> master:emapp/src/main/webapp/WEB-INF/add.jsp
+<jsp:useBean id="employeeChecked" scope="session" type="fr.efrei.se.emapp.common.model.EmployeeTranscript"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -53,48 +47,6 @@
                 <label for="inputFirstName" class="col-sm-2 col-form-label">First name</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="inputFirstName" name="inputFirstName" placeholder="John" value="${employeeChecked.firstName}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="inputHomePhone" class="col-sm-2 col-form-label">Home phone</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputHomePhone" name="inputHomePhone" placeholder="+33 6 00 00 00 00" value="${employeeChecked.homePhone}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="inputMobilePhone" class="col-sm-2 col-form-label">Mobile phone</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputMobilePhone" name="inputMobilePhone" placeholder="+33 6 00 00 00 00" value="${employeeChecked.mobilePhone}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="inputWorkPhone" class="col-sm-2 col-form-label">Work phone</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputWorkPhone" name="inputWorkPhone" placeholder="+33 6 00 00 00 00" value="${employeeChecked.workPhone}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputAddress" name="inputAddress" placeholder="-1, ArrayOutOfBound Street" value="${employeeChecked.address}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="inputPostalCode" class="col-sm-2 col-form-label">Postal code</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputPostalCode" name="inputPostalCode" placeholder="00000" value="${employeeChecked.postalCode}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="inputCity" class="col-sm-2 col-form-label">City</label>
-                <div class="col-sm-9">
-                   <input type="text" class="form-control" id="inputCity" name="inputCity" placeholder="Exception city" value="${employeeChecked.city}">
-                </div>
-            </div>
-            <div class="form-group row">
-               <label for="inputEmail" class="col-sm-2 col-form-label">Email address</label>
-                <div class="col-sm-9">
-                   <input type="text" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email address" value="${employeeChecked.email}">
                 </div>
             </div>
             <div class="form-group row">

@@ -1,5 +1,10 @@
 package fr.efrei.se.emapp.web.controller;
 
+import fr.efrei.se.emapp.common.model.EmployeeTranscript;
+import fr.efrei.se.emapp.web.TheOneServlet;
+import fr.efrei.se.emapp.web.utils.HttpMethod;
+import fr.efrei.se.emapp.web.utils.HttpRequestHelper;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,6 +12,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static fr.efrei.se.emapp.web.utils.Constants.*;
+import static fr.efrei.se.emapp.web.utils.HttpMethod.DELETE;
+import static fr.efrei.se.emapp.web.utils.HttpMethod.PUT;
 
 public class EmployeeController implements IController {
     private HttpServletRequest request;
@@ -42,7 +49,7 @@ public class EmployeeController implements IController {
         switch (action) {
             case ADD:
                 //add.jsp needs an employee ; we create this one to fake it
-                //session.setAttribute("employeeChecked", new Employee(dbLink, 0));
+                session.setAttribute("employeeChecked", new EmployeeTranscript());
                 return JSP_ADD;
             case DETAILS:
                 return details();
@@ -61,26 +68,21 @@ public class EmployeeController implements IController {
      * handles the commit request
      * @return next page
      */
-    private String commit() {/*
-
+    private String commit() {
         //we check if the employee is either a fake one (id = 0) or not
         //if fake, then it is a create request ; otherwise, this is an update
-        int id = session.getAttribute("employeeChecked") != null ? ((Employee)session.getAttribute("employeeChecked")).getId() : 0;
-        Employee employee = new Employee(dbLink, id, request.getParameter("inputFirstName"),
-                request.getParameter("inputLastName"),  request.getParameter("inputHomePhone"),
-                request.getParameter("inputMobilePhone"),  request.getParameter("inputWorkPhone"),
-                request.getParameter("inputAddress"),  request.getParameter("inputPostalCode"),
-                request.getParameter("inputCity"),  request.getParameter("inputEmail"), false);
+        int id = session.getAttribute("employeeChecked") != null ? ((EmployeeTranscript)session.getAttribute("employeeChecked")).getId() : 0;
+        EmployeeTranscript employee = new EmployeeTranscript();
+        employee.setId(id);
+        employee.setFirstName(request.getParameter("inputFirstName"));
+        employee.setFirstName(request.getParameter("inputLastName"));
+        //request.getParameter("inputLastName"),  request.getParameter("inputHomePhone"), request.getParameter("inputMobilePhone"),  request.getParameter("inputWorkPhone"), request.getParameter("inputAddress"),  request.getParameter("inputPostalCode"), request.getParameter("inputCity"),  request.getParameter("inputEmail"), false);
         try {
-            if(id != 0) {
-                employee.update();
-            } else {
-                employee.create();
-            }
-        } catch (Exception e) {
+            HttpRequestHelper.put(EMPLOYEES_URI, employee);
+        } catch (IOException e) {
             TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
             return JSP_ERROR_PAGE;
-        }*/
+        }
         return JSP_WELCOME_PAGE;
     }
 
@@ -88,20 +90,19 @@ public class EmployeeController implements IController {
      * handles the details request
      * @return next page
      */
-    private String details() {/*
+    private String details() {
         try {
             int id = Integer.parseInt(request.getParameter("check"));
-            Employee employee = new Employee(dbLink, id);
-            employee.read();
+            EmployeeTranscript employee = HttpRequestHelper.get(EMPLOYEES_URI + "/" + id, EmployeeTranscript.class);
             session.setAttribute("employeeChecked", employee);
-        } catch (DBComException e) {
+        } catch (IOException e) {
             TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
             return JSP_ERROR_PAGE;
         } catch (NumberFormatException e) {
             //fires if there's an a error with the id
             request.setAttribute("errCheck", ERR_CHECK);
             return JSP_WELCOME_PAGE;
-        }*/
+        }
         return JSP_ADD;
     }
 
@@ -109,17 +110,17 @@ public class EmployeeController implements IController {
      * handles the delete request
      * @return next page
      */
-    private String delete() {/*
+    private String delete() {
         try {
             int id = Integer.parseInt(request.getParameter("check"));
-            new Employee(dbLink, id).delete();
-        } catch (DBComException e) {
+            HttpRequestHelper.request(DELETE, EMPLOYEES_URI + "/" + id);
+        } catch (IOException e) {
             TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
             return JSP_ERROR_PAGE;
         } catch (NumberFormatException e) {
             //fires if there's an a error with the id
             request.setAttribute("errCheck", ERR_CHECK);
-        }*/
+        }
         return JSP_WELCOME_PAGE;
     }
 }

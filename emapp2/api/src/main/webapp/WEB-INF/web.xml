@@ -13,6 +13,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Restey</servlet-name>
-        <url-pattern>/api/*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 </web-app>
