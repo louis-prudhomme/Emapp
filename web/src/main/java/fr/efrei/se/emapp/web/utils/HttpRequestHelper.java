@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import fr.efrei.se.emapp.common.model.EmployeeTranscript;
 
+import javax.ws.rs.core.HttpHeaders;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
@@ -17,16 +18,17 @@ import static fr.efrei.se.emapp.web.utils.HttpMethod.PUT;
 public class HttpRequestHelper {
     private static Gson cypher = new Gson();
 
-    public static String request(HttpMethod method, String uri) throws IOException {
-        return request(method, uri, null);
+    public static String request(HttpMethod method, String uri, String token) throws IOException {
+        return request(method, uri, token,null);
     }
 
-    public static String request(HttpMethod method, String uri, Object parameter) throws IOException {
+    public static String request(HttpMethod method, String uri, String token, Object parameter) throws IOException {
         URL url = new URL(uri);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
         connection.setRequestMethod(method.name());
-        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/json");
+        connection.setRequestProperty(HttpHeaders.AUTHORIZATION, token);
         connection.setDoInput(true);
         connection.setDoOutput(true);
 
@@ -58,16 +60,16 @@ public class HttpRequestHelper {
         return content.toString();
     }
 
-    public static <T> T get(String uri, Class<T> clazz) throws IOException {
-        return cypher.fromJson(HttpRequestHelper.request(GET, uri), clazz);
+    public static <T> T get(String uri, String token, Class<T> clazz) throws IOException {
+        return cypher.fromJson(HttpRequestHelper.request(GET, uri, token), clazz);
     }
 
-    public static <T> ArrayList<T> getAll(String uri, Class<T> klass) throws IOException {
+    public static <T> ArrayList<T> getAll(String uri, String token, Class<T> klass) throws IOException {
         Type listType = TypeToken.getParameterized(ArrayList.class, klass).getType();
-        return cypher.<ArrayList>fromJson(HttpRequestHelper.request(GET, uri), listType);
+        return cypher.<ArrayList>fromJson(HttpRequestHelper.request(GET, uri, token), listType);
     }
 
-    public static void put(String uri, Object parameter) throws IOException {
-        request(PUT, uri, parameter);
+    public static void put(String uri, String token, Object parameter) throws IOException {
+        request(PUT, uri, token, parameter);
     }
 }

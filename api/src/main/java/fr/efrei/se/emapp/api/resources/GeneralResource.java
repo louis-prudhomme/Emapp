@@ -1,4 +1,4 @@
-package fr.efrei.se.emapp.api;
+package fr.efrei.se.emapp.api.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
