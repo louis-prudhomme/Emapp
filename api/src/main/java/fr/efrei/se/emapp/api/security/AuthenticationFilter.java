@@ -1,5 +1,7 @@
 package fr.efrei.se.emapp.api.security;
 
+import fr.efrei.se.emapp.common.security.Role;
+
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -16,32 +18,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static fr.efrei.se.emapp.common.utils.Constants.TOKEN_FILE;
+
 @Secured
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
-    private static final String AUTH_STATIC_SALT = "MAHOUTS";
-    private static final String TOKEN_FILE = "token.properties";
-
     @Context
     private ResourceInfo resourceInfo;
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-/*
-        if(!isValidToken(authorizationHeader)) {
-            containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
-            return;
-        }*/
 
         Method resourceClass = resourceInfo.getResourceMethod();
         List<Role> authorizedRoles = extractRoles(resourceClass);
-        //String token = authorizationHeader.substring(AUTH_STATIC_SALT.length()).trim();
-        String token = authorizationHeader;
 
         if(!authorizedRoles.isEmpty()) {
-            if(!checkPermission(authorizedRoles, token)) {
+            if(!checkPermission(authorizedRoles, authorizationHeader)) {
                 containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             }
         }
@@ -52,11 +46,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         Role incomingRole = matcher.getCorrespondingRole(token);
 
         return authorizedRoles.contains(incomingRole);
-    }
-
-    private boolean isValidToken(String authorizationHeader) {
-        return authorizationHeader != null &&
-                authorizationHeader.toLowerCase().startsWith(AUTH_STATIC_SALT.toLowerCase() + " ");
     }
 
     private List<Role> extractRoles(AnnotatedElement annotatedElement) {

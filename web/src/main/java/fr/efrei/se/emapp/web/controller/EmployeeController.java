@@ -1,6 +1,7 @@
 package fr.efrei.se.emapp.web.controller;
 
 import fr.efrei.se.emapp.common.model.EmployeeTranscript;
+import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.web.TheOneServlet;
 import fr.efrei.se.emapp.web.utils.HttpMethod;
 import fr.efrei.se.emapp.web.utils.HttpRequestHelper;
@@ -78,7 +79,7 @@ public class EmployeeController implements IController {
         employee.setFirstName(request.getParameter("inputLastName"));
         //request.getParameter("inputLastName"),  request.getParameter("inputHomePhone"), request.getParameter("inputMobilePhone"),  request.getParameter("inputWorkPhone"), request.getParameter("inputAddress"),  request.getParameter("inputPostalCode"), request.getParameter("inputCity"),  request.getParameter("inputEmail"), false);
         try {
-            HttpRequestHelper.put(EMPLOYEES_URI, "haddock", employee);
+            HttpRequestHelper.put(EMPLOYEES_URI, TheOneServlet.getRoleMatcher().getCorrespondingToken(Role.ADMIN), employee);
         } catch (IOException e) {
             TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
             return JSP_ERROR_PAGE;
@@ -93,7 +94,8 @@ public class EmployeeController implements IController {
     private String details() {
         try {
             int id = Integer.parseInt(request.getParameter("check"));
-            EmployeeTranscript employee = HttpRequestHelper.get(EMPLOYEES_URI + "/" + id, "haddock", EmployeeTranscript.class);
+            EmployeeTranscript employee = HttpRequestHelper.get(EMPLOYEES_URI + "/" + id,
+                    TheOneServlet.getRoleMatcher().getCorrespondingToken(Role.ADMIN), EmployeeTranscript.class);
             session.setAttribute("employeeChecked", employee);
         } catch (IOException e) {
             TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
@@ -113,7 +115,8 @@ public class EmployeeController implements IController {
     private String delete() {
         try {
             int id = Integer.parseInt(request.getParameter("check"));
-            HttpRequestHelper.request(DELETE, EMPLOYEES_URI + "/" + id, "haddock");
+            HttpRequestHelper.request(DELETE, EMPLOYEES_URI + "/" + id,
+                    TheOneServlet.getRoleMatcher().getCorrespondingToken(Role.ADMIN));
         } catch (IOException e) {
             TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
             return JSP_ERROR_PAGE;

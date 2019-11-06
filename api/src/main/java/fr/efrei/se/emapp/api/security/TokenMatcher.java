@@ -1,5 +1,7 @@
 package fr.efrei.se.emapp.api.security;
 
+import fr.efrei.se.emapp.common.security.Role;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
@@ -12,6 +14,7 @@ public class TokenMatcher {
     public TokenMatcher(String tokenPropertiesUri) throws IOException {
         this.tokenProperties = new Properties();
         tokenProperties.load(this.getClass().getClassLoader().getResourceAsStream(tokenPropertiesUri));
+
         this.roles = new HashMap<>();
 
         readTokens();

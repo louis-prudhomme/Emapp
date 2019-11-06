@@ -1,10 +1,12 @@
 package fr.efrei.se.emapp.web;
 
 import fr.efrei.se.emapp.common.model.EmployeeTranscript;
+import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.web.controller.ControllerFactory;
 import fr.efrei.se.emapp.web.controller.IController;
 import fr.efrei.se.emapp.web.controller.StateOfPower;
 import fr.efrei.se.emapp.web.controller.WordOfPower;
+import fr.efrei.se.emapp.web.security.RoleMatcher;
 import fr.efrei.se.emapp.web.utils.HttpRequestHelper;
 
 import javax.servlet.ServletException;
@@ -13,9 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static fr.efrei.se.emapp.common.utils.Constants.TOKEN_FILE;
 import static fr.efrei.se.emapp.web.utils.Constants.*;
 
 public class TheOneServlet extends HttpServlet {
+    private static RoleMatcher roleMatcher;
+
     private String nextPage;
     private IController controller;
     private StateOfPower state;
@@ -53,7 +58,9 @@ public class TheOneServlet extends HttpServlet {
         //this is made to avoid repeating it over and over in employeeController
         if(nextPage.equals(JSP_WELCOME_PAGE)) {
             try {
-                request.setAttribute("empList", HttpRequestHelper.getAll(EMPLOYEES_URI, "haddock", EmployeeTranscript.class));
+                roleMatcher = new RoleMatcher(TOKEN_FILE);
+
+                request.setAttribute("empList", HttpRequestHelper.getAll(EMPLOYEES_URI, roleMatcher.getCorrespondingToken(Role.ADMIN), EmployeeTranscript.class));
             } catch (Exception e) {
                 TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
                 nextPage = JSP_ERROR_PAGE;
@@ -99,5 +106,9 @@ public class TheOneServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
+    }
+
+    public static RoleMatcher getRoleMatcher() {
+        return roleMatcher;
     }
 }

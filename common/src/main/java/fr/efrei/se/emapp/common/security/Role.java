@@ -1,4 +1,4 @@
-package fr.efrei.se.emapp.api.security;
+package fr.efrei.se.emapp.common.security;
 
 public enum Role {
     ADMIN("admin_token"),

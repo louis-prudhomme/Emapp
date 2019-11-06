@@ -3,7 +3,7 @@ package fr.efrei.se.emapp.api.resources;
 import com.google.gson.Gson;
 import fr.efrei.se.emapp.api.model.business.Employee;
 import fr.efrei.se.emapp.api.model.core.exception.DBComException;
-import fr.efrei.se.emapp.api.security.Role;
+import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.api.security.Secured;
 import fr.efrei.se.emapp.common.model.EmployeeTranscript;
 

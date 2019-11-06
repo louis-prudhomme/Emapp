@@ -5,7 +5,7 @@ import fr.efrei.se.emapp.api.model.business.Credential;
 import fr.efrei.se.emapp.api.model.core.exception.DBComException;
 import fr.efrei.se.emapp.api.model.exception.EmptyParameterException;
 import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
-import fr.efrei.se.emapp.api.security.Role;
+import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.api.security.Secured;
 
 import javax.ws.rs.*;

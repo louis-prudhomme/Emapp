@@ -1,5 +1,7 @@
 package fr.efrei.se.emapp.api.security;
 
+import fr.efrei.se.emapp.common.security.Role;
+
 import javax.ws.rs.NameBinding;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
