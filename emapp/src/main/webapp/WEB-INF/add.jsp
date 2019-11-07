@@ -42,7 +42,7 @@
             <div class="form-group row">
                 <label for="inputLastName" class="col-sm-2 col-form-label">Last name</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputLastName" name="inputLastName" placeholder="Doe" value="${employeeChecked.lastName}">
+                    <input type="text" class="form-control" id="inputLastName" name='inputLastName' placeholder="Doe" value='${employeeChecked.lastName}'>
                 </div>
             </div>
             <div class="form-group row">

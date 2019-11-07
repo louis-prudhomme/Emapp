@@ -25,8 +25,8 @@
                 </div>
 
                 <form name="registering" action="${pageContext.request.contextPath}/se.m1.emapp.controller">
-                    <input type='text' name='loginField' class="fadeIn second" placeholder="Login">
-                    <input type='text' name='pwdField' class="fadeIn third" placeholder="Password">
+                    <input type='text' name="loginField" class="fadeIn second" placeholder="Login">
+                    <input type='text' name="pwdField" class="fadeIn third" placeholder="Password">
                     <input type='submit' class="fadeIn fourth" name='action' value='Login'>
                 </form>
 
