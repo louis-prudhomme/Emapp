@@ -1,18 +1,15 @@
 package se.m1.emapp.controller;
 
-import se.m1.emapp.TheOneServlet;
-import se.m1.emapp.model.business.AppDbHelper;
 import se.m1.emapp.model.business.Credential;
-import se.m1.emapp.model.core.DBLink;
-import se.m1.emapp.model.core.exception.DBComException;
-import se.m1.emapp.model.exception.EmptyParameterException;
-import se.m1.emapp.model.exception.EmptyResultException;
+
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import se.m1.emapp.model.core.JPAManager;
 
 import static se.m1.emapp.utils.Constants.*;
 
@@ -23,23 +20,26 @@ import static se.m1.emapp.utils.Constants.*;
 public class SessionController implements IController {
     private HttpServletRequest request;
     private HttpServletResponse response;
+    private Credential user;
+    
 
-    /**
-     * session and dblink are shortcuts to avoid cluttering the code with calls through request
-     */
+    private JPAManager jpa;
+    
+    
     private HttpSession session;
-    private DBLink dbLink;
+
 
     /**
      * default constructor
      * @param request http servlet request
      * @param response http servlet response
      */
-    SessionController(HttpServletRequest request, HttpServletResponse response) {
+    SessionController(HttpServletRequest request, HttpServletResponse response, JPAManager jpa) {
         this.request = request;
         this.response = response;
         this.session = request.getSession();
-        this.dbLink = (DBLink)request.getAttribute("dbLink");
+        this.jpa = jpa;
+
     }
 
     /**
@@ -71,22 +71,31 @@ public class SessionController implements IController {
      * @throws IOException unexpected
      */
     private String logUser() throws ServletException, IOException {
-        String login = request.getParameter("loginField");
-        String password = request.getParameter("pwdField");
-
-        try {
-            Credential user = new AppDbHelper(dbLink).checkCredentials(login, password);
-            session.setAttribute("user", user);
-            return JSP_WELCOME_PAGE;
-        } catch (DBComException e) {
-            TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
-            return JSP_ERROR_PAGE;
-        } catch (EmptyResultException e) {
-            request.setAttribute("errKey", ERR_MESSAGE_INVALID_CREDENTIALS);
-            return JSP_HOME_PAGE;
-        } catch (EmptyParameterException e) {
-            request.setAttribute("errKey", ERR_MESSAGE_FIELD_EMPTY);
-            return JSP_HOME_PAGE;
-        }
+                    String login = request.getParameter("loginField");
+                    String password = request.getParameter("pwdField");
+                    user = null;
+                    
+                    if(login.equals("") || password.equals(""))
+                    {
+                        request.setAttribute("errKey", ERR_MESSAGE_FIELD_EMPTY);
+                        return JSP_HOME_PAGE;
+                       
+                    }
+                    
+                    user = new Credential(login, password);
+                    System.out.println("LKQHSFLKQHFLKHQFLH"+user);
+                    System.out.println("sqlkjdlkqjlkfqj"+user.getLogin());
+                    
+                    if(jpa.checkCredentials(user))
+                    {
+                        session.setAttribute("empList", jpa.getAll());
+                        session.setAttribute("user", user);
+                        return JSP_WELCOME_PAGE;
+                    }else{
+                        request.setAttribute("errKey", ERR_MESSAGE_INVALID_CREDENTIALS);
+                        return JSP_HOME_PAGE;
+                        
+                    }
+        
     }
 }

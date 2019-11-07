@@ -1,39 +1,37 @@
 package se.m1.emapp.controller;
 
-import org.omg.PortableServer.THREAD_POLICY_ID;
-import se.m1.emapp.TheOneServlet;
 import se.m1.emapp.model.business.Employee;
-import se.m1.emapp.model.core.DBLink;
-import se.m1.emapp.model.core.exception.DBComException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import se.m1.emapp.model.core.JPAManager;
 
 import static se.m1.emapp.utils.Constants.*;
 
 public class EmployeeController implements IController {
     private HttpServletRequest request;
     private HttpServletResponse response;
-
+    
+    private JPAManager jpa;
     /**
      * session and dblink are shortcuts to avoid cluttering the code with calls through request
      */
     private HttpSession session;
-    private DBLink dbLink;
 
     /**
      * default constructor
      * @param request http servlet request
      * @param response http servlet response
      */
-    EmployeeController(HttpServletRequest request, HttpServletResponse response) {
+    EmployeeController(HttpServletRequest request, HttpServletResponse response, JPAManager jpa) {
         this.request = request;
         this.response = response;
         this.session = request.getSession();
-        this.dbLink = (DBLink)request.getAttribute("dbLink");
+        this.jpa = jpa;
+        
     }
 
     /**
@@ -50,7 +48,7 @@ public class EmployeeController implements IController {
         switch (action) {
             case ADD:
                 //add.jsp needs an employee ; we create this one to fake it
-                session.setAttribute("employeeChecked", new Employee(dbLink, 0));
+                session.setAttribute("employeeChecked", new Employee(0));               
                 return JSP_ADD;
             case DETAILS:
                 return details();
@@ -70,25 +68,20 @@ public class EmployeeController implements IController {
      * @return next page
      */
     private String commit() {
-
         //we check if the employee is either a fake one (id = 0) or not
         //if fake, then it is a create request ; otherwise, this is an update
         int id = session.getAttribute("employeeChecked") != null ? ((Employee)session.getAttribute("employeeChecked")).getId() : 0;
-        Employee employee = new Employee(dbLink, id, request.getParameter("inputFirstName"),
+        Employee employee = new Employee(id, request.getParameter("inputFirstName"),
                 request.getParameter("inputLastName"),  request.getParameter("inputHomePhone"),
                 request.getParameter("inputMobilePhone"),  request.getParameter("inputWorkPhone"),
-                request.getParameter("inputAddress"),  request.getParameter("inputPostalCode"),
-                request.getParameter("inputCity"),  request.getParameter("inputEmail"), false);
-        try {
+                request.getParameter("inputAddress"),  request.getParameter("inputPostalCode"),request.getParameter("inputCity"), request.getParameter("inputEmail"));
+
             if(id != 0) {
-                employee.update();
+                jpa.modifyEmployee(employee);
             } else {
-                employee.create();
+                jpa.createEmployee(employee);
             }
-        } catch (DBComException e) {
-            TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
-            return JSP_ERROR_PAGE;
-        }
+        session.removeAttribute("employeeChecked");
         return JSP_WELCOME_PAGE;
     }
 
@@ -96,15 +89,11 @@ public class EmployeeController implements IController {
      * handles the details request
      * @return next page
      */
-    private String details() {
+    private String details() {   
         try {
             int id = Integer.parseInt(request.getParameter("check"));
-            Employee employee = new Employee(dbLink, id);
-            employee.read();
+            Employee employee = jpa.read(id);
             session.setAttribute("employeeChecked", employee);
-        } catch (DBComException e) {
-            TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
-            return JSP_ERROR_PAGE;
         } catch (NumberFormatException e) {
             //fires if there's an a error with the id
             request.setAttribute("errCheck", ERR_CHECK);
@@ -117,13 +106,10 @@ public class EmployeeController implements IController {
      * handles the delete request
      * @return next page
      */
-    private String delete() {
+    private String delete() {                                                            
         try {
             int id = Integer.parseInt(request.getParameter("check"));
-            new Employee(dbLink, id).delete();
-        } catch (DBComException e) {
-            TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
-            return JSP_ERROR_PAGE;
+            jpa.removeEmployee(new Employee( id));
         } catch (NumberFormatException e) {
             //fires if there's an a error with the id
             request.setAttribute("errCheck", ERR_CHECK);
