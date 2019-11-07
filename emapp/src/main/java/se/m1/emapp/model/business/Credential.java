@@ -22,12 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "CREDENTIAL")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Credential.findAll", query = "SELECT c FROM Credential c"),
-    @NamedQuery(name = "Credential.findById", query = "SELECT c FROM Credential c WHERE c.id = :id"),
-    @NamedQuery(name = "Credential.findByLogin", query = "SELECT c FROM Credential c WHERE c.login = :login"),
-    @NamedQuery(name = "Credential.findByPwd", query = "SELECT c FROM Credential c WHERE c.pwd = :pwd"),
-@NamedQuery(name = "Credential.checkcred", query = "SELECT c FROM Credential c WHERE c.login = :login AND c.pwd = :pwd")})
+@NamedQueries({@NamedQuery(name = "Credential.checkcred", query = "SELECT c FROM Credential c WHERE c.login = :login AND c.pwd = :pwd")})
 public class Credential implements Serializable {
 
     private static final long serialVersionUID = 1L;
