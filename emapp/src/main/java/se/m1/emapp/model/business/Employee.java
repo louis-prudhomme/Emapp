@@ -24,15 +24,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Employee.findAll", query = "SELECT e FROM Employee e"),
     @NamedQuery(name = "Employee.findById", query = "SELECT e FROM Employee e WHERE e.id = :id"),
-    @NamedQuery(name = "Employee.findByFirstname", query = "SELECT e FROM Employee e WHERE e.firstname = :firstname"),
-    @NamedQuery(name = "Employee.findByLastname", query = "SELECT e FROM Employee e WHERE e.lastname = :lastname"),
-    @NamedQuery(name = "Employee.findByHomephone", query = "SELECT e FROM Employee e WHERE e.homephone = :homephone"),
-    @NamedQuery(name = "Employee.findByMobilephone", query = "SELECT e FROM Employee e WHERE e.mobilephone = :mobilephone"),
+    @NamedQuery(name = "Employee.findByFirstName", query = "SELECT e FROM Employee e WHERE e.firstName = :firstName"),
+    @NamedQuery(name = "Employee.findByLastName", query = "SELECT e FROM Employee e WHERE e.lastName = :lastName"),
+    @NamedQuery(name = "Employee.findByHomePhone", query = "SELECT e FROM Employee e WHERE e.homePhone = :homePhone"),
+    @NamedQuery(name = "Employee.findByMobilePhone", query = "SELECT e FROM Employee e WHERE e.mobilePhone = :mobilePhone"),
+    @NamedQuery(name = "Employee.findByWorkPhone", query = "SELECT e FROM Employee e WHERE e.workPhone = :workPhone"),
     @NamedQuery(name = "Employee.findByAddress", query = "SELECT e FROM Employee e WHERE e.address = :address"),
-    @NamedQuery(name = "Employee.findByPostalcode", query = "SELECT e FROM Employee e WHERE e.postalcode = :postalcode"),
+    @NamedQuery(name = "Employee.findByPostalCode", query = "SELECT e FROM Employee e WHERE e.postalCode = :postalCode"),
     @NamedQuery(name = "Employee.findByCity", query = "SELECT e FROM Employee e WHERE e.city = :city"),
     @NamedQuery(name = "Employee.findByEmail", query = "SELECT e FROM Employee e WHERE e.email = :email")})
-
 public class Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,25 +43,25 @@ public class Employee implements Serializable {
     private Integer id;
     @Size(max = 128)
     @Column(name = "FIRSTNAME")
-    private String firstname;
+    private String firstName;
     @Size(max = 128)
     @Column(name = "LASTNAME")
-    private String lastname;
+    private String lastName;
     @Size(max = 128)
     @Column(name = "HOMEPHONE")
-    private String homephone;
+    private String homePhone;
     @Size(max = 128)
     @Column(name = "MOBILEPHONE")
-    private String mobilephone;
+    private String mobilePhone;
     @Size(max = 128)
     @Column(name = "WORKPHONE")
-    private String workphone;
+    private String workPhone;
     @Size(max = 128)
     @Column(name = "ADDRESS")
     private String address;
     @Size(max = 128)
     @Column(name = "POSTALCODE")
-    private String postalcode;
+    private String postalCode;
     @Size(max = 128)
     @Column(name = "CITY")
     private String city;
@@ -69,6 +69,7 @@ public class Employee implements Serializable {
     @Size(max = 128)
     @Column(name = "EMAIL")
     private String email;
+
     public Employee() {
     }
 
@@ -80,12 +81,12 @@ public class Employee implements Serializable {
         this.address = address;
         this.city = City;
         this.email = email;
-        this.firstname = Firstname;
-        this.lastname = Lastname;
-        this.homephone = HomePhone;
-        this.mobilephone = MobilePhone;
-        this.workphone = WorkPhone;
-        this.postalcode = PostalCode;
+        this.firstName = Firstname;
+        this.lastName = Lastname;
+        this.homePhone = HomePhone;
+        this.mobilePhone = MobilePhone;
+        this.workPhone = WorkPhone;
+        this.postalCode = PostalCode;
         
     }
     
@@ -93,12 +94,12 @@ public class Employee implements Serializable {
         this.address = address;
         this.city = City;
         this.email = email;
-        this.lastname = Lastname;
-        this.firstname = Firstname;
-        this.homephone = HomePhone;
-        this.mobilephone = MobilePhone;
-        this.workphone = WorkPhone;
-        this.postalcode = PostalCode;
+        this.lastName = Lastname;
+        this.firstName = Firstname;
+        this.homePhone = HomePhone;
+        this.mobilePhone = MobilePhone;
+        this.workPhone = WorkPhone;
+        this.postalCode = PostalCode;
        
        
     }
@@ -112,45 +113,45 @@ public class Employee implements Serializable {
     }
 
     public String getFirstName() {
-        return firstname;
+        return firstName;
     }
 
-    public void setFirstName(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
-        return lastname;
+        return lastName;
     }
 
-    public void setLastName(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getHomePhone() {
-        return homephone;
+        return homePhone;
     }
 
-    public void setHomePhone(String homephone) {
-        this.homephone = homephone;
+    public void setHomePhone(String homePhone) {
+        this.homePhone = homePhone;
     }
 
     public String getMobilePhone() {
-        return mobilephone;
+        return mobilePhone;
     }
 
-    public void setMobilePhone(String mobilephone) {
-        this.mobilephone = mobilephone;
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
     }
-    
+
     public String getWorkPhone() {
-        return workphone;
+        return workPhone;
     }
 
-    public void setWorkPhone(String workphone) {
-        this.workphone = workphone;
+    public void setWorkPhone(String workPhone) {
+        this.workPhone = workPhone;
     }
-    
+
     public String getAddress() {
         return address;
     }
@@ -160,11 +161,11 @@ public class Employee implements Serializable {
     }
 
     public String getPostalCode() {
-        return postalcode;
+        return postalCode;
     }
 
-    public void setPostalCode(String postalcode) {
-        this.postalcode = postalcode;
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public String getCity() {

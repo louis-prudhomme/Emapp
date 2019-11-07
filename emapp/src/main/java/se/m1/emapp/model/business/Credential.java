@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,13 +27,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "CREDENTIAL")
 @XmlRootElement
 @NamedQueries({
-    /*@NamedQuery(name="Credential.count", query="SELECT COUNT(c) FROM Credential c"),
     @NamedQuery(name = "Credential.findAll", query = "SELECT c FROM Credential c"),
     @NamedQuery(name = "Credential.findById", query = "SELECT c FROM Credential c WHERE c.id = :id"),
     @NamedQuery(name = "Credential.findByLogin", query = "SELECT c FROM Credential c WHERE c.login = :login"),
-    @NamedQuery(name = "Credential.findByPwd", query = "SELECT c FROM Credential c WHERE c.pwd = :pwd"),*/
-    @NamedQuery(name = "Credential.checkcred", query = "SELECT c FROM Credential c WHERE c.login = :login AND c.pwd = :pwd")})
-
+    @NamedQuery(name = "Credential.findByPwd", query = "SELECT c FROM Credential c WHERE c.pwd = :pwd"),
+@NamedQuery(name = "Credential.checkcred", query = "SELECT c FROM Credential c WHERE c.login = :login AND c.pwd = :pwd")})
 public class Credential implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,10 +40,14 @@ public class Credential implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Size(max = 128)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 128)
     @Column(name = "LOGIN")
     private String login;
-    @Size(max = 128)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 128)
     @Column(name = "PWD")
     private String pwd;
 
@@ -59,7 +62,7 @@ public class Credential implements Serializable {
         this.login = login;
         this.pwd = pwd;
     }
-    
+
     public Integer getId() {
         return id;
     }

@@ -1,7 +1,7 @@
 package se.m1.emapp.controller;
 import se.m1.emapp.model.business.Credential;
 import java.io.IOException;
-import java.util.Properties;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,19 +10,17 @@ import javax.servlet.http.HttpSession;
 import static se.m1.emapp.utils.Constants.*;
 
 import se.m1.emapp.model.business.Employee;
-import se.m1.emapp.model.core.exception.dbLink.DBLException;
-import se.m1.emapp.model.exception.EmptyResultException;
 import se.m1.emapp.model.core.JPAManager;
-import se.m1.emapp.model.core.exception.DatabaseCommunicationException;
+
 
 public class Controller extends HttpServlet {
-    //private Properties properties;
-    //private DBLink dbLink;
     private String action;
     private HttpSession session;
-    //private AppDbHelper helper;
     private Credential user;
+
+    @EJB
     private JPAManager jpa;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,13 +32,9 @@ public class Controller extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        /*try {Class.forName("com.mysql.jdbc.Driver");} 
-        catch (ClassNotFoundException e) {
-            throw new ServletException(e);
-        }*/
+
         user = null;
-        jpa = new JPAManager();
+
 
         if (request.getParameter("action") == null) {
             request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
