@@ -15,11 +15,24 @@ import javax.ws.rs.core.Response;
 
 import static fr.efrei.se.emapp.api.resources.ResourceHelper.*;
 
-
+/**
+ * this class is the rest api entry point for every credentials-related request
+ * its primary purpose is to authenticate the user and return its profile, including his token
+ */
 @Path("credentials")
 public class CredentialResource {
+    /**
+     * serialize classes to json
+     */
     private Gson gson = new Gson();
 
+    /**
+     * authenticates the user using his login and password
+     * @param login of the user
+     * @param password of the user
+     * @return returns a json serizialized profile of the user, including its autorization token level
+     * @throws DBComException lel sa va disparètr
+     */
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -31,15 +44,5 @@ public class CredentialResource {
         } catch (EmptyParameterException | EmptyResultException e) {
             return Response.status(Response.Status.FORBIDDEN).build().toString();
         }
-    }
-
-    //@GET
-    @Path("/{id}")
-    @Secured({Role.USER, Role.ADMIN})
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getOne(@PathParam("id")int id) throws DBComException {
-        Credential c = new Credential(getLink(), id);
-        c.read();
-        return Response.ok(gson.toJson(ResourceHelper.convertCredential(c))).build();
     }
 }

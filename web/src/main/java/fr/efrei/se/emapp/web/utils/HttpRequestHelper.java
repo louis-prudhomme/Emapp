@@ -87,6 +87,12 @@ public class HttpRequestHelper {
         //request(PUT, uri, token, parameter);
     }
 
+    /**
+     * converts an hashmap of parameters to a byte array for post purposes
+     * @param parameters hashmap of the desired parameters, with the key being the identifier of the parameter
+     * @return byte array encoded parameters
+     * @throws UnsupportedEncodingException should not throw that
+     */
     private static byte[] convertToPostParameters(HashMap<String, String> parameters) throws UnsupportedEncodingException {
         StringBuilder data = new StringBuilder();
 

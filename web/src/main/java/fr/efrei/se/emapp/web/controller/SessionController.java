@@ -67,10 +67,8 @@ public class SessionController implements IController {
     /**
      * tries to log the user in
      * @return either welcome page if the user was successfully logged in, or an error page
-     * @throws ServletException unexpected
-     * @throws IOException unexpected
      */
-    private String logUser() throws ServletException, IOException {
+    private String logUser() {
         try {
             HashMap<String, String> params = new HashMap<>();
             params.put("login", request.getParameter("loginField"));
