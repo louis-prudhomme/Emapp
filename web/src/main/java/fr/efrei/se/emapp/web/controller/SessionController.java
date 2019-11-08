@@ -1,10 +1,20 @@
 package fr.efrei.se.emapp.web.controller;
 
+import fr.efrei.se.emapp.common.model.CredentialTranscript;
+import fr.efrei.se.emapp.common.security.Role;
+import fr.efrei.se.emapp.web.TheOneServlet;
+import fr.efrei.se.emapp.web.utils.HttpRequestHelper;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 import static fr.efrei.se.emapp.web.utils.Constants.*;
 
@@ -61,15 +71,16 @@ public class SessionController implements IController {
      * @throws IOException unexpected
      */
     private String logUser() throws ServletException, IOException {
-        String login = request.getParameter("loginField");
-        String password = request.getParameter("pwdField");
-
         try {
-            //Credential user = new AppDbHelper(dbLink).checkCredentials(login, password);
-            //session.setAttribute("user", user);
+            HashMap<String, String> params = new HashMap<>();
+            params.put("login", request.getParameter("loginField"));
+            params.put("password", request.getParameter("pwdField"));
+
+            CredentialTranscript user = HttpRequestHelper.post(CREDENTIALS_URI, null, CredentialTranscript.class, params);
+            session.setAttribute("user", user);
             return JSP_WELCOME_PAGE;
         } catch (Exception e) {
-            //TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
+            TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
             return JSP_ERROR_PAGE;/*
         } catch (EmptyResultException e) {
             request.setAttribute("errKey", ERR_MESSAGE_INVALID_CREDENTIALS);

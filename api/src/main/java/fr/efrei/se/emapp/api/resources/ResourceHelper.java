@@ -33,7 +33,7 @@ public class ResourceHelper {
         return credentialTranscript;
     }
 
-    public static int checkCredentials(String firstName, String lastName) throws DBComException, EmptyResultException, EmptyParameterException {
+    public static Credential checkCredentials(String firstName, String lastName) throws DBComException, EmptyResultException, EmptyParameterException {
         if(firstName.equals("") || lastName.equals("")) {
             throw new EmptyParameterException();
         }
@@ -47,7 +47,9 @@ public class ResourceHelper {
 
         try {
             resultSet.next();
-            return resultSet.getInt("id");
+            Credential credential = new Credential(getLink(), resultSet.getInt("id"));
+            credential.read();
+            return credential;
         } catch (SQLException e) {
             throw new EmptyResultException(e);
         }

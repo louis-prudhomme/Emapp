@@ -4,10 +4,10 @@ public enum Role {
     ADMIN("admin_token"),
     USER("user_token");
 
-    public String token;
+    public String tokenName;
 
-    Role(String token) {
-        this.token = token;
+    Role(String tokenName) {
+        this.tokenName = tokenName;
     }
 
     /**
@@ -17,7 +17,7 @@ public enum Role {
      */
     public static Role fromString(String t) {
         for (Role r : Role.values()) {
-            if (r.token.compareToIgnoreCase(t) == 0) {
+            if (r.tokenName.compareToIgnoreCase(t) == 0) {
                 return r;
             }
         }

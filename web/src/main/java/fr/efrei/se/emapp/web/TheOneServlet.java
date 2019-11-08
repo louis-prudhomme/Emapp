@@ -1,5 +1,6 @@
 package fr.efrei.se.emapp.web;
 
+import fr.efrei.se.emapp.common.model.CredentialTranscript;
 import fr.efrei.se.emapp.common.model.EmployeeTranscript;
 import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.web.controller.ControllerFactory;
@@ -13,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static fr.efrei.se.emapp.common.utils.Constants.TOKEN_FILE;
@@ -41,7 +43,7 @@ public class TheOneServlet extends HttpServlet {
         request.setAttribute("action", WordOfPower.fromString(request.getParameter("action")));
 
         if (request.getSession().getAttribute("user") == null || request.getAttribute("action") == WordOfPower.LOGOUT) {
-            state = StateOfPower.EMPLOYEE;
+            state = StateOfPower.SESSION;
         } else {
             state = StateOfPower.EMPLOYEE;
         }
@@ -58,9 +60,7 @@ public class TheOneServlet extends HttpServlet {
         //this is made to avoid repeating it over and over in employeeController
         if(nextPage.equals(JSP_WELCOME_PAGE)) {
             try {
-                roleMatcher = new RoleMatcher(TOKEN_FILE);
-
-                request.setAttribute("empList", HttpRequestHelper.getAll(EMPLOYEES_URI, roleMatcher.getCorrespondingToken(Role.ADMIN), EmployeeTranscript.class));
+                request.setAttribute("empList", HttpRequestHelper.getAll(EMPLOYEES_URI, getSessionToken(request.getSession()), EmployeeTranscript.class));
             } catch (Exception e) {
                 TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
                 nextPage = JSP_ERROR_PAGE;
@@ -110,5 +110,13 @@ public class TheOneServlet extends HttpServlet {
 
     public static RoleMatcher getRoleMatcher() {
         return roleMatcher;
+    }
+
+    private static Role getRole(HttpSession session) {
+        return ((CredentialTranscript)session.getAttribute("user")).isAdmin() ? Role.ADMIN : Role.USER;
+    }
+
+    public static String getSessionToken(HttpSession session) throws IOException {
+        return new RoleMatcher(TOKEN_FILE).getCorrespondingToken(getRole(session));
     }
 }

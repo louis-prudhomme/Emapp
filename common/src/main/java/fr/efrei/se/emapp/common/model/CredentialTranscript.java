@@ -3,6 +3,15 @@ package fr.efrei.se.emapp.common.model;
 public class CredentialTranscript {
     private int id;
     private String login, password;
+    private boolean isAdmin;
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 
     public int getId() {
         return id;
@@ -27,4 +36,6 @@ public class CredentialTranscript {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }

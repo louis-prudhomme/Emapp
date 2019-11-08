@@ -5,6 +5,7 @@ import fr.efrei.se.emapp.api.model.business.Credential;
 import fr.efrei.se.emapp.api.model.core.exception.DBComException;
 import fr.efrei.se.emapp.api.model.exception.EmptyParameterException;
 import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
+import fr.efrei.se.emapp.common.model.CredentialTranscript;
 import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.api.security.Secured;
 
@@ -12,8 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static fr.efrei.se.emapp.api.resources.ResourceHelper.checkCredentials;
-import static fr.efrei.se.emapp.api.resources.ResourceHelper.getLink;
+import static fr.efrei.se.emapp.api.resources.ResourceHelper.*;
 
 
 @Path("credentials")
@@ -24,15 +24,16 @@ public class CredentialResource {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response tryAuth(@FormParam("login")String login, @FormParam("password")String password) throws DBComException {
+    public String tryAuth(@FormParam("login")String login, @FormParam("password")String password) throws DBComException {
         try {
-            return Response.ok(checkCredentials(login, password)).build();
+            CredentialTranscript c = convertCredential(checkCredentials(login, password));
+            return gson.toJson(c);
         } catch (EmptyParameterException | EmptyResultException e) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            return Response.status(Response.Status.FORBIDDEN).build().toString();
         }
     }
 
-    @GET
+    //@GET
     @Path("/{id}")
     @Secured({Role.USER, Role.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)

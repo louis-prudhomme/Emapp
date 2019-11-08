@@ -49,7 +49,6 @@ public class EmployeesResource {
     public String deleteOne(@PathParam("id")int id) throws DBComException {
         Employee e = new Employee(getLink(), id);
         e.delete();
-        //todo test it ?
         return gson.toJson(true);
     }
 
