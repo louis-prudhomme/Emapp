@@ -1,5 +1,8 @@
 package fr.efrei.se.emapp.web.controller;
 
+/**
+ * wanted user action, not dependant of the application’s state
+ */
 public enum WordOfPower {
     ADD,
     CANCEL,

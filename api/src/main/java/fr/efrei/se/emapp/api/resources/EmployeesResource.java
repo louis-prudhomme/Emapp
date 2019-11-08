@@ -13,15 +13,17 @@ import java.util.ArrayList;
 
 import static fr.efrei.se.emapp.api.resources.ResourceHelper.getLink;
 
+/**
+ * handles all employees-related requests
+ */
 @Path("employees")
 public class EmployeesResource {
     private Gson gson = new Gson();
 
     /**
-     * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "text/plain" media type.
-     *
-     * @return String that will be returned as a text/plain response.
+     * handles a general get request by returning all the employees in database
+     * @return json-serialized list of all the employees
+     * @throws DBComException sa va murir mdr
      */
     @GET
     @Secured({Role.USER, Role.ADMIN})
@@ -32,6 +34,12 @@ public class EmployeesResource {
         return gson.toJson(transcripts);
     }
 
+    /**
+     * handles specialized get request and returns the one matching employee
+     * @param id of the wanted employee
+     * @return json-serialized employee
+     * @throws DBComException sa va murir mdr
+     */
     @GET
     @Path("/{id}")
     @Secured({Role.USER, Role.ADMIN})
@@ -39,9 +47,16 @@ public class EmployeesResource {
     public String getOne(@PathParam("id")int id) throws DBComException {
         Employee e = new Employee(getLink(), id);
         e.read();
+        //todo add error when empty
         return gson.toJson(ResourceHelper.convertEmployee(e));
     }
 
+    /**
+     * handles delete requests on a particular id
+     * @param id of the employee one wants to delete
+     * @return true in all cases //todo faire un truc stylé pour la valeur de retour
+     * @throws DBComException sa va murir mdr
+     */
     @DELETE
     @Path("/{id}")
     @Secured(Role.ADMIN)
@@ -52,6 +67,12 @@ public class EmployeesResource {
         return gson.toJson(true);
     }
 
+    /**
+     * handles put requests
+     * semanticaly, should update employees
+     * @return true in all cases //todo faire un truc stylé pour la valeur de retour
+     * @throws DBComException sa va murir mdr
+     */
     @PUT
     @Secured(Role.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)

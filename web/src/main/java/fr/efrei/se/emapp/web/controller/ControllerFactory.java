@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import static fr.efrei.se.emapp.web.utils.Constants.USER_WRONG_PAGE_CODE;
 
 /**
- * this factory dispatches a controller
+ * this factory dispatches a controller depending on the situation
  */
 public class ControllerFactory {
     public static IController dispatch(HttpServletRequest request, StateOfPower state) {

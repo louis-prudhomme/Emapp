@@ -16,9 +16,23 @@ import java.util.Map;
 
 import static fr.efrei.se.emapp.web.utils.HttpMethod.*;
 
+/**
+ * intermediary class helping with formatting the http requests to the rest api
+ */
 public class HttpRequestHelper {
+    /**
+     * json serializer
+     */
     private static Gson cypher = new Gson();
 
+    /**
+     * launches an http request with the provided method, uri and token
+     * @param method htttp method
+     * @param uri actual url
+     * @param token authorization token
+     * @return result of the request
+     * @throws IOException ¯\_(ツ)_/¯
+     */
     public static String request(HttpMethod method, String uri, String token) throws IOException {
         URL url = new URL(uri);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
@@ -38,6 +52,12 @@ public class HttpRequestHelper {
         return result;
     }
 
+    /**
+     * reads an http response
+     * @param response http response
+     * @return string-formated response content
+     * @throws IOException ¯\_(ツ)_/¯
+     */
     private static String readResponse(InputStream response) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(response));
 
@@ -50,10 +70,29 @@ public class HttpRequestHelper {
         return content.toString();
     }
 
+    /**
+     * launches an http get request and desrializes the response in the provided class
+     * @param uri address of the service
+     * @param token authorization token
+     * @param clazz wanted class
+     * @param <T> insures type consistency
+     * @return new instance of the provided class
+     * @throws IOException ¯\_(ツ)_/¯
+     */
     public static <T> T get(String uri, String token, Class<T> clazz) throws IOException {
         return cypher.fromJson(HttpRequestHelper.request(GET, uri, token), clazz);
     }
 
+    /**
+     * launches an http post request and desrializes the response in the provided class
+     * @param uri address of the service
+     * @param token authorization token
+     * @param clazz wanted class
+     * @param params parameters of the request ; will be encoded as url form parameters
+     * @param <T> insures type consistency
+     * @return new instance of the provided class
+     * @throws IOException ¯\_(ツ)_/¯
+     */
     public static <T> T post(String uri, String token, Class<T> clazz, HashMap<String, String> params) throws IOException {
         URL url = new URL(uri);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
@@ -77,11 +116,27 @@ public class HttpRequestHelper {
         return cypher.fromJson(result, clazz);
     }
 
+    /**
+     * launches an http get request and desrializes the response in a list of the provided class
+     * @param uri address of the service
+     * @param token authorization token
+     * @param klass wanted class for the list
+     * @param <T> insures type consistency
+     * @return new instance of a list of the provided class
+     * @throws IOException ¯\_(ツ)_/¯
+     */
     public static <T> ArrayList<T> getAll(String uri, String token, Class<T> klass) throws IOException {
         Type listType = TypeToken.getParameterized(ArrayList.class, klass).getType();
         return cypher.<ArrayList>fromJson(HttpRequestHelper.request(GET, uri, token), listType);
     }
 
+    /**
+     * launches an htttp put request with the given parameters
+     * @param uri address of the service
+     * @param token authroization token
+     * @param parameter provided parameter
+     * @throws IOException ¯\_(ツ)_/¯
+     */
     public static void put(String uri, String token, Object parameter) throws IOException {
         //request(PUT, uri, token, parameter);
     }

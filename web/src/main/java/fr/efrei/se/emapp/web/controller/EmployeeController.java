@@ -12,7 +12,13 @@ import java.io.IOException;
 import static fr.efrei.se.emapp.web.utils.Constants.*;
 import static fr.efrei.se.emapp.web.utils.HttpMethod.DELETE;
 
+/**
+ * controls everything employee-manipulation related
+ */
 public class EmployeeController implements IController {
+    /**
+     * incoming request
+     */
     private HttpServletRequest request;
 
     /**

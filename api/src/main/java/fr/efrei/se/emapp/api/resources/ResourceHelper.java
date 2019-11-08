@@ -16,6 +16,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * helps resources
+ * most of this class should disappear with the oncoming jpa update
+ * will document it later
+ * //todo
+ */
 public class ResourceHelper {
     public static EmployeeTranscript convertEmployee(Employee e) {
         EmployeeTranscript employeeTranscript = new EmployeeTranscript();

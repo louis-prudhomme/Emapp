@@ -1,5 +1,9 @@
 package fr.efrei.se.emapp.common.model;
 
+/**
+ * serves as a common ground for the json serialization in the rest api ↔ web app communication
+ * represents credentials
+ */
 public class CredentialTranscript {
     private int id;
     private String login, password;
