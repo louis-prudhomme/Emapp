@@ -38,8 +38,10 @@ public class CredentialResource {
         try {
             CredentialTranscript c = convertCredential(checkCredentials(login, password));
             return gson.toJson(c);
-        } catch (EmptyParameterException | EmptyResultException e) {
-            return Response.status(Response.Status.FORBIDDEN).build().toString();
+        } catch (EmptyParameterException e) {
+            return Response.status(Response.Status.METHOD_NOT_ALLOWED).build().toString();
+        } catch (EmptyResultException e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build().toString();
         }
     }
 }

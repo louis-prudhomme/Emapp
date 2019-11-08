@@ -51,7 +51,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             //and if the security authorization are not observed
             if(!checkPermission(authorizedRoles, authorizationHeader)) {
                 //returns http 401 error
-                containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+                containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
             }
         }
     }
