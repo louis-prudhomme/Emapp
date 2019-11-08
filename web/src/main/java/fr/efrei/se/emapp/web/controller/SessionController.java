@@ -1,20 +1,14 @@
 package fr.efrei.se.emapp.web.controller;
 
 import fr.efrei.se.emapp.common.model.CredentialTranscript;
-import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.web.TheOneServlet;
 import fr.efrei.se.emapp.web.utils.HttpRequestHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Map;
 
 import static fr.efrei.se.emapp.web.utils.Constants.*;
 
@@ -24,7 +18,6 @@ import static fr.efrei.se.emapp.web.utils.Constants.*;
  */
 public class SessionController implements IController {
     private HttpServletRequest request;
-    private HttpServletResponse response;
 
     /**
      * session and dblink are shortcuts to avoid cluttering the code with calls through request
@@ -34,11 +27,9 @@ public class SessionController implements IController {
     /**
      * default constructor
      * @param request http servlet request
-     * @param response http servlet response
      */
-    SessionController(HttpServletRequest request, HttpServletResponse response) {
+    SessionController(HttpServletRequest request) {
         this.request = request;
-        this.response = response;
         this.session = request.getSession();
     }
 
@@ -74,6 +65,7 @@ public class SessionController implements IController {
             params.put("login", request.getParameter("loginField"));
             params.put("password", request.getParameter("pwdField"));
 
+            //token is null cause the user is not yet authenticated
             CredentialTranscript user = HttpRequestHelper.post(CREDENTIALS_URI, null, CredentialTranscript.class, params);
             session.setAttribute("user", user);
             return JSP_WELCOME_PAGE;

@@ -1,13 +1,10 @@
 package fr.efrei.se.emapp.api.resources;
 
 import com.google.gson.Gson;
-import fr.efrei.se.emapp.api.model.business.Credential;
 import fr.efrei.se.emapp.api.model.core.exception.DBComException;
 import fr.efrei.se.emapp.api.model.exception.EmptyParameterException;
 import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
 import fr.efrei.se.emapp.common.model.CredentialTranscript;
-import fr.efrei.se.emapp.common.security.Role;
-import fr.efrei.se.emapp.api.security.Secured;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

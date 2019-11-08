@@ -21,8 +21,6 @@ import static fr.efrei.se.emapp.common.utils.Constants.TOKEN_FILE;
 import static fr.efrei.se.emapp.web.utils.Constants.*;
 
 public class TheOneServlet extends HttpServlet {
-    private static RoleMatcher roleMatcher;
-
     private String nextPage;
     private IController controller;
     private StateOfPower state;
@@ -49,7 +47,7 @@ public class TheOneServlet extends HttpServlet {
         }
 
         //gets controller
-        controller = ControllerFactory.dispatch(request, response, state);
+        controller = ControllerFactory.dispatch(request, state);
         if(controller == null) {
             nextPage = JSP_ERROR_PAGE;
         } else {
@@ -108,14 +106,21 @@ public class TheOneServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    public static RoleMatcher getRoleMatcher() {
-        return roleMatcher;
-    }
-
+    /**
+     * shortcut to get the current session΅s user’s role
+     * @param session current session
+     * @return current session’s user’s role
+     */
     private static Role getRole(HttpSession session) {
         return ((CredentialTranscript)session.getAttribute("user")).isAdmin() ? Role.ADMIN : Role.USER;
     }
 
+    /**
+     * shortcut to get the current session’s token
+     * @param session target
+     * @return session’s user’s token
+     * @throws IOException if the token property file cannot be read
+     */
     public static String getSessionToken(HttpSession session) throws IOException {
         return new RoleMatcher(TOKEN_FILE).getCorrespondingToken(getRole(session));
     }

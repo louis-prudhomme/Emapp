@@ -2,7 +2,6 @@ package fr.efrei.se.emapp.web.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import fr.efrei.se.emapp.common.model.EmployeeTranscript;
 
 import javax.ws.rs.core.HttpHeaders;
 import java.io.*;

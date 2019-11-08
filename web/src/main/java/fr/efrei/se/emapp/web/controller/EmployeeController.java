@@ -6,7 +6,6 @@ import fr.efrei.se.emapp.web.utils.HttpRequestHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -15,7 +14,6 @@ import static fr.efrei.se.emapp.web.utils.HttpMethod.DELETE;
 
 public class EmployeeController implements IController {
     private HttpServletRequest request;
-    private HttpServletResponse response;
 
     /**
      * session and dblink are shortcuts to avoid cluttering the code with calls through request
@@ -25,11 +23,9 @@ public class EmployeeController implements IController {
     /**
      * default constructor
      * @param request http servlet request
-     * @param response http servlet response
      */
-    EmployeeController(HttpServletRequest request, HttpServletResponse response) {
+    EmployeeController(HttpServletRequest request) {
         this.request = request;
-        this.response = response;
         this.session = request.getSession();
     }
 

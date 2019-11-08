@@ -13,7 +13,9 @@ import java.lang.annotation.Target;
  * it is used to specify the authorized roles in a method
  * and bridges the gap between the method and the actual security filter
  */
+//provides the actual bridge between the provider annotated class and the target
 @NameBinding
+//stays around at runtime
 @Retention(RetentionPolicy.RUNTIME)
 //might be used class-wide
 @Target({ElementType.TYPE, ElementType.METHOD})
