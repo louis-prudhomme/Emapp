@@ -25,51 +25,65 @@ public class JPAManager {
     private TypedQuery<Employee> queryEmployee;
     private TypedQuery<Credential> queryCredential;
   
-    //Creation of an employee
+
+    /**
+     * allows the creation of an employee
+     * @param e the employee to create
+     */
     public void createEmployee(Employee e){ 
         em.persist(e);
-
-
     }
-    //Employee delete
+    
+    /**
+     * allows employee deletion
+     * @param e the employee to delete
+     */
     public void removeEmployee(Employee e){
         if (!em.contains(e)){
             e = em.merge(e);
         }
         em.remove(e);
-
     }
-    //employee modification
+    
+    /**
+     * allows the modification of an employee
+     * @param e the employee to modify
+     */
     public void modifyEmployee(Employee e){  
-
         em.merge(e);
-
-
     }
-    //get All employees
+    
+    /**
+     * Allows to get all the employee
+     * @return an ArrayList with all the employees
+     */
     public List<Employee> getAll(){ 
-
         queryEmployee = em.createNamedQuery("Employee.findAll", Employee.class);
         all = new ArrayList<>(queryEmployee.getResultList());
-
         return all;      
     }
-    //read an employee
+    
+    /**
+     * get the details of an employee
+     * @param id of the employee to read
+     * @return The employee corresponding to the id
+     */
     public Employee read(int id){ 
-
         queryEmployee = em.createNamedQuery("Employee.findById", Employee.class);
         queryEmployee.setParameter("id",id); 
         Employee x = queryEmployee.getSingleResult();
-
         return x; 
     }
-    //verify the credentials entered
-    public boolean checkCredentials(Credential e){ 
+    
+    /**
+     * verify the credentials entered
+     * @param c the credentials to be verified
+     * @return a boolean : true if the credentials entered are valid, false if not
+     */
+    public boolean checkCredentials(Credential c){ 
       queryCredential = em.createNamedQuery("Credential.checkcred", Credential.class);
-      queryCredential.setParameter("login",e.getLogin());
-      queryCredential.setParameter("pwd",e.getPwd());
-      boolean x = !queryCredential.getResultList().isEmpty();
-
-      return x;
+      queryCredential.setParameter("login",c.getLogin());
+      queryCredential.setParameter("pwd",c.getPwd()); 
+      return !queryCredential.getResultList().isEmpty();
     }
 }

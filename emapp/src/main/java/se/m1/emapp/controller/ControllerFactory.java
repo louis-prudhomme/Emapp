@@ -12,6 +12,14 @@ import static se.m1.emapp.utils.Constants.USER_WRONG_PAGE_CODE;
  * this factory dispatches a controller
  */
 public class ControllerFactory {
+    /**
+     * 
+     * @param request
+     * @param response
+     * @param jpa
+     * @param state
+     * @return 
+     */
     public static IController dispatch(HttpServletRequest request, HttpServletResponse response, JPAManager jpa,StateOfPower state) {
         switch (state) {
             case SESSION:

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import se.m1.emapp.exception.DatabaseCommunicationException;
 import se.m1.emapp.model.core.JPAManager;
 
 import static se.m1.emapp.utils.Constants.*;
@@ -83,19 +84,16 @@ public class SessionController implements IController {
                     }
                     
                     user = new Credential(login, password);
-                    System.out.println("LKQHSFLKQHFLKHQFLH"+user);
-                    System.out.println("sqlkjdlkqjlkfqj"+user.getLogin());
-                    
-                    if(jpa.checkCredentials(user))
-                    {
-                        session.setAttribute("empList", jpa.getAll());
-                        session.setAttribute("user", user);
-                        return JSP_WELCOME_PAGE;
-                    }else{
-                        request.setAttribute("errKey", ERR_MESSAGE_INVALID_CREDENTIALS);
-                        return JSP_HOME_PAGE;
-                        
-                    }
+                        if(jpa.checkCredentials(user))
+                        {
+                            session.setAttribute("empList", jpa.getAll());
+                            session.setAttribute("user", user);
+                            return JSP_WELCOME_PAGE;
+                        }else{
+                            request.setAttribute("errKey", ERR_MESSAGE_INVALID_CREDENTIALS);
+                            return JSP_HOME_PAGE;
+                        }
+
         
     }
 }

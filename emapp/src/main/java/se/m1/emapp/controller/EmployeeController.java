@@ -16,8 +16,9 @@ public class EmployeeController implements IController {
     private HttpServletResponse response;
     
     private JPAManager jpa;
+    
     /**
-     * session and dblink are shortcuts to avoid cluttering the code with calls through request
+     * session is a shortcut to avoid cluttering the code with calls through request
      */
     private HttpSession session;
 

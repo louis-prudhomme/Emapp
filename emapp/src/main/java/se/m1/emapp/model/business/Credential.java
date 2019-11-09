@@ -42,42 +42,75 @@ public class Credential implements Serializable {
     @Column(name = "PWD")
     private String pwd;
 
+    /**
+     * default constructor
+     */
     public Credential() {
     }
 
+    /**
+     * constructor
+     * @param id 
+     */
     public Credential(Integer id) {
         this.id = id;
     }
-    
+    /**
+     * constructor
+     * @param login
+     * @param pwd 
+     */
     public Credential(String login, String pwd){
         this.login = login;
         this.pwd = pwd;
     }
-
+    /**
+     * getter id
+     * @return Integer : the id of the credential
+     */
     public Integer getId() {
         return id;
     }
-
+    /**
+     * setter id
+     * @param id of the credential
+     */
     public void setId(Integer id) {
         this.id = id;
     }
-
+    /**
+     * getter login credential
+     * @return a string corresponding to the login
+     */
     public String getLogin() {
         return login;
     }
-
+    /**
+     * login setter
+     * @param login 
+     */
     public void setLogin(String login) {
         this.login = login;
     }
-
+    /**
+     * Password getter
+     * @return a string corresponding to the password
+     */
     public String getPwd() {
         return pwd;
     }
-
+    /**
+     * password setter
+     * @param pwd 
+     */
     public void setPwd(String pwd) {
         this.pwd = pwd;
     }
 
+    /**
+     * 
+     * @return an integer corresponding to the hash
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -85,6 +118,11 @@ public class Credential implements Serializable {
         return hash;
     }
 
+    /**
+     * 
+     * @param object
+     * @return a boolean 
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -98,6 +136,10 @@ public class Credential implements Serializable {
         return true;
     }
 
+    /**
+     * 
+     * @return a string
+     */
     @Override
     public String toString() {
         return "se.m1.emapp.model.business.Credential[ id=" + id + " ]";
