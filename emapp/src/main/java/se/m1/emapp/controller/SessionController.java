@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import se.m1.emapp.exception.DatabaseCommunicationException;
 import se.m1.emapp.model.core.JPAManager;
 
 import static se.m1.emapp.utils.Constants.*;
