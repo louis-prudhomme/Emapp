@@ -1,5 +1,23 @@
 #logOutButton{
     position:absolute;
-    top:20px;
+    top:15px;
     right:20px;
+}
+
+#hello{
+    position:absolute;
+    top:42px;
+    right:20px;
+}
+#darkID{
+    float:right;
+    right:74px;
+    background:#082030;
+    color:white;
+}
+#LightID{
+    float:right;
+    right:10px;
+    background:#b8bcbf;
+    color:white;
 }

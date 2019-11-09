@@ -4,6 +4,20 @@ html {
   background-color: #56baed;
 }
 
+
+#darkID{
+    float: right;
+    right:74px;
+    background:#082030;
+    color:white;
+}
+#LightID{
+    float: right;
+    right:10px;
+    background:#b8bcbf;
+    color:white;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   height: 100vh;
@@ -25,8 +39,6 @@ h2 {
   margin: 40px 8px 10px 8px; 
   color: #cccccc;
 }
-
-
 
 /* STRUCTURE */
 
@@ -267,8 +279,8 @@ img.resize{
 }
 
 #goodbye{
-    padding: 20px 10px 10px 10px;
-    color:#708090;
+   padding: 20px 10px 10px 10px;
+   color:#708090;
 }
 
 

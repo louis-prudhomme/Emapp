@@ -1,0 +1,65 @@
+/** Dark CSS */
+
+.dark {
+  background-color: #09202e;
+  color: #ffffff;
+}
+
+.dark button {
+  background: #144098;
+  color: #fff;
+}
+
+.dark #formContent {
+  background: #082030;
+}
+
+#formFooter {
+  background-color: #f6f6f6;
+  border-top: 1px solid #dce8f1;
+  padding: 25px;
+  text-align: center;
+  -webkit-border-radius: 0 0 10px 10px;
+  border-radius: 0 0 10px 10px;
+}
+
+
+/* FORM TYPOGRAPHY*/
+
+.dark input[type=button], input[type=submit], input[type=reset]  {
+  background-color: #1d8ad1;
+}
+
+
+.dark input[type=text] {
+  background-color: #09324d;
+  color: white;
+  border: 2px solid #082030;
+}
+
+.dark input[type=text]:focus {
+  background-color: #164869;
+  border-bottom: 2px solid #5fbae9;
+}
+
+input[type=text]:placeholder {
+  color: white;
+}
+
+.dark td{
+    color:white;
+}
+
+
+.dark .modal-body{
+    color : black;
+}
+.dark .modal-header{
+    color:black;
+}
+
+
+
+
+
+

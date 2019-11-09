@@ -12,9 +12,11 @@
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="css/darkTheme.css">
+        <script type="text/javascript" src="js/darkTheme.js"></script>
     </head>
     <link href="css/cssErrorPage.css" rel='stylesheet' type='text/css'>
-    <body>
+    <body onload="loadPage2()">
         <!-- Error Page -->
             <div class="error">
                 <div class="container-fluid">
