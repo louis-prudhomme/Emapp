@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
 
 import static fr.efrei.se.emapp.web.utils.Constants.*;
 import static fr.efrei.se.emapp.web.utils.HttpMethod.DELETE;
@@ -75,10 +76,15 @@ public class EmployeeController implements IController {
         EmployeeTranscript employee = new EmployeeTranscript();
         employee.setId(id);
         employee.setFirstName(request.getParameter("inputFirstName"));
-        employee.setFirstName(request.getParameter("inputLastName"));
+        employee.setLastName(request.getParameter("inputLastName"));
+        //todo include other parameters
         //request.getParameter("inputLastName"),  request.getParameter("inputHomePhone"), request.getParameter("inputMobilePhone"),  request.getParameter("inputWorkPhone"), request.getParameter("inputAddress"),  request.getParameter("inputPostalCode"), request.getParameter("inputCity"),  request.getParameter("inputEmail"), false);
         try {
-            HttpRequestHelper.put(EMPLOYEES_URI, TheOneServlet.getSessionToken(session), employee);
+            if (id == 0) {
+                HttpRequestHelper.post(EMPLOYEES_URI, TheOneServlet.getSessionToken(session), "employee", employee);
+            } else {
+                HttpRequestHelper.put(EMPLOYEES_URI + "/" + id, TheOneServlet.getSessionToken(session), "employee", employee);
+            }
         } catch (IOException e) {
             TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
             return JSP_ERROR_PAGE;

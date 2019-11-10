@@ -31,6 +31,10 @@ public class ResourceHelper {
         return employeeTranscript;
     }
 
+    public static Employee convertEmployeeTranscript(EmployeeTranscript e) throws DBComException {
+        return new Employee(getLink(), e.getId(), e.getFirstName(), e.getLastName(), "", "", "", "", "", "", "", false);
+    }
+
     public static CredentialTranscript convertCredential(Credential c) {
         CredentialTranscript credentialTranscript = new CredentialTranscript();
         credentialTranscript.setId(c.getId());

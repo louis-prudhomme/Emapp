@@ -9,8 +9,10 @@ import fr.efrei.se.emapp.common.model.EmployeeTranscript;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
+import static fr.efrei.se.emapp.api.resources.ResourceHelper.convertEmployeeTranscript;
 import static fr.efrei.se.emapp.api.resources.ResourceHelper.getLink;
 
 /**
@@ -28,10 +30,10 @@ public class EmployeesResource {
     @GET
     @Secured({Role.USER, Role.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAll() throws DBComException {
+    public Response getAll() throws DBComException {
         ArrayList<EmployeeTranscript> transcripts = new ArrayList<>();
         Employee.selectAll(getLink(), Employee.class).forEach(e -> transcripts.add(ResourceHelper.convertEmployee(e)));
-        return gson.toJson(transcripts);
+        return Response.ok(gson.toJson(transcripts)).build();
     }
 
     /**
@@ -44,11 +46,11 @@ public class EmployeesResource {
     @Path("/{id}")
     @Secured({Role.USER, Role.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)
-    public String getOne(@PathParam("id")int id) throws DBComException {
+    public Response getOne(@PathParam("id")int id) throws DBComException {
         Employee e = new Employee(getLink(), id);
         e.read();
         //todo add error when empty
-        return gson.toJson(ResourceHelper.convertEmployee(e));
+        return Response.ok(gson.toJson(ResourceHelper.convertEmployee(e))).build();
     }
 
     /**
@@ -61,10 +63,11 @@ public class EmployeesResource {
     @Path("/{id}")
     @Secured(Role.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public String deleteOne(@PathParam("id")int id) throws DBComException {
+    public Response deleteOne(@PathParam("id")int id) throws DBComException {
         Employee e = new Employee(getLink(), id);
         e.delete();
-        return gson.toJson(true);
+        return Response.ok().build();
+
     }
 
     /**
@@ -74,11 +77,27 @@ public class EmployeesResource {
      * @throws DBComException sa va murir mdr
      */
     @PUT
+    @Path("/{id}")
     @Secured(Role.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public String putOne() throws DBComException {
-        System.out.println("");
-        //todo
-        return gson.toJson(true);
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response putOne(@PathParam("id")int id, @FormParam("employee")EmployeeTranscript employee)  throws DBComException {
+        convertEmployeeTranscript(employee).update();
+        return Response.ok().build();
+    }
+
+    /**
+     * handles post requests
+     * semanticaly, should create employees
+     * @return true in all cases //todo faire un truc stylé pour la valeur de retour
+     * @throws DBComException sa va murir mdr
+     */
+    @POST
+    @Secured(Role.ADMIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response postOne(@FormParam("employee")EmployeeTranscript employee) throws DBComException {
+        convertEmployeeTranscript(employee).create();
+        return Response.ok().build();
     }
 }

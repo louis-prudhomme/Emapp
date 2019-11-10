@@ -1,6 +1,7 @@
 package fr.efrei.se.emapp.web.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.$Gson$Preconditions;
 import com.google.gson.reflect.TypeToken;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -34,22 +35,7 @@ public class HttpRequestHelper {
      * @throws IOException ¯\_(ツ)_/¯
      */
     public static String request(HttpMethod method, String uri, String token) throws IOException {
-        URL url = new URL(uri);
-        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-
-        connection.setRequestMethod(method.name());
-        connection.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/json");
-        connection.setRequestProperty(HttpHeaders.AUTHORIZATION, token);
-        connection.setDoInput(true);
-        connection.setDoOutput(true);
-
-        if(connection.getResponseCode() == 500)
-        {
-            throw new IOException("Http request returned an error 500 !");
-        }
-        String result = readResponse(connection.getInputStream());
-        connection.disconnect();
-        return result;
+        return request(method, uri, token, null);
     }
 
     /**
@@ -83,37 +69,24 @@ public class HttpRequestHelper {
         return cypher.fromJson(HttpRequestHelper.request(GET, uri, token), clazz);
     }
 
-    /**
-     * launches an http post request and desrializes the response in the provided class
-     * @param uri address of the service
-     * @param token authorization token
-     * @param clazz wanted class
-     * @param params parameters of the request ; will be encoded as url form parameters
-     * @param <T> insures type consistency
-     * @return new instance of the provided class
-     * @throws IOException ¯\_(ツ)_/¯
-     */
     public static <T> T post(String uri, String token, Class<T> clazz, HashMap<String, String> params) throws IOException {
-        URL url = new URL(uri);
-        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-        byte[] encodedParams = convertToPostParameters(params);
+        return cypher.fromJson(request(POST, uri, token, params), clazz);
+    }
 
-        connection.setRequestMethod(POST.name());
-        connection.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-        connection.setRequestProperty(HttpHeaders.AUTHORIZATION, token);
-        connection.setRequestProperty(HttpHeaders.CONTENT_LENGTH, String.valueOf(encodedParams.length));
+    public static String put(String uri, String token, HashMap<String, String> params) throws IOException {
+        return request(PUT, uri, token, params);
+    }
 
-        connection.setDoInput(true);
-        connection.setDoOutput(true);
-        connection.getOutputStream().write(encodedParams);
+    public static String put(String uri, String token, String paramName, Object param) throws IOException {
+        HashMap<String, String> map = new HashMap<>();
+        map.put(paramName, cypher.toJson(param));
+        return request(PUT, uri, token, map);
+    }
 
-        if(connection.getResponseCode() == 500)
-        {
-            throw new IOException("Http request returned an error 500 !");
-        }
-        String result = readResponse(connection.getInputStream());
-        connection.disconnect();
-        return cypher.fromJson(result, clazz);
+    public static String post(String uri, String token, String paramName, Object param) throws IOException {
+        HashMap<String, String> map = new HashMap<>();
+        map.put(paramName, cypher.toJson(param));
+        return request(POST, uri, token, map);
     }
 
     /**
@@ -131,14 +104,38 @@ public class HttpRequestHelper {
     }
 
     /**
-     * launches an htttp put request with the given parameters
+     * launches an http post request and desrializes the response in the provided class
      * @param uri address of the service
-     * @param token authroization token
-     * @param parameter provided parameter
+     * @param token authorization token
+     * @param params parameters of the request ; will be encoded as url form parameters
+     * @return new instance of the provided class
      * @throws IOException ¯\_(ツ)_/¯
      */
-    public static void put(String uri, String token, Object parameter) throws IOException {
-        //request(PUT, uri, token, parameter);
+    public static String request(HttpMethod method, String uri, String token, HashMap<String, String> params) throws IOException {
+        URL url = new URL(uri);
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+
+        connection.setRequestMethod(method.name());
+        connection.setRequestProperty(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        connection.setRequestProperty(HttpHeaders.AUTHORIZATION, token);
+
+        if(params != null) {
+            byte[] encodedParams = convertToPostParameters(params);
+            connection.setRequestProperty(HttpHeaders.CONTENT_LENGTH, String.valueOf(encodedParams.length));
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.getOutputStream().write(encodedParams);
+        }
+
+
+        if(connection.getResponseCode() == 500)
+        {
+            throw new IOException("Http request returned an error 500 !");
+        }
+
+        String result = readResponse(connection.getInputStream());
+        connection.disconnect();
+        return result;
     }
 
     /**

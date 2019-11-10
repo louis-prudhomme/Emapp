@@ -7,6 +7,7 @@ import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
 import fr.efrei.se.emapp.common.model.CredentialTranscript;
 
 import javax.ws.rs.*;
+import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -34,14 +35,14 @@ public class CredentialResource {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String tryAuth(@FormParam("login")String login, @FormParam("password")String password) throws DBComException {
+    public Response tryAuth(@FormParam("login")String login, @FormParam("password")String password) throws DBComException {
         try {
             CredentialTranscript c = convertCredential(checkCredentials(login, password));
-            return gson.toJson(c);
+            return Response.ok(gson.toJson(c)).build();
         } catch (EmptyParameterException e) {
-            return Response.status(Response.Status.METHOD_NOT_ALLOWED).build().toString();
+            return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
         } catch (EmptyResultException e) {
-            return Response.status(Response.Status.UNAUTHORIZED).build().toString();
+            return Response.status(Response.Status.UNAUTHORIZED).build();
         }
     }
 }
