@@ -56,25 +56,12 @@ public class HttpRequestHelper {
         return content.toString();
     }
 
-    /**
-     * launches an http get request and desrializes the response in the provided class
-     * @param uri address of the service
-     * @param token authorization token
-     * @param clazz wanted class
-     * @param <T> insures type consistency
-     * @return new instance of the provided class
-     * @throws IOException ¯\_(ツ)_/¯
-     */
     public static <T> T get(String uri, String token, Class<T> clazz) throws IOException {
         return cypher.fromJson(HttpRequestHelper.request(GET, uri, token), clazz);
     }
 
     public static <T> T post(String uri, String token, Class<T> clazz, HashMap<String, String> params) throws IOException {
         return cypher.fromJson(request(POST, uri, token, params), clazz);
-    }
-
-    public static String put(String uri, String token, HashMap<String, String> params) throws IOException {
-        return request(PUT, uri, token, params);
     }
 
     public static String put(String uri, String token, String paramName, Object param) throws IOException {
@@ -104,11 +91,12 @@ public class HttpRequestHelper {
     }
 
     /**
-     * launches an http post request and desrializes the response in the provided class
+     * launches an http request with the provided method, uri and token
+     * @param method http method
      * @param uri address of the service
      * @param token authorization token
-     * @param params parameters of the request ; will be encoded as url form parameters
-     * @return new instance of the provided class
+     * @param params hashmap of parameters and their names
+     * @return received response
      * @throws IOException ¯\_(ツ)_/¯
      */
     public static String request(HttpMethod method, String uri, String token, HashMap<String, String> params) throws IOException {

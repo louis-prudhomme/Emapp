@@ -56,7 +56,7 @@ public class EmployeesResource {
     /**
      * handles delete requests on a particular id
      * @param id of the employee one wants to delete
-     * @return true in all cases //todo faire un truc stylé pour la valeur de retour
+     * @return http 200 all cases //todo faire un truc stylé pour la valeur de retour
      * @throws DBComException sa va murir mdr
      */
     @DELETE
@@ -73,7 +73,7 @@ public class EmployeesResource {
     /**
      * handles put requests
      * semanticaly, should update employees
-     * @return true in all cases //todo faire un truc stylé pour la valeur de retour
+     * @return http 200 all cases //todo faire un truc stylé pour la valeur de retour
      * @throws DBComException sa va murir mdr
      */
     @PUT
@@ -89,7 +89,7 @@ public class EmployeesResource {
     /**
      * handles post requests
      * semanticaly, should create employees
-     * @return true in all cases //todo faire un truc stylé pour la valeur de retour
+     * @return http 200 in all cases //todo faire un truc stylé pour la valeur de retour
      * @throws DBComException sa va murir mdr
      */
     @POST
