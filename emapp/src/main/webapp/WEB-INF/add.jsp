@@ -14,28 +14,51 @@
         <link type="text/css" rel="stylesheet" href="css/darkTheme.css">
         <script type="text/javascript" src="js/darkTheme.js"></script>
     </head>
-    <body onload="loadPage2()">
+    <body onload="loadPage2();">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        
-        
+
         <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-            <button id = "logOutButton" type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm">
-                <span class="glyphicon glyphicon-log-out"></span> Log out
-            </button>
-            <h2> EMAPP - Details of employee: ${employeeChecked.firstName} ${employeeChecked.lastName}</h2>
+                <div id = "hello">
+                    <h5>Hello ${user.login}! Your session is active.</h5>
+                </div>
+                <div id="listOfEmployee">
+                    <h2> EMAPP - Details of employee: ${employeeChecked.firstName} ${employeeChecked.lastName}</h2>
+                </div>
+                <br/>
+                <br/>
         </nav>
         
-        <button id = "darkID" type="button" onclick="setDarkMode()"class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-certificate"></span> Dark
-        </button>       
-        <button id = "LightID" type="button" onclick="setLightMode()" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-flash"></span> Light
-        </button>
+        <nav class="navbar navbar-fixed-left navbar-minimal animate" role="navigation">
+		<div class="navbar-toggler animate">
+			<span class="menu-icon"></span>
+		</div>
+		<ul class="navbar-menu animate">
+			<li>
+                             <a href="#blog" class="animate" onclick="setLightMode()">
+                                 <span class="desc animate"> Light </span>
+				<span class="glyphicon glyphicon-flash"></span>
+                             </a>
+			</li>
+			<li>
+                            <a href="#blog" class="animate" onclick="setDarkMode()">
+				<span class="desc animate"> Dark </span>
+				<span class="glyphicon glyphicon-certificate"></span></span>
+                            </a>
+			</li>
+                        	<li>
+                            <a href="#blog" class="animate" data-toggle="modal" data-target=".bs-example-modal-sm">
+				<span class="desc animate"> Log out </span>
+				<span class="glyphicon glyphicon-off"></span></span>
+                            </a>
+			</li>
+		</ul>
+	</nav>
+        
         <br/>
         <form method="get" action="${pageContext.request.contextPath}/se.m1.emapp.controller">
             <div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
@@ -111,5 +134,14 @@
                 </div>
             </div>
         </form>
+                
+            <script type="text/javascript">
+                    $(function () {
+    
+    $('.navbar-toggler').on('click', function(event) {
+		event.preventDefault();
+		$(this).closest('.navbar-minimal').toggleClass('open');
+	});
+});</script>
     </body>
 </html>

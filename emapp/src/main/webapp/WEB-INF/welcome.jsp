@@ -21,29 +21,56 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
             <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-                <button id = "logOutButton" type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-sm">
-                    <span class="glyphicon glyphicon-log-out"></span> Log out
-                </button>
                 <div id = "hello">
                     <h5>Hello ${user.login}! Your session is active.</h5>
                 </div>
                 <div id="listOfEmployee">
                     <h2>EMAPP - List of Employees</h2>
                 </div>
+                <br/>
+                <br/>
             </nav>
+ 
+                
+                
+                
+<!--AJOUT-->
+        <nav class="navbar navbar-fixed-left navbar-minimal animate" role="navigation">
+		<div class="navbar-toggler animate">
+			<span class="menu-icon"></span>
+		</div>
+		<ul class="navbar-menu animate">
+			<li>
+                             <a href="#blog" class="animate" onclick="setLightMode()">
+                                 <span class="desc animate"> Light </span>
+				<span class="glyphicon glyphicon-flash"></span>
+                             </a>
+			</li>
+			<li>
+                            <a href="#blog" class="animate" onclick="setDarkMode()">
+				<span class="desc animate"> Dark </span>
+				<span class="glyphicon glyphicon-certificate"></span></span>
+                            </a>
+			</li>
+                        	<li>
+                            <a href="#blog" class="animate" data-toggle="modal" data-target=".bs-example-modal-sm">
+				<span class="desc animate"> Log out </span>
+				<span class="glyphicon glyphicon-off"></span></span>
+                            </a>
+			</li>
+		</ul>
+	</nav>
+      <!--FIN AJOUT-->
+        
+        
+        
+        
+        
         <c:if test="${!empty errCheck}">
         <div class="alert alert-danger" role="alert">
             <c:out value="${errCheck}" />
         </div>
         </c:if>
-        
-        <button id = "darkID" type="button" onclick="setDarkMode()"class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-certificate"></span> Dark
-        </button>
-        
-        <button id = "LightID" type="button" onclick="setLightMode()" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-flash"></span> Light
-        </button>
         <div class="container">
 
             <!--Logout button-->
@@ -122,6 +149,15 @@
                 </c:if>
             </form>
         </div>
+                
+    <script type="text/javascript">
+                    $(function () {
+    
+    $('.navbar-toggler').on('click', function(event) {
+		event.preventDefault();
+		$(this).closest('.navbar-minimal').toggleClass('open');
+	});
+});</script>
                     
     </body>
 </html>
