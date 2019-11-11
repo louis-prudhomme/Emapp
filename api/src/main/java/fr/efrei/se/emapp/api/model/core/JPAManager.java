@@ -8,6 +8,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import fr.efrei.se.emapp.api.model.business.Credential;
 import fr.efrei.se.emapp.api.model.business.Employee;
+import fr.efrei.se.emapp.api.model.exception.EmptyParameterException;
+import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
 
 @Stateless
 public class JPAManager {
@@ -44,7 +46,7 @@ public class JPAManager {
      * allows the modification of an employee
      * @param e the employee to modify
      */
-    public void modifyEmployee(Employee e){  
+    public void modifyEmployee(Employee e) {
         em.merge(e);
     }
     
@@ -52,9 +54,13 @@ public class JPAManager {
      * Allows to get all the employee
      * @return an ArrayList with all the employees
      */
-    public List<Employee> getAll(){
+    public List<Employee> getAll() throws EmptyResultException {
         queryEmployee = em.createNamedQuery("Employee.findAll", Employee.class);
         all = new ArrayList<>(queryEmployee.getResultList());
+
+        if(all.isEmpty())
+            throw new EmptyResultException();
+
         return all;      
     }
     
@@ -63,9 +69,16 @@ public class JPAManager {
      * @param id of the employee to read
      * @return The employee corresponding to the id
      */
-    public Employee read(int id){ 
+    public Employee read(int id) throws EmptyResultException, EmptyParameterException {
+        if(id == 0)
+            throw new EmptyParameterException();
+
         queryEmployee = em.createNamedQuery("Employee.findById", Employee.class);
-        queryEmployee.setParameter("id",id);
+        queryEmployee.setParameter("id", id);
+
+        if(queryEmployee.getResultList().isEmpty())
+            throw new EmptyResultException();
+
         return queryEmployee.getSingleResult();
     }
     
@@ -74,10 +87,18 @@ public class JPAManager {
      * @param c the credentials to be verified
      * @return the corresponding creedential if it exists
      */
-    public Credential checkCredentials(Credential c) {
+    public Credential checkCredentials(Credential c) throws EmptyParameterException, EmptyResultException {
         queryCredential = em.createNamedQuery("Credential.checkCred", Credential.class);
-        queryCredential.setParameter("login",c.getLogin());
-        queryCredential.setParameter("pwd",c.getPwd());
+
+        if(c.getLogin() == null || c.getPwd() == null)
+            throw new EmptyParameterException();
+
+        queryCredential.setParameter("login", c.getLogin());
+        queryCredential.setParameter("pwd", c.getPwd());
+
+        if(queryCredential.getResultList().isEmpty())
+            throw new EmptyResultException();
+
         return queryCredential.getResultList().get(0);
     }
 }

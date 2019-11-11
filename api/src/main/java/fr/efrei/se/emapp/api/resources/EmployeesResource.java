@@ -3,6 +3,7 @@ package fr.efrei.se.emapp.api.resources;
 import com.google.gson.Gson;
 import fr.efrei.se.emapp.api.model.business.Employee;
 import fr.efrei.se.emapp.api.model.core.JPAManager;
+import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
 import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.api.security.Secured;
 import fr.efrei.se.emapp.common.model.EmployeeTranscript;
@@ -34,7 +35,11 @@ public class EmployeesResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
         ArrayList<EmployeeTranscript> transcripts = new ArrayList<>();
-        jpaManager.getAll().forEach(e -> transcripts.add(ResourceHelper.convertEmployee(e)));
+        try {
+            jpaManager.getAll().forEach(e -> transcripts.add(ResourceHelper.convertEmployee(e)));
+        } catch (EmptyResultException e) {
+            e.printStackTrace();
+        }
         return Response.ok(gson.toJson(transcripts)).build();
     }
 

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import fr.efrei.se.emapp.api.model.business.Credential;
 import fr.efrei.se.emapp.api.model.core.JPAManager;
 import fr.efrei.se.emapp.api.model.exception.EmptyParameterException;
+import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -39,16 +40,12 @@ public class CredentialResource {
         try {
             Credential credential = new Credential(login, password);
             credential = jpaManager.checkCredentials(credential);
-            //todo fix
-            if (credential != null) {
-                return Response.ok(gson.toJson(ResourceHelper.convertCredential(credential))).build();
-            } else {
-                throw new EmptyParameterException();
-            }
+
+            return Response.ok(gson.toJson(ResourceHelper.convertCredential(credential))).build();
         } catch (EmptyParameterException e) {
             return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
-        } /*catch (EmptyResultException e) {
+        } catch (EmptyResultException e) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
-        }*/
+        }
     }
 }
