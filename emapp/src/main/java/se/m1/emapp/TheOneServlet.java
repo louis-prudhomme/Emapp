@@ -60,8 +60,10 @@ public class TheOneServlet extends HttpServlet {
         //if the next page is welcome.jsp we load the list containing all the employees
         //this is made to avoid repeating it over and over in employeeController
         if(nextPage.equals(JSP_WELCOME_PAGE)) {
-                request.setAttribute("empList", jpa.getAll());          
+            request.setAttribute("empList", jpa.getAll());
+            request.removeAttribute("action");
         }
+
         if(request.getParameter("action") != null && request.getParameter("action").equalsIgnoreCase(WordOfPower.COMMIT.name())) {
             response.sendRedirect("se.m1.emapp.controller");
         } else {

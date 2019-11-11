@@ -120,7 +120,7 @@ public class EmployeeController implements IController {
     private String delete() {                                                            
         try {
             int id = Integer.parseInt(request.getParameter("check"));
-            jpa.removeEmployee(new Employee( id));
+            jpa.removeEmployee(new Employee(id));
         } catch (NumberFormatException e) {
             //fires if there's an a error with the id
             request.setAttribute("errCheck", ERR_CHECK);
