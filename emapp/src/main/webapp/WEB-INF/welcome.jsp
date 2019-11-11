@@ -1,17 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <jsp:useBean id="empList" scope="request" type="java.util.ArrayList"/>
 <jsp:useBean id="user" scope="session" type="se.m1.emapp.model.business.Credential"/>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>List of Employees</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link type="text/css" rel="stylesheet" href="css/cssWelcome.css">
         <link type="text/css" rel="stylesheet" href="css/darkTheme.css">
         <script type="text/javascript" src="js/darkTheme.js"></script>
+        
+
     </head>
     <body onload="loadPage2()">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -32,7 +35,7 @@
             </nav>
  
                 
-                
+           
                 
 <!--AJOUT-->
         <nav class="navbar navbar-fixed-left navbar-minimal animate" role="navigation">
@@ -74,7 +77,7 @@
         <div class="container">
 
             <!--Logout button-->
-            <form id="lol" name="welcome" action="${pageContext.request.contextPath}/se.m1.emapp.controller">
+            <form name="welcome" action="${pageContext.request.contextPath}/se.m1.emapp.controller">
             <!--Pop up for the logout-->
                 <div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-sm">
@@ -115,7 +118,7 @@
                                     </div>
                             </td>
                             </c:if>
-                            <td> ${employee.lastName} </td>
+                            <td >${employee.lastName}</td>
                             <td> ${employee.firstName} </td>
                             <td> ${employee.homePhone} </td>
                             <td> ${employee.mobilePhone} </td>
