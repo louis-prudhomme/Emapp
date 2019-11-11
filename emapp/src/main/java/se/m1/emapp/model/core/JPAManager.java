@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import se.m1.emapp.model.business.Credential;
@@ -30,7 +32,7 @@ public class JPAManager {
      * allows the creation of an employee
      * @param e the employee to create
      */
-    public void createEmployee(Employee e){ 
+    public void createEmployee(Employee e)throws RuntimeException{ 
         em.persist(e);
     }
     
@@ -38,7 +40,7 @@ public class JPAManager {
      * allows employee deletion
      * @param e the employee to delete
      */
-    public void removeEmployee(Employee e){
+    public void removeEmployee(Employee e)throws RuntimeException{
         if (!em.contains(e)){
             e = em.merge(e);
         }
@@ -49,7 +51,8 @@ public class JPAManager {
      * allows the modification of an employee
      * @param e the employee to modify
      */
-    public void modifyEmployee(Employee e){  
+    public void modifyEmployee(Employee e) throws RuntimeException{ 
+        em.getEntityManagerFactory().getCache().evictAll();
         em.merge(e);
     }
     
@@ -57,7 +60,7 @@ public class JPAManager {
      * Allows to get all the employee
      * @return an ArrayList with all the employees
      */
-    public List<Employee> getAll(){ 
+    public List<Employee> getAll() throws RuntimeException{ 
         queryEmployee = em.createNamedQuery("Employee.findAll", Employee.class);
         all = new ArrayList<>(queryEmployee.getResultList());
         return all;      
@@ -68,11 +71,15 @@ public class JPAManager {
      * @param id of the employee to read
      * @return The employee corresponding to the id
      */
-    public Employee read(int id){ 
-        queryEmployee = em.createNamedQuery("Employee.findById", Employee.class);
-        queryEmployee.setParameter("id",id); 
-        Employee x = queryEmployee.getSingleResult();
-        return x; 
+    public Employee read(int id){
+            em.getEntityManagerFactory().getCache().evictAll();
+            queryEmployee = em.createNamedQuery("Employee.findById", Employee.class);
+            queryEmployee.setParameter("id",id);         
+            if (queryEmployee.getResultList().isEmpty()){
+                return null;
+            }
+            Employee x = queryEmployee.getSingleResult();
+            return x;
     }
     
     /**
@@ -80,10 +87,11 @@ public class JPAManager {
      * @param c the credentials to be verified
      * @return a boolean : true if the credentials entered are valid, false if not
      */
-    public boolean checkCredentials(Credential c){ 
-      queryCredential = em.createNamedQuery("Credential.checkcred", Credential.class);
-      queryCredential.setParameter("login",c.getLogin());
-      queryCredential.setParameter("pwd",c.getPwd()); 
-      return !queryCredential.getResultList().isEmpty();
+    public boolean checkCredentials(Credential c) throws RuntimeException{
+        queryCredential = em.createNamedQuery("Credential.checkcred", Credential.class);
+        queryCredential.setParameter("login",c.getLogin());
+        queryCredential.setParameter("pwd",c.getPwd()); 
+        return !queryCredential.getResultList().isEmpty();
+      
     }
 }

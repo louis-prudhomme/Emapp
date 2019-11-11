@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import javax.persistence.NoResultException;
 import se.m1.emapp.model.core.JPAManager;
 
 import static se.m1.emapp.utils.Constants.*;
@@ -59,6 +60,8 @@ public class EmployeeController implements IController {
                 return commit();
             case CANCEL:
                 session.removeAttribute("employeeChecked");
+            case HOME:
+                return JSP_HOME_PAGE;
             default:
                 return JSP_WELCOME_PAGE;
         }
@@ -94,6 +97,13 @@ public class EmployeeController implements IController {
         try {
             int id = Integer.parseInt(request.getParameter("check"));
             Employee employee = jpa.read(id);
+            if(employee==null){
+                request.setAttribute("errorMessage", "Employee not found");
+                request.setAttribute("firstDigit", '4');
+                request.setAttribute("secondDigit", '0');
+                request.setAttribute("thirdDigit", '4');
+                return JSP_ERROR_PAGE;
+            }
             session.setAttribute("employeeChecked", employee);
         } catch (NumberFormatException e) {
             //fires if there's an a error with the id

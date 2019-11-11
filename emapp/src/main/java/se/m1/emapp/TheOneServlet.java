@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import javax.ejb.EJB;
+import javax.servlet.http.HttpSession;
 import se.m1.emapp.model.core.JPAManager;
 
 import static se.m1.emapp.utils.Constants.*;
@@ -37,9 +38,8 @@ public class TheOneServlet extends HttpServlet {
      * @throws IOException 
      */
      private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
         //parses the action parameter into a WordOfPower enum
+        
         request.setAttribute("action", WordOfPower.fromString(request.getParameter("action")));
 
         if (request.getSession().getAttribute("user") == null || request.getAttribute("action") == WordOfPower.LOGOUT) {
@@ -51,6 +51,7 @@ public class TheOneServlet extends HttpServlet {
         //gets controller
         controller = ControllerFactory.dispatch(request, response,jpa, state);
         if(controller == null) {
+            
             nextPage = JSP_ERROR_PAGE;
         } else {
             nextPage = controller.handle((WordOfPower)request.getAttribute("action"));
@@ -61,7 +62,12 @@ public class TheOneServlet extends HttpServlet {
         if(nextPage.equals(JSP_WELCOME_PAGE)) {
                 request.setAttribute("empList", jpa.getAll());          
         }
-        request.getRequestDispatcher(nextPage).forward(request, response);
+        if(request.getParameter("action") != null && request.getParameter("action").equalsIgnoreCase(WordOfPower.COMMIT.name())) {
+            response.sendRedirect("se.m1.emapp.controller");
+        } else {
+            request.getRequestDispatcher(nextPage).forward(request, response);
+        }
+        
     }
 
     /**

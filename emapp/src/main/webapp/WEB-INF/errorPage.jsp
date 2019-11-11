@@ -34,7 +34,7 @@
         </div>
         <form action="${pageContext.request.contextPath}/se.m1.emapp.controller">
             <div class="error-actions">
-                <input type="submit" class="btn btn-primary btn-lg" name="action" value="Take Me Home">      
+                <input type="submit" class="btn btn-primary btn-lg" name="action" value="Home">      
             </div>
         </form>
         <!-- Error Page JS-->
