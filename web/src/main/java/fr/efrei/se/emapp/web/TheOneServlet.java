@@ -62,7 +62,12 @@ public class TheOneServlet extends HttpServlet {
                 nextPage = JSP_ERROR_PAGE;
             }
         }
-        request.getRequestDispatcher(nextPage).forward(request, response);
+
+        if(request.getParameter("action") != null && request.getParameter("action").equalsIgnoreCase(WordOfPower.COMMIT.name())) {
+            response.sendRedirect("app");
+        } else {
+            request.getRequestDispatcher(nextPage).forward(request, response);
+        }
     }
 
     /**

@@ -18,18 +18,30 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <c:if test="${!empty errKey}">
-        <div class="alert alert-danger" role="alert">
-            <c:out value="${errKey}" />
-        </div>
+            <div class="alert alert-danger" role="alert">
+                <c:out value="${errKey}" />
+            </div>
         </c:if>
         
-        <button id = "darkID" type="button" onclick="setDarkMode()"class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-certificate"></span> Dark
-        </button>
-        
-        <button id = "LightID" type="button" onclick="setLightMode()" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-flash"></span> Light
-        </button>
+        <nav class="navbar navbar-fixed-left navbar-minimal animate" role="navigation">
+		<div class="navbar-toggler animate">
+			<span class="menu-icon"></span>
+		</div>
+		<ul class="navbar-menu animate">
+			<li>
+                             <a href="#blog" class="animate" onclick="setLightMode()">
+                                 <span class="desc animate"> Light </span>
+				<span class="glyphicon glyphicon-flash"></span>
+                             </a>
+			</li>
+			<li>
+                            <a href="#blog" class="animate" onclick="setDarkMode()">
+				<span class="desc animate"> Dark </span>
+				<span class="glyphicon glyphicon-certificate"></span>
+                            </a>
+			</li>
+		</ul>
+	</nav>
         
         <div class="wrapper fadeInDown">
             <div id="formContent">
@@ -38,12 +50,22 @@
                     <img class="resize" src="https://pngimage.net/wp-content/uploads/2018/06/logo-user-png-6.png" id="icon" alt="User Icon"  />
                 </div>
 
-                <form name="registering" action="${pageContext.request.contextPath}/app">
+                <form method="post" name="registering" action="${pageContext.request.contextPath}/app">
                     <input type='text' name="loginField" class="fadeIn second" placeholder="Login">
                     <input type='text' name="pwdField" class="fadeIn third" placeholder="Password">
                     <input type='submit' class="fadeIn fourth" name='action' value='Login'>
                 </form>
             </div>
         </div>
+                    
+                    
+    <script type="text/javascript">
+                    $(function () {
+    
+    $('.navbar-toggler').on('click', function(event) {
+		event.preventDefault();
+		$(this).closest('.navbar-minimal').toggleClass('open');
+	});
+});</script>
     </body>
 </html>
