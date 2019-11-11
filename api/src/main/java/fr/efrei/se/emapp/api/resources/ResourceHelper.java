@@ -8,7 +8,6 @@ import fr.efrei.se.emapp.common.model.EmployeeTranscript;
 
 /**
  * helps resources
- * most of this class should disappear with the oncoming jpa update
  * will document it later
  * //todo
  */
@@ -18,11 +17,19 @@ public class ResourceHelper {
         employeeTranscript.setId(e.getId());
         employeeTranscript.setFirstName(e.getFirstName());
         employeeTranscript.setLastName(e.getLastName());
+        employeeTranscript.setMobilePhone(e.getMobilePhone());
+        employeeTranscript.setHomePhone(e.getHomePhone());
+        employeeTranscript.setWorkPhone(e.getWorkPhone());
+        employeeTranscript.setAddress(e.getAddress());
+        employeeTranscript.setCity(e.getCity());
+        employeeTranscript.setPostalCode(e.getPostalCode());
+        employeeTranscript.setEmail(e.getEmail());
         return employeeTranscript;
     }
 
     public static Employee convertEmployeeTranscript(EmployeeTranscript e) {
-        return new Employee(e.getId(), e.getFirstName(), e.getLastName(), "", "", "", "", "", "", "");
+        return new Employee(e.getId(), e.getFirstName(), e.getLastName(), e.getHomePhone(),
+                e.getMobilePhone(), e.getWorkPhone(), e.getAddress(), e.getPostalCode(), e.getCity(), e.getEmail());
     }
 
     public static CredentialTranscript convertCredential(Credential c) {
@@ -30,6 +37,16 @@ public class ResourceHelper {
         credentialTranscript.setId(0);
         credentialTranscript.setLogin(c.getLogin());
         credentialTranscript.setPassword(c.getPwd());
+        credentialTranscript.setAdmin(c.isAdmin());
         return credentialTranscript;
+    }
+
+    public static Credential convertCredential(CredentialTranscript c) {
+        Credential credential = new Credential();
+        credential.setId(c.getId());
+        credential.setLogin(c.getLogin());
+        credential.setPwd(c.getPassword());
+        credential.setAdmin(c.isAdmin());
+        return credential;
     }
 }

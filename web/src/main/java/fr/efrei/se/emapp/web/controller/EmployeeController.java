@@ -75,8 +75,13 @@ public class EmployeeController implements IController {
         employee.setId(id);
         employee.setFirstName(request.getParameter("inputFirstName"));
         employee.setLastName(request.getParameter("inputLastName"));
-        //todo include other parameters
-        //request.getParameter("inputLastName"),  request.getParameter("inputHomePhone"), request.getParameter("inputMobilePhone"),  request.getParameter("inputWorkPhone"), request.getParameter("inputAddress"),  request.getParameter("inputPostalCode"), request.getParameter("inputCity"),  request.getParameter("inputEmail"), false);
+        employee.setMobilePhone(request.getParameter("inputMobilePhone"));
+        employee.setHomePhone(request.getParameter("inputHomePhone"));
+        employee.setWorkPhone(request.getParameter("inputWorkPhone"));
+        employee.setAddress(request.getParameter("inputAddress"));
+        employee.setCity(request.getParameter("inputCity"));
+        employee.setPostalCode(request.getParameter("inputPostalCode"));
+        employee.setEmail(request.getParameter("inputEmail"));
         try {
             if (id == 0) {
                 HttpRequestHelper.post(EMPLOYEES_URI, TheOneServlet.getSessionToken(session), "employee", employee);

@@ -37,6 +37,11 @@ public class Credential implements Serializable {
     @Size(min = 1, max = 128)
     @Column(name = "PWD")
     private String pwd;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1)
+    @Column(name = "ISADMIN")
+    private boolean isAdmin;
 
     /**
      * default constructor
@@ -56,7 +61,7 @@ public class Credential implements Serializable {
      * @param login
      * @param pwd 
      */
-    public Credential(String login, String pwd){
+    public Credential(String login, String pwd) {
         this.login = login;
         this.pwd = pwd;
     }
@@ -101,6 +106,14 @@ public class Credential implements Serializable {
      */
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     /**

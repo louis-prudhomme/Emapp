@@ -110,7 +110,7 @@ public class TheOneServlet extends HttpServlet {
      * @return current session’s user’s role
      */
     private static Role getRole(HttpSession session) {
-        return ((CredentialTranscript)session.getAttribute("user")).isAdmin() ? Role.ADMIN : Role.ADMIN;
+        return ((CredentialTranscript)session.getAttribute("user")).isAdmin() ? Role.ADMIN : Role.USER;
     }
 
     /**

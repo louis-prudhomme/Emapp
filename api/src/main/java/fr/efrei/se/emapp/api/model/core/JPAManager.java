@@ -72,12 +72,12 @@ public class JPAManager {
     /**
      * verify the credentials entered
      * @param c the credentials to be verified
-     * @return a boolean : true if the credentials entered are valid, false if not
+     * @return the corresponding creedential if it exists
      */
-    public boolean checkCredentials(Credential c){ 
+    public Credential checkCredentials(Credential c) {
         queryCredential = em.createNamedQuery("Credential.checkCred", Credential.class);
         queryCredential.setParameter("login",c.getLogin());
         queryCredential.setParameter("pwd",c.getPwd());
-        return !queryCredential.getResultList().isEmpty();
+        return queryCredential.getResultList().get(0);
     }
 }

@@ -38,9 +38,9 @@ public class CredentialResource {
     public Response tryAuth(@FormParam("login")String login, @FormParam("password")String password) {
         try {
             Credential credential = new Credential(login, password);
-
+            credential = jpaManager.checkCredentials(credential);
             //todo fix
-            if (jpaManager.checkCredentials(credential)) {
+            if (credential != null) {
                 return Response.ok(gson.toJson(ResourceHelper.convertCredential(credential))).build();
             } else {
                 throw new EmptyParameterException();
