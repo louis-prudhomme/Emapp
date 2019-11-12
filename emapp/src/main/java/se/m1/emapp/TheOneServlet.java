@@ -57,7 +57,7 @@ public class TheOneServlet extends HttpServlet {
             try{
                 nextPage = controller.handle((WordOfPower)request.getAttribute("action"));
             }catch(EJBException e){
-                setErrorMessage(request,"DATABASE CONNECTION ERROR",DB_COM_ERROR_CODE);
+                setErrorMessage(request,"DATABASE CONNECTION ERROR PLEASE RELOAD THE APPLICATION",DB_COM_ERROR_CODE);
                 request.setAttribute("commit", true);
                 nextPage = JSP_ERROR_PAGE;
             }
