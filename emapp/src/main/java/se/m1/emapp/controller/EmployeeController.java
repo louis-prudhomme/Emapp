@@ -13,13 +13,19 @@ import se.m1.emapp.model.core.JPAManager;
 import static se.m1.emapp.utils.Constants.*;
 
 public class EmployeeController implements IController {
+    /**
+     * Servlet’s context
+     */
     private HttpServletRequest request;
     private HttpServletResponse response;
-    
+
+    /**
+     * Persistence manager
+     */
     private JPAManager jpa;
     
     /**
-     * session is a shortcut to avoid cluttering the code with calls through request
+     * Session is a shortcut to avoid cluttering the code with calls through request
      */
     private HttpSession session;
 
@@ -42,10 +48,10 @@ public class EmployeeController implements IController {
      * add, details, delete, commit, cancer and the default case
      * @param action user's request
      * @return a string representing the view to serve
-     * @throws ServletException, EJBException
+     * @throws EJBException
      */
     @Override
-    public String handle(WordOfPower action) throws ServletException,EJBException {    
+    public String handle(WordOfPower action) throws EJBException {
         switch (action) {
             case ADD:
                 //add.jsp needs an employee ; we create this one to fake it
@@ -71,7 +77,7 @@ public class EmployeeController implements IController {
      * @return next page
      * @throws EJBException
      */
-    private String commit()  throws EJBException{
+    private String commit() throws EJBException {
         //we check if the employee is either a fake one (id = 0) or not
         //if fake, then it is a create request ; otherwise, this is an update
         int id = session.getAttribute("employeeChecked") != null ? ((Employee)session.getAttribute("employeeChecked")).getId() : 0;
@@ -81,12 +87,11 @@ public class EmployeeController implements IController {
                 request.getParameter("inputAddress"),  request.getParameter("inputPostalCode"),request.getParameter("inputCity"), request.getParameter("inputEmail"));
             if(id != 0) { 
                 boolean verif = jpa.modifyEmployee(employee);
-                if(!verif){
+                if(!verif) {
                     TheOneServlet.setErrorMessage(request, "Employee not found", USER_WRONG_PAGE_CODE);
                     request.setAttribute("commit", true);
                     return JSP_ERROR_PAGE;
                 }
-                
             } else {
                 jpa.createEmployee(employee);
             }
@@ -99,11 +104,11 @@ public class EmployeeController implements IController {
      * @return next page
      * @throws EJBException
      */
-    private String details()  throws EJBException{   
+    private String details() throws EJBException {
         try {
             int id = Integer.parseInt(request.getParameter("check"));
             Employee employee = jpa.read(id);
-            if(employee==null){
+            if(employee==null) {
                 TheOneServlet.setErrorMessage(request, "Employee not found", USER_WRONG_PAGE_CODE);
                 request.setAttribute("commit", true);
                 return JSP_ERROR_PAGE;
@@ -122,11 +127,11 @@ public class EmployeeController implements IController {
      * @return next page
      * @throws EJBException
      */
-    private String delete()  throws EJBException{                                                            
+    private String delete() throws EJBException {
         try {
             int id = Integer.parseInt(request.getParameter("check"));
             boolean check = jpa.removeEmployee(new Employee(id));
-            if(!check){
+            if(!check) {
                 TheOneServlet.setErrorMessage(request, "Employee not found", USER_WRONG_PAGE_CODE);
                 request.setAttribute("commit", true);
                 return JSP_ERROR_PAGE;

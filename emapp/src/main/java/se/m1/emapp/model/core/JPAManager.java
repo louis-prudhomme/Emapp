@@ -16,22 +16,23 @@ import se.m1.emapp.model.business.Employee;
 import javax.ejb.EJBException;
 @Stateless
 public class JPAManager {
-
+    /**
+     * ArrayList that contains all the employees registered in the database
+     */
     private ArrayList<Employee> all;
-    
+
     @PersistenceContext
     private EntityManager em;
-    
+
     private TypedQuery<Employee> queryEmployee;
     private TypedQuery<Credential> queryCredential;
-  
 
     /**
      * allows the creation of an employee
      * @param e the employee to create
      * @throws EJBException
      */
-    public void createEmployee(Employee e)  throws EJBException{ 
+    public void createEmployee(Employee e) throws EJBException {
         em.persist(e);
     }
     
@@ -41,17 +42,16 @@ public class JPAManager {
      * @return a boolean that confirms if the employee is deleted
      * @throws EJBException
      */
-    public boolean removeEmployee(Employee e)  throws EJBException{
-        if(read(e.getId())==null){
+    public boolean removeEmployee(Employee e) throws EJBException {
+        if(read(e.getId()) == null) {
             return false;
-        }else{
-            if (!em.contains(e)){
+        } else {
+            if (!em.contains(e)) {
                 e = em.merge(e);
             }
             em.remove(e);
             return true;
         }
-
     }
     
     /**
@@ -60,11 +60,11 @@ public class JPAManager {
      * @return a boolean that confirms if the employee is modified
      * @throws EJBException
      */
-    public boolean modifyEmployee(Employee e)  throws EJBException{ 
+    public boolean modifyEmployee(Employee e) throws EJBException{
         em.getEntityManagerFactory().getCache().evictAll();
-        if(read(e.getId())==null){
+        if(read(e.getId()) == null) {
             return false;
-        }else{
+        } else {
             em.merge(e);
             return true;
         }
@@ -75,7 +75,7 @@ public class JPAManager {
      * @return an ArrayList with all the employees
      * @throws EJBException
      */
-    public List<Employee> getAll()  throws EJBException{ 
+    public List<Employee> getAll() throws EJBException {
         queryEmployee = em.createNamedQuery("Employee.findAll", Employee.class);
         all = new ArrayList<>(queryEmployee.getResultList());
         return all;      
@@ -88,16 +88,15 @@ public class JPAManager {
      * @throws EJBException
      */
        
-    public Employee read(int id) throws EJBException{
+    public Employee read(int id) throws EJBException {
         em.getEntityManagerFactory().getCache().evictAll();
         queryEmployee = em.createNamedQuery("Employee.findById", Employee.class);
-        queryEmployee.setParameter("id",id);
+        queryEmployee.setParameter("id", id);
         //we verify if the employee exists :
-        if (queryEmployee.getResultList().isEmpty()){
+        if (queryEmployee.getResultList().isEmpty()) {
             return null;
         }
-        Employee x = queryEmployee.getSingleResult();
-        return x;
+        return queryEmployee.getSingleResult();
     }
     
     /**
@@ -106,10 +105,10 @@ public class JPAManager {
      * @return a boolean : true if the credentials entered are valid, false if not
      * @throws EJBException
      */
-    public boolean checkCredentials(Credential c)  throws EJBException{
+    public boolean checkCredentials(Credential c) throws EJBException {
         queryCredential = em.createNamedQuery("Credential.checkcred", Credential.class);
-        queryCredential.setParameter("login",c.getLogin());
-        queryCredential.setParameter("pwd",c.getPwd()); 
+        queryCredential.setParameter("login", c.getLogin());
+        queryCredential.setParameter("pwd", c.getPwd());
         return !queryCredential.getResultList().isEmpty();
       
     }

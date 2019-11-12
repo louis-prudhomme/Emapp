@@ -13,14 +13,14 @@ import static se.m1.emapp.utils.Constants.USER_WRONG_PAGE_CODE;
  */
 public class ControllerFactory {
     /**
-     * 
-     * @param request
-     * @param response
-     * @param jpa
-     * @param state
-     * @return 
+     * Main method, dispatches a controller depending on the state
+     * @param request servlet request
+     * @param response servlet response
+     * @param jpa {@link JPAManager} persistence manager
+     * @param state application’s state
+     * @return new controller
      */
-    public static IController dispatch(HttpServletRequest request, HttpServletResponse response, JPAManager jpa,StateOfPower state) {
+    public static IController dispatch(HttpServletRequest request, HttpServletResponse response, JPAManager jpa, StateOfPower state) {
         switch (state) {
             case SESSION:
                 return new SessionController(request, response, jpa);

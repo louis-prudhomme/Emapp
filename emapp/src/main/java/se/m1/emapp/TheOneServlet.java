@@ -20,9 +20,11 @@ import se.m1.emapp.model.core.JPAManager;
 
 import static se.m1.emapp.utils.Constants.*;
 
-
+/**
+ * Entry point of the application
+ * Main controller
+ */
 public class TheOneServlet extends HttpServlet {
-
     private String nextPage;
     private IController controller;
     private StateOfPower state;
@@ -39,7 +41,6 @@ public class TheOneServlet extends HttpServlet {
      */
      private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //parses the action parameter into a WordOfPower enum
-        
         request.setAttribute("action", WordOfPower.fromString(request.getParameter("action")));
 
         if (request.getSession().getAttribute("user") == null || request.getAttribute("action") == WordOfPower.LOGOUT) {
@@ -49,15 +50,15 @@ public class TheOneServlet extends HttpServlet {
         }
 
         //gets controller
-        controller = ControllerFactory.dispatch(request, response,jpa, state);
+        controller = ControllerFactory.dispatch(request, response, jpa, state);
         if(controller == null) {
             setErrorMessage(request,null,"404");
             nextPage = JSP_ERROR_PAGE;
         } else {
-            try{
+            try {
                 nextPage = controller.handle((WordOfPower)request.getAttribute("action"));
-            }catch(EJBException e){
-                setErrorMessage(request,"DATABASE CONNECTION ERROR PLEASE RELOAD THE APPLICATION",DB_COM_ERROR_CODE);
+            } catch(EJBException e) {
+                setErrorMessage(request,"DATABASE CONNECTION ERROR PLEASE RELOAD THE APPLICATION", DB_COM_ERROR_CODE);
                 request.setAttribute("commit", true);
                 nextPage = JSP_ERROR_PAGE;
             }
@@ -70,12 +71,11 @@ public class TheOneServlet extends HttpServlet {
             request.removeAttribute("action");
         }
 
-        if(request.getParameter("action") != null && request.getParameter("action").equalsIgnoreCase(WordOfPower.COMMIT.name())&&request.getAttribute("commit")==null) {
+        if(request.getParameter("action") != null && request.getParameter("action").equalsIgnoreCase(WordOfPower.COMMIT.name()) && request.getAttribute("commit")==null) {
             response.sendRedirect("se.m1.emapp.controller");
         } else {
             request.getRequestDispatcher(nextPage).forward(request, response);
         }
-        
     }
 
     /**
@@ -87,8 +87,8 @@ public class TheOneServlet extends HttpServlet {
     public static void setErrorMessage(HttpServletRequest request, String error, String errorCode) {
         request.setAttribute("errorMessage", error);
         request.setAttribute("firstDigit", errorCode.charAt(0));
-        request.setAttribute("secondDigit",  errorCode.charAt(1));
-        request.setAttribute("thirdDigit",  errorCode.charAt(2));
+        request.setAttribute("secondDigit", errorCode.charAt(1));
+        request.setAttribute("thirdDigit", errorCode.charAt(2));
     }
 
     /**
