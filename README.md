@@ -50,20 +50,20 @@ This imposed us to start the project with Maven
 We also used MySQL (via XAMPP and MAMP), on port 8889
 
 # Database evolution according to versions : 
-
+```
 - V1 & V2 : 
 
-- ID int(32) AUTO_INCREMENT
-- FIRSTNAME varchar(128)
-- LASTNAME varchar(128)
-- HOMEPHONE varchar(128)
-- MOBILEPHONE varchar(128)
-- WORKPHONE varchar(128)
-- ADDRESS varchar(128)
-- POSTALCODE varchar(128)
-- CITY varchar(128)
-- EMAIL varchar(128)
-
+ID int(32) AUTO_INCREMENT
+FIRSTNAME varchar(128)
+LASTNAME varchar(128)
+HOMEPHONE varchar(128)
+MOBILEPHONE varchar(128)
+WORKPHONE varchar(128)
+ADDRESS varchar(128)
+POSTALCODE varchar(128)
+CITY varchar(128)
+EMAIL varchar(128)
+```
 
 - V3 : 
 
