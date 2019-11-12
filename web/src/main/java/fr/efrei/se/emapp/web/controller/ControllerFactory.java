@@ -17,7 +17,6 @@ public class ControllerFactory {
             case EMPLOYEE:
                 return new EmployeeController(request);
             default:
-                TheOneServlet.setErrorMessage(request, new Exception(""), USER_WRONG_PAGE_CODE);
                 return null;
         }
     }

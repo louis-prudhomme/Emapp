@@ -2,6 +2,9 @@ package fr.efrei.se.emapp.web;
 
 import fr.efrei.se.emapp.common.model.CredentialTranscript;
 import fr.efrei.se.emapp.common.model.EmployeeTranscript;
+import fr.efrei.se.emapp.common.model.exception.EmptyResultException;
+import fr.efrei.se.emapp.common.model.exception.UnauthorizedException;
+import fr.efrei.se.emapp.common.model.exception.WrongParameterException;
 import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.web.controller.ControllerFactory;
 import fr.efrei.se.emapp.web.controller.IController;
@@ -30,12 +33,11 @@ public class TheOneServlet extends HttpServlet {
      * @param request
      * @param response
      * @throws ServletException
-     * @throws IOException 
+     * @throws IOException, ServletException
      */
      private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
         //parses the action parameter into a WordOfPower enum
+        
         request.setAttribute("action", WordOfPower.fromString(request.getParameter("action")));
 
         if (request.getSession().getAttribute("user") == null || request.getAttribute("action") == WordOfPower.LOGOUT) {
@@ -47,9 +49,24 @@ public class TheOneServlet extends HttpServlet {
         //gets controller
         controller = ControllerFactory.dispatch(request, state);
         if(controller == null) {
+            setErrorMessage(request,"No pages were found for this request.", "404");
             nextPage = JSP_ERROR_PAGE;
         } else {
-            nextPage = controller.handle((WordOfPower)request.getAttribute("action"));
+            try {
+                nextPage = controller.handle((WordOfPower)request.getAttribute("action"));
+            } catch (UnauthorizedException e) {
+                request.setAttribute("commit", true);
+                setErrorMessage(request,"You are not authorized do perform this action", "403");
+                nextPage = JSP_ERROR_PAGE;
+            } catch (WrongParameterException e) {
+                request.setAttribute("commit", true);
+                setErrorMessage(request,"You have provided ", "405");
+                nextPage = JSP_ERROR_PAGE;
+            } catch (EmptyResultException e) {
+                request.setAttribute("commit", true);
+                setErrorMessage(request,"No results were found", "404");
+                nextPage = JSP_ERROR_PAGE;
+            }
         }
 
         //if the next page is welcome.jsp we load the list containing all the employees
@@ -58,16 +75,17 @@ public class TheOneServlet extends HttpServlet {
             try {
                 request.setAttribute("empList", HttpRequestHelper.getAll(EMPLOYEES_URI, getSessionToken(request.getSession()), EmployeeTranscript.class));
             } catch (Exception e) {
-                TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
+                TheOneServlet.setErrorMessage(request, "There has been a database communication error, please reload the application", DB_COM_ERROR_CODE);
                 nextPage = JSP_ERROR_PAGE;
             }
         }
 
-        if(request.getParameter("action") != null && request.getParameter("action").equalsIgnoreCase(WordOfPower.COMMIT.name())) {
+        if(request.getParameter("action") != null && request.getParameter("action").equalsIgnoreCase(WordOfPower.COMMIT.name()) && request.getAttribute("commit")==null) {
             response.sendRedirect("app");
         } else {
             request.getRequestDispatcher(nextPage).forward(request, response);
         }
+        
     }
 
     /**
@@ -76,8 +94,8 @@ public class TheOneServlet extends HttpServlet {
      * @param error exception raised during application execution
      * @param errorCode 404, 50x…
      */
-    public static void setErrorMessage(HttpServletRequest request, Exception error, String errorCode) {
-        request.setAttribute("errorMessage", error.getMessage());
+    public static void setErrorMessage(HttpServletRequest request, String error, String errorCode) {
+        request.setAttribute("errorMessage", error);
         request.setAttribute("firstDigit", errorCode.charAt(0));
         request.setAttribute("secondDigit",  errorCode.charAt(1));
         request.setAttribute("thirdDigit",  errorCode.charAt(2));

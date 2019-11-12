@@ -3,8 +3,8 @@ package fr.efrei.se.emapp.api.resources;
 import com.google.gson.Gson;
 import fr.efrei.se.emapp.api.model.business.Credential;
 import fr.efrei.se.emapp.api.model.core.JPAManager;
-import fr.efrei.se.emapp.api.model.exception.EmptyParameterException;
-import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
+import fr.efrei.se.emapp.common.model.exception.WrongParameterException;
+import fr.efrei.se.emapp.common.model.exception.EmptyResultException;
 import fr.efrei.se.emapp.common.model.CredentialTranscript;
 
 import javax.ejb.EJB;
@@ -42,7 +42,7 @@ public class CredentialResource {
         try {
             Credential credential = jpaManager.checkCredentials(ResourceHelper.convertCredentialTranscript(user));
             return Response.ok(gson.toJson(ResourceHelper.convertCredential(credential))).build();
-        } catch (EmptyParameterException e) {
+        } catch (WrongParameterException e) {
             return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
         } catch (EmptyResultException e) {
             return Response.status(Response.Status.UNAUTHORIZED).build();

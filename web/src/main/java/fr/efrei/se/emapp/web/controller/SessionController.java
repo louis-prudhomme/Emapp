@@ -1,14 +1,14 @@
 package fr.efrei.se.emapp.web.controller;
 
 import fr.efrei.se.emapp.common.model.CredentialTranscript;
-import fr.efrei.se.emapp.web.TheOneServlet;
+import fr.efrei.se.emapp.common.model.exception.UnauthorizedException;
+import fr.efrei.se.emapp.common.model.exception.WrongParameterException;
+import fr.efrei.se.emapp.common.model.exception.EmptyResultException;
 import fr.efrei.se.emapp.web.utils.HttpRequestHelper;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
 
 import static fr.efrei.se.emapp.web.utils.Constants.*;
 
@@ -35,11 +35,10 @@ public class SessionController implements IController {
      * login, logout and the default case (null)
      * @param action user's request
      * @return a string representing the view to serve
-     * @throws ServletException unexpected
      * @throws IOException unexpected
      */
     @Override
-    public String handle(WordOfPower action) throws ServletException, IOException {
+    public String handle(WordOfPower action) throws IOException {
         switch (action) {
             case LOGIN:
                 return logUser();
@@ -55,7 +54,7 @@ public class SessionController implements IController {
      * tries to log the user in
      * @return either welcome page if the user was successfully logged in, or an error page
      */
-    private String logUser() {
+    private String logUser() throws IOException {
         try {
             CredentialTranscript user = new CredentialTranscript();
             user.setLogin(request.getParameter("loginField"));
@@ -65,15 +64,12 @@ public class SessionController implements IController {
             user = HttpRequestHelper.post(CREDENTIALS_URI, null, CredentialTranscript.class, "user", user);
             session.setAttribute("user", user);
             return JSP_WELCOME_PAGE;
-        } catch (Exception e) {
-            TheOneServlet.setErrorMessage(request, e, DB_COM_ERROR_CODE);
-            return JSP_ERROR_PAGE;/*
         } catch (EmptyResultException e) {
             request.setAttribute("errKey", ERR_MESSAGE_INVALID_CREDENTIALS);
             return JSP_HOME_PAGE;
-        } catch (EmptyParameterException e) {
+        } catch (WrongParameterException e) {
             request.setAttribute("errKey", ERR_MESSAGE_FIELD_EMPTY);
-            return JSP_HOME_PAGE;*/
+            return JSP_HOME_PAGE;
         }
     }
 }

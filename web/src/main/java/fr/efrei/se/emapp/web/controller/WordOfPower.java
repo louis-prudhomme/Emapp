@@ -12,6 +12,7 @@ public enum WordOfPower {
     DETAILS,
     LOGIN,
     LOGOUT,
+    HOME,
     NULL;
 
     /**

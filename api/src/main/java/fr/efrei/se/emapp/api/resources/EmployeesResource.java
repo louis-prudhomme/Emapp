@@ -3,13 +3,14 @@ package fr.efrei.se.emapp.api.resources;
 import com.google.gson.Gson;
 import fr.efrei.se.emapp.api.model.business.Employee;
 import fr.efrei.se.emapp.api.model.core.JPAManager;
-import fr.efrei.se.emapp.api.model.exception.EmptyParameterException;
-import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
+import fr.efrei.se.emapp.common.model.exception.WrongParameterException;
+import fr.efrei.se.emapp.common.model.exception.EmptyResultException;
 import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.api.security.Secured;
 import fr.efrei.se.emapp.common.model.EmployeeTranscript;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -50,6 +51,8 @@ public class EmployeesResource {
             return Response.ok(gson.toJson(transcripts)).build();
         } catch (EmptyResultException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (EJBException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -66,7 +69,7 @@ public class EmployeesResource {
     public Response getOne(@PathParam("id")int id) {
         try {
             return Response.ok(gson.toJson(convertEmployee(jpaManager.read(id)))).build();
-        } catch (EmptyParameterException e) {
+        } catch (WrongParameterException e) {
             return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
         } catch (EmptyResultException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -87,7 +90,7 @@ public class EmployeesResource {
         try {
             jpaManager.removeEmployee(jpaManager.read(id));
             return Response.ok().build();
-        } catch (EmptyParameterException e) {
+        } catch (WrongParameterException e) {
             return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
         } catch (EmptyResultException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -106,8 +109,16 @@ public class EmployeesResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response putOne(@FormParam("employee")EmployeeTranscript employee) {
-        jpaManager.modifyEmployee(convertEmployeeTranscript(employee));
-        return Response.ok().build();
+        try {
+            jpaManager.modifyEmployee(convertEmployeeTranscript(employee));
+            return Response.ok().build();
+        } catch (WrongParameterException e) {
+            return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
+        } catch (EmptyResultException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (EJBException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     /**
@@ -121,7 +132,11 @@ public class EmployeesResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response postOne(@FormParam("employee")EmployeeTranscript employee) {
-        jpaManager.createEmployee(convertEmployeeTranscript(employee));
-        return Response.ok().build();
+        try {
+            jpaManager.createEmployee(convertEmployeeTranscript(employee));
+            return Response.ok().build();
+        } catch (EJBException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

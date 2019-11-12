@@ -2,6 +2,9 @@ package fr.efrei.se.emapp.web.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import fr.efrei.se.emapp.common.model.exception.UnauthorizedException;
+import fr.efrei.se.emapp.common.model.exception.WrongParameterException;
+import fr.efrei.se.emapp.common.model.exception.EmptyResultException;
 
 import javax.ws.rs.core.HttpHeaders;
 import java.io.*;
@@ -116,11 +119,14 @@ public class HttpRequestHelper {
             connection.getOutputStream().write(encodedParams);
         }
 
-
-        if(connection.getResponseCode() == 500)
-        {
-            throw new IOException("Http request returned an error 500 !");
-        }
+        if(connection.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR)
+            throw new IOException();
+        else if(connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND)
+            throw new EmptyResultException();
+        else if(connection.getResponseCode() == HttpURLConnection.HTTP_FORBIDDEN)
+            throw new UnauthorizedException();
+        else if(connection.getResponseCode() == HttpURLConnection.HTTP_BAD_METHOD)
+            throw new WrongParameterException();
 
         String result = readResponse(connection.getInputStream());
         connection.disconnect();
