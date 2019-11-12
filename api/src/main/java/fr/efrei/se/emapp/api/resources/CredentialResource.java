@@ -5,6 +5,7 @@ import fr.efrei.se.emapp.api.model.business.Credential;
 import fr.efrei.se.emapp.api.model.core.JPAManager;
 import fr.efrei.se.emapp.api.model.exception.EmptyParameterException;
 import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
+import fr.efrei.se.emapp.common.model.CredentialTranscript;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -27,20 +28,16 @@ public class CredentialResource {
 
     /**
      * authenticates the user using his login and password
-     * @param login of the user
-     * @param password of the user
+     * @param user incoming credential
      * @return returns a json serizialized profile of the user, including its autorization token level
      */
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    //todo tranform parameters in credential
-    public Response tryAuth(@FormParam("login")String login, @FormParam("password")String password) {
+    public Response tryAuth(@FormParam("user")CredentialTranscript user) {
         try {
-            Credential credential = new Credential(login, password);
-            credential = jpaManager.checkCredentials(credential);
-
+            Credential credential = jpaManager.checkCredentials(ResourceHelper.convertCredentialTranscript(user));
             return Response.ok(gson.toJson(ResourceHelper.convertCredential(credential))).build();
         } catch (EmptyParameterException e) {
             return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();

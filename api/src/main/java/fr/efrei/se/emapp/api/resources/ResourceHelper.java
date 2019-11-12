@@ -41,7 +41,7 @@ public class ResourceHelper {
         return credentialTranscript;
     }
 
-    public static Credential convertCredential(CredentialTranscript c) {
+    public static Credential convertCredentialTranscript(CredentialTranscript c) {
         Credential credential = new Credential();
         credential.setId(c.getId());
         credential.setLogin(c.getLogin());

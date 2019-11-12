@@ -3,6 +3,7 @@ package fr.efrei.se.emapp.api.resources;
 import com.google.gson.Gson;
 import fr.efrei.se.emapp.api.model.business.Employee;
 import fr.efrei.se.emapp.api.model.core.JPAManager;
+import fr.efrei.se.emapp.api.model.exception.EmptyParameterException;
 import fr.efrei.se.emapp.api.model.exception.EmptyResultException;
 import fr.efrei.se.emapp.common.security.Role;
 import fr.efrei.se.emapp.api.security.Secured;
@@ -37,10 +38,10 @@ public class EmployeesResource {
         ArrayList<EmployeeTranscript> transcripts = new ArrayList<>();
         try {
             jpaManager.getAll().forEach(e -> transcripts.add(ResourceHelper.convertEmployee(e)));
+            return Response.ok(gson.toJson(transcripts)).build();
         } catch (EmptyResultException e) {
-            e.printStackTrace();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(gson.toJson(transcripts)).build();
     }
 
     /**
@@ -53,7 +54,13 @@ public class EmployeesResource {
     @Secured({Role.USER, Role.ADMIN})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOne(@PathParam("id")int id) {
-        return Response.ok(gson.toJson(convertEmployee(jpaManager.read(id)))).build();
+        try {
+            return Response.ok(gson.toJson(convertEmployee(jpaManager.read(id)))).build();
+        } catch (EmptyParameterException e) {
+            return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
+        } catch (EmptyResultException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     /**
@@ -66,9 +73,14 @@ public class EmployeesResource {
     @Secured(Role.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteOne(@PathParam("id")int id) {
-        jpaManager.removeEmployee(jpaManager.read(id));
-        return Response.ok().build();
-
+        try {
+            jpaManager.removeEmployee(jpaManager.read(id));
+            return Response.ok().build();
+        } catch (EmptyParameterException e) {
+            return Response.status(Response.Status.METHOD_NOT_ALLOWED).build();
+        } catch (EmptyResultException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     /**
@@ -81,7 +93,7 @@ public class EmployeesResource {
     @Secured(Role.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response putOne(@PathParam("id")int id, @FormParam("employee")EmployeeTranscript employee) {
+    public Response putOne(@FormParam("employee")EmployeeTranscript employee) {
         jpaManager.modifyEmployee(convertEmployeeTranscript(employee));
         return Response.ok().build();
     }

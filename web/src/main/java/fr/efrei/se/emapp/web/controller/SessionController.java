@@ -57,12 +57,12 @@ public class SessionController implements IController {
      */
     private String logUser() {
         try {
-            HashMap<String, String> params = new HashMap<>();
-            params.put("login", request.getParameter("loginField"));
-            params.put("password", request.getParameter("pwdField"));
+            CredentialTranscript user = new CredentialTranscript();
+            user.setLogin(request.getParameter("loginField"));
+            user.setPassword(request.getParameter("pwdField"));
 
             //token is null cause the user is not yet authenticated
-            CredentialTranscript user = HttpRequestHelper.post(CREDENTIALS_URI, null, CredentialTranscript.class, params);
+            user = HttpRequestHelper.post(CREDENTIALS_URI, null, CredentialTranscript.class, "user", user);
             session.setAttribute("user", user);
             return JSP_WELCOME_PAGE;
         } catch (Exception e) {

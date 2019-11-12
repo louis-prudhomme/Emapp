@@ -11,7 +11,7 @@
         </init-param>
         <init-param>
             <param-name>jersey.config.server.provider.classnames</param-name>
-            <param-value>fr.efrei.se.emapp.api.resources.EmployeeConverterProvider</param-value>
+            <param-value>fr.efrei.se.emapp.api.resources.EmappConverterProvider</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

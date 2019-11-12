@@ -60,8 +60,10 @@ public class HttpRequestHelper {
         return cypher.fromJson(HttpRequestHelper.request(GET, uri, token), clazz);
     }
 
-    public static <T> T post(String uri, String token, Class<T> clazz, HashMap<String, String> params) throws IOException {
-        return cypher.fromJson(request(POST, uri, token, params), clazz);
+    public static <T> T post(String uri, String token, Class<T> clazz, String paramName, Object param) throws IOException {
+        HashMap<String, String> map = new HashMap<>();
+        map.put(paramName, cypher.toJson(param));
+        return cypher.fromJson(request(POST, uri, token, map), clazz);
     }
 
     public static String put(String uri, String token, String paramName, Object param) throws IOException {
