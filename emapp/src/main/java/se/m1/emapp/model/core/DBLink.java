@@ -8,32 +8,32 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * represents a connection to a database
+ * Represents a connection to the database
+ * Essentially a decorator for the {@link Connection} class
  */
 public class DBLink {
     /**
-     * default driver
-     * //todo put that in a proper configuration file (pom ?)
+     * Default driver
      */
     private static final String DEFAULT_DRIVER = "com.mysql.jdbc.Driver";
 
     /**
-     * connection parameters
+     * {@link Connection} parameters ; the DB’s URL, User and Password
      */
     private String databaseUrl, databaseUsername, databasePassword;
 
     /**
-     * java connection object
+     * {@link Connection} instance which effectively connects
      */
     private Connection connection;
 
     /**
-     * creates a new dblink instance with the given parameters
-     * it also registers the database driver
+     * Creates a new {@link DBLink} instance with the given parameters
+     * It also registers the database driver
      * @param databaseUrl url of the db
      * @param databaseUsername user of the db
      * @param databasePassword pwd of the db
-     * @return new dblink instance ; it has to be opened manually
+     * @return new {@link DBLink} instance ; it must be opened manually
      * @throws DBLDriverNotFoundException if the driver is not found
      */
     public static DBLink getNewInstance(String databaseUrl, String databaseUsername, String databasePassword) throws DBLDriverNotFoundException {
@@ -42,7 +42,7 @@ public class DBLink {
     }
 
     /**
-     * default constructor
+     * Default constructor
      * @param databaseUrl url of the db
      * @param databaseUsername user of the db
      * @param databasePassword pwd of the db
@@ -54,8 +54,8 @@ public class DBLink {
     }
 
     /**
-     * opens connection to the database
-     * @throws DBLUnderlyingException ¯\_(ツ)_/¯
+     * Opens the connection to the database
+     * @throws DBLUnderlyingException when everything fails
      */
     public void connect() throws DBLUnderlyingException {
         try {
@@ -66,9 +66,9 @@ public class DBLink {
     }
 
     /**
-     * checks if the connection to the database is opened
+     * Checks if the {@link Connection} to the database is opened
      * @return true if open, false if not
-     * @throws DBLUnderlyingException ¯\_(ツ)_/¯
+     * @throws DBLUnderlyingException something fails
      */
     public boolean isOpen() throws DBLUnderlyingException {
         try {
@@ -79,8 +79,8 @@ public class DBLink {
     }
 
     /**
-     * closes the connection to the database
-     * should be reopenable
+     * Closes the connection to the database
+     * Sould be reopenable
      * @throws DBLUnderlyingException usually when the connection is already closed
      */
     public void close() throws DBLUnderlyingException {
@@ -92,12 +92,12 @@ public class DBLink {
     }
 
     /**
-     * issues a new prepared query
-     * @param query string with wildcards ( "?" )
-     * @param expectedParameterTypes list of the expected parameters types
+     * Issues a new {@link PreparedQuery} representing an SQL order
+     * @param query {@link String}-formed SQL order with wildcards ( "?" ) in the place of parameters
+     * @param expectedParameterTypes {@link ArrayList} of the expected {@link PreparedStatementTypes}
      * @return new query with the specified string and parameters
-     * @throws PQWrongParameterException if the parameter count doesn't match with the query
-     * @throws DBLUnderlyingException underlying connection exception
+     * @throws PQWrongParameterException if the parameter count doesn't match with the {@link PreparedQuery}
+     * @throws DBLUnderlyingException underlying {@link DBLink} exception
      */
     public PreparedQuery prepareQuery(String query, ArrayList<PreparedStatementTypes> expectedParameterTypes) throws PQWrongParameterException, DBLUnderlyingException {
         if(!PreparedQuery.doesQueryMatchesExpectedParameters(query, expectedParameterTypes)){
@@ -111,10 +111,10 @@ public class DBLink {
     }
 
     /**
-     * issues a new prepared query (id-oriented, should only contain one wildcard)
-     * @param query string with wildcards ( "?" )
-     * @return a new prepared query
-     * @throws PQWrongParameterException if there is more than one wildcard in the query
+     * Issues a new {@link PreparedQuery} (id-oriented, should only contain one wildcard)
+     * @param query {@link String}-contained SQL statement with ONE (or zero) wildcard ( "?" )
+     * @return a new {@link PreparedQuery}
+     * @throws PQWrongParameterException if there is more than one wildcard in the {@link PreparedQuery}
      */
     public PreparedQuery prepareQuery(String query) throws PQWrongParameterException, DBLUnderlyingException {
         if(!PreparedQuery.doesQueryMatchesExpectedParameters(query)){
@@ -128,7 +128,7 @@ public class DBLink {
     }
 
     /**
-     * registers the driver to insure it is correctly used
+     * Registers the database driver to insure it is correctly used
      * @throws DBLDriverNotFoundException if the driver cannot be found, loaded or registered
      */
     private static void registerDriver() throws DBLDriverNotFoundException {

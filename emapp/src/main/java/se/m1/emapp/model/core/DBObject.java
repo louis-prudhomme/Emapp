@@ -2,7 +2,6 @@ package se.m1.emapp.model.core;
 
 import se.m1.emapp.model.core.exception.dbObject.*;
 import se.m1.emapp.model.core.exception.dbLink.DBLException;
-import se.m1.emapp.model.core.exception.dbLink.DBLUnderlyingException;
 import se.m1.emapp.model.core.exception.preparedQuery.PQException;
 import se.m1.emapp.utils.Tuple;
 
@@ -15,23 +14,32 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Represents database object.
+ * This abstract class only states base methods to mark classes as database objects
+ * It must be inherited to provide its full effects
+ *
+ * Upon inheritance, the child class MUST have the name of the represented object in the database
+ * Each field MUST have the same name, too
+ * Each database field MUST have public getter and setter whose naming convention MUST be « get<FieldName> »
+ */
 public abstract class DBObject {
 
     /**
-     * identifier of the object in the databse ;
-     * is equal to zero when the object has not yet been commited to db
-     * integer because the selectAll method crashes otherwise
+     * Identifier of the object in the databse ;
+     * It is equal to zero when the object has not yet been commited to db
+     * Integer because the selectAll method crashes otherwise
      */
     private Integer id;
 
     /**
-     * connection to the database
+     * {@link DBLink} instance representing the database connection
      */
     private DBLink dbLink;
 
     /**
      * default constructor, will serve for new object instances, not yet commited to database
-     * @param dbLink connection to the database
+     * @param dbLink {@link DBLink} instance representing the database connection
      */
     public DBObject(DBLink dbLink) {
         this.dbLink = dbLink;
@@ -39,7 +47,7 @@ public abstract class DBObject {
 
     /**
      * constructor for objects already stored in database (thus, with id)
-     * @param dbLink connection to the database
+     * @param dbLink {@link DBLink} instance representing the database connection
      * @param id of the object in the db
      */
     public DBObject(DBLink dbLink, Integer id) {
@@ -48,9 +56,11 @@ public abstract class DBObject {
     }
 
     /**
-     * creates a record for the object in the database
-     * @throws DBOException
-     * @throws PQException
+     * Creates a record corresponding the object instance in the database
+     * @return returns the number of database lines affected by the instruction
+     * @throws PQException {@link PreparedQuery}-related exception
+     * @throws DBOException {@link DBObject}-related exception
+     * @throws DBLException {@link DBLink}-related exception
      */
     public int create() throws PQException, DBOException, DBLException {
         HashMap<String, Tuple<Class, Object>> fieldsAndValues = getFieldsAndValues();
@@ -88,9 +98,10 @@ public abstract class DBObject {
     }
 
     /**
-     * reads the object record in the database
-     * @throws SQLException
-     * @throws PQException
+     * Reads the corresponding object (via its ID) in the database
+     * @throws PQException {@link PreparedQuery}-related exception
+     * @throws DBOException {@link DBObject}-related exception
+     * @throws DBLException {@link DBLink}-related exception
      */
     public void read() throws PQException, DBOException, DBLException {
         String query = "SELECT * FROM " +
@@ -107,8 +118,8 @@ public abstract class DBObject {
     }
 
     /**
-     * parses the results of a query into the field of the object
-     * @param resultSet of the query
+     * Parses the answer contained in a {@link ResultSet}
+     * @param resultSet result contained in the {@link ResultSet}
      * @throws DBOUnreachableSetter when the field corresponding setter is unreachable
      * @throws DBOCannotParseFieldException when the field cannot be parsed
      * @throws DBOCannotDetectFieldType when the field is not recognized
@@ -199,9 +210,9 @@ public abstract class DBObject {
     }
 
     /**
-     * deletes the object record in the database
-     * @throws PQException prepared query exception, usually when parameters are incorrect
-     * @throws DBLUnderlyingException problem with the database
+     * Deletes the object record in the database
+     * @throws PQException {@link PreparedQuery}-related exception
+     * @throws DBLException {@link DBLink}-related exception
      */
     public int delete() throws PQException, DBLException {
         String query = "DELETE FROM " +
@@ -212,10 +223,10 @@ public abstract class DBObject {
     }
 
     /**
-     * gets all the classe's fields and return their names, types and values for the ongoing instance
-     * for each reflection-obtained field of the class,
+     * Gets all the classe's {@link Field} and return their names, types and values for the ongoing instance
+     * for each reflection-obtained {@link Field} of the class,
      * it will try to obtain and invoke the corresponding getter
-     * @return hashmap of the classe's fields
+     * @return {@link HashMap} of the classe's fields
      * @throws DBOUnreachableGetter if either a getter cannot be found, accessed or invoked
      */
     private HashMap<String, Tuple<Class, Object>> getFieldsAndValues() throws DBOUnreachableGetter {
@@ -224,6 +235,7 @@ public abstract class DBObject {
         fieldsAndValues.put("id", new Tuple<>(Integer.class, id));
 
         for (Field f : this.getClass().getDeclaredFields()) {
+            //capitalization is necessary to comply with naming convention
             String getterName = "get" + capitalize(f.getName());
             try {
                 Method getter = this.getClass().getDeclaredMethod(getterName);
@@ -237,10 +249,10 @@ public abstract class DBObject {
     }
 
     /**
-     * converts java types to prepared statement types to allow generic query generation
-     * @param type of the field
-     * @return prepared statement type matching the initial field
-     * @throws DBOCannotDetectFieldType if there is not matching prepared statement type
+     * Converts {@link java.lang.reflect.Type} to {@link PreparedStatementTypes} to allow generic query generation
+     * @param type {@link Field} type
+     * @return {@link PreparedStatementTypes} matching the initial {@link java.lang.reflect.Type}
+     * @throws DBOCannotDetectFieldType if there is not matching {@link PreparedStatementTypes}
      */
     private PreparedStatementTypes parseJavaType(Class type) throws DBOCannotDetectFieldType {
         switch (type.getSimpleName()) {
@@ -257,37 +269,38 @@ public abstract class DBObject {
         }
     }
 
+    /**
+     * Getter for {@link DBObject} id
+     * @return the {@link DBObject} id
+     */
     public int getId() {
         return id;
     }
 
-    public DBLink getDbLink() {
-        return dbLink;
-    }
-
     /**
-     * capitalizes the first letter of a string
-     * @param s string to capitalize
-     * @return capitalized string
+     * Capitalizes the first letter of a {@link String}
+     * « exempleString » → « ExempleString »
+     * @param s {@link String} to capitalize
+     * @return capitalized {@link String}
      */
     private static String capitalize(String s) {
         return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
 
     /**
-     * selects all the records for a certain type of dbobject
-     * 1 selects everything in the table corresponding to the class given in parameter,
-     * 2 then creates a corresponding class
-     * 3 and askes it to parse all the remaining informations
-     * @param dbLink database connection
-     * @param target dbobject
-     * @param <T> dbobject
+     * Selects all the records for a certain {@link DBObject} child
+     * 1 Selects everything in the table corresponding to the {@link Class} given in parameter,
+     * 2 then creates a corresponding @link Class}
+     * 3 and asks it to parse all the remaining informations
+     * @param dbLink {@link DBLink} instance representing the database connection
+     * @param target {@link DBObject} child target
+     * @param <T> {@link DBObject} child, to insure type consistency
      * @return all the records
-     * @throws PQException prepared query exception, usually when a parameter is incorrect
-     * @throws DBLUnderlyingException problem with database connection, usually when its closed
-     * @throws DBOException problem with the data object, usually a missing field / getter / setter / constructor or database column
+     * @throws PQException {@link PreparedQuery}-related exception
+     * @throws DBOException {@link DBObject}-related exception
+     * @throws DBLException {@link DBLink}-related exception
      */
-    public static <T extends DBObject> ArrayList<T> selectAll(DBLink dbLink, Class<T> target) throws PQException, DBLUnderlyingException, DBOException {
+    public static <T extends DBObject> ArrayList<T> selectAll(DBLink dbLink, Class<T> target) throws PQException, DBLException, DBOException {
         ArrayList<T> objects = new ArrayList<>();
 
         String query = "SELECT * FROM " + target.getSimpleName();

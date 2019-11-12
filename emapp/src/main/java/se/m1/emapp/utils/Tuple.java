@@ -1,7 +1,7 @@
 package se.m1.emapp.utils;
 
 /**
- * represents a tuple
+ * Represents a tuple
  * @param <A>
  * @param <B>
  */

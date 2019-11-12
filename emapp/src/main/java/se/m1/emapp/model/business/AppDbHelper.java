@@ -12,27 +12,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * represents non-standard database interactions
+ * Represents non-standard database interactions
+ * Non-standard meaning not directly related to a {@link se.m1.emapp.model.core.DBObject}
  */
 public class AppDbHelper {
     /**
-     * connection to the database
+     * {@link DBLink} instance representing the database connection
      */
     private DBLink dbLink;
 
     /**
-     * default constructor
-     * @param dbLink link to the database
+     * Default constructor
+     * @param dbLink {@link DBLink} instance representing the database connection
      */
     public AppDbHelper(DBLink dbLink) {
         this.dbLink = dbLink;
     }
 
     /**
-     * returns a matching employee
-     * @param firstName duh
-     * @param lastName duh
-     * @return matching employee
+     * Returns a matching {@link Employee}
+     * @param firstName of the {@link Employee}
+     * @param lastName of the {@link Employee}
+     * @return matching {@link Employee}
      * @throws DatabaseCommunicationException underlying mechanisms failing
      * @throws EmptyResultException when no credentials where found for the specified parameters
      */

@@ -192,6 +192,14 @@ public class Controller extends HttpServlet {
         processRequest(request, response);
     }
 
+    /**
+     * Sets an error in the {@link HttpServletRequest} instance
+     * @param request servlet request
+     * @param response servlet response
+     * @param errorText error text
+     * @throws ServletException
+     * @throws IOException
+     */
     private void sendError(HttpServletRequest request, HttpServletResponse response, Exception errorText) throws ServletException, IOException {
         request.setAttribute("errorMessage", errorText.getMessage());
         request.setAttribute("firstDigit", 5);
@@ -202,7 +210,6 @@ public class Controller extends HttpServlet {
 
     /**
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

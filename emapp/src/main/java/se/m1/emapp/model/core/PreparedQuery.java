@@ -9,25 +9,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * represents a prepared query ;
- * is essentially a java prepared statement throwing exception when type mismatch
- * it cleans itself before each execution and can thus be reused
- * todo refactor preparedquery constructor to take a dblink parameter and check parameters type by itself
+ * Represents an SQL prepared query ;
+ * Is essentially a {@link PreparedStatement} decorator with explicit exceptions when types mismatch
+ * It cleans itself before each execution and can thus be reused
  */
 public class PreparedQuery {
     /**
-     * corresponding prepared statement
+     * {@link DBLink} instance representing the database connection
      */
     private PreparedStatement preparedStatement;
 
     /**
-     * types expected for query evaluation
+     * {@link PreparedStatementTypes} expected for query evaluation
      */
     private ArrayList<PreparedStatementTypes> expectedParameterTypes;
 
     /**
-     * this constructor serves when the only parameter in the query is an id
-     * @param preparedStatement corresponding prepared statement
+     * This constructor serves when the only parameter in the query is an id
+     * @param preparedStatement underlying {@link PreparedStatement}
      */
     PreparedQuery(PreparedStatement preparedStatement) {
         this.preparedStatement = preparedStatement;
@@ -36,8 +35,8 @@ public class PreparedQuery {
 
     /**
      * default constructor
-     * @param preparedStatement corresponding prepared statement
-     * @param expectedParameterTypes types expected for query evaluation
+     * @param preparedStatement underlying {@link PreparedStatement}
+     * @param expectedParameterTypes {@link PreparedStatementTypes} for query evaluation
      */
     PreparedQuery(PreparedStatement preparedStatement, ArrayList<PreparedStatementTypes> expectedParameterTypes) {
         this.preparedStatement = preparedStatement;
@@ -45,54 +44,46 @@ public class PreparedQuery {
     }
 
     /**
-     *
-     * @param id executes a query with only the id as parameter
-     * @return result of the query, usually the number of affected lines (should be one ?)
-     * @throws PQWrongParameterException
-     * @throws PQUnderlyingException
-     * @throws PQWrongParameterCountException
+     * Executes a {@link PreparedStatement} with the given id as only parameter
+     * @param id given id
+     * @return result of the {@link PreparedQuery}, usually the number of affected lines (should be one ?)
+     * @throws PQException {@link PreparedQuery}-related exception
      */
-    public ResultSet executeQuery(int id) throws PQUnderlyingException, PQWrongParameterException, PQWrongParameterCountException {
+    public ResultSet executeQuery(int id) throws PQException {
         ArrayList<String> p = new ArrayList<>();
         p.add(String.valueOf(id));
         return this.executeQuery(p);
     }
 
     /**
-     *
-     * @param id executes a query with only the id as parameter
-     * @return result of the query, usually the number of affected lines (should be one ?)
-     * @throws PQWrongParameterException
-     * @throws PQUnderlyingException
-     * @throws PQWrongParameterCountException
+     * Executes a {@link PreparedStatement} with the given id as only parameter
+     * @param id given id
+     * @return result of the {@link PreparedQuery}, usually the number of affected lines (should be one ?)
+     * @throws PQException {@link PreparedQuery}-related exception
      */
-    public int executeUpdate(int id) throws PQUnderlyingException, PQWrongParameterException, PQWrongParameterCountException {
+    public int executeUpdate(int id) throws PQException {
         ArrayList<String> p = new ArrayList<>();
         p.add(String.valueOf(id));
         return this.executeUpdate(p);
     }
 
     /**
-     *
-     * @return result of the query, usually the number of affected lines (should be one ?)
-     * @throws PQWrongParameterException
-     * @throws PQUnderlyingException
-     * @throws PQWrongParameterCountException
+     * Executes an update-type SQL statement
+     * @return result of the {@link PreparedQuery}, the number of affected lines (should be one ?)
+     * @throws PQException {@link PreparedQuery}-related exception
      */
-    public int executeUpdate() throws PQUnderlyingException, PQWrongParameterException, PQWrongParameterCountException {
+    public int executeUpdate() throws PQException {
         ArrayList<String> p = new ArrayList<>();
         expectedParameterTypes = new ArrayList<>();
         return this.executeUpdate(p);
     }
 
     /**
-     *
-     * @return result of the query, usually the number of affected lines (should be one ?)
-     * @throws PQWrongParameterException
-     * @throws PQUnderlyingException
-     * @throws PQWrongParameterCountException
+     * Executes an query-type SQL statement
+     * @return result of the {@link PreparedQuery}, usually the number of affected lines (should be one ?)
+     * @throws PQException {@link PreparedQuery}-related exception
      */
-    public ResultSet executeQuery() throws PQUnderlyingException, PQWrongParameterException, PQWrongParameterCountException {
+    public ResultSet executeQuery() throws PQException {
         ArrayList<String> p = new ArrayList<>();
         expectedParameterTypes = new ArrayList<>();
         return this.executeQuery(p);
@@ -100,13 +91,11 @@ public class PreparedQuery {
 
     /**
      * executes a query with the given parameters
-     * @param parameters list of the given parameters
-     * @return result of the query
-     * @throws PQWrongParameterException
-     * @throws PQUnderlyingException
-     * @throws PQWrongParameterCountException
+     * @param parameters {@link ArrayList} of parameters, which should match the expected {@link ArrayList} of {@link PreparedStatementTypes}
+     * @return result of the {@link PreparedQuery}
+     * @throws PQException {@link PreparedQuery}-related exception
      */
-    public ResultSet executeQuery(ArrayList<String> parameters) throws PQWrongParameterException, PQUnderlyingException, PQWrongParameterCountException {
+    public ResultSet executeQuery(ArrayList<String> parameters) throws PQException {
         try {
             checkQuery(parameters);
             return preparedStatement.executeQuery();
@@ -118,14 +107,12 @@ public class PreparedQuery {
     }
 
     /**
-     * executes a query with the given parameters
-     * @param parameters list of the given parameters
-     * @return result of the query
-     * @throws PQWrongParameterException
-     * @throws PQUnderlyingException
-     * @throws PQWrongParameterCountException
+     * Executes a query with the given parameters
+     * @param parameters {@link ArrayList} of parameters, which should match the expected {@link ArrayList} of {@link PreparedStatementTypes}
+     * @return result of the {@link PreparedQuery}
+     * @throws PQException {@link PreparedQuery}-related exception
      */
-    public int executeUpdate(ArrayList<String> parameters) throws PQWrongParameterCountException, PQWrongParameterException, PQUnderlyingException {
+    public int executeUpdate(ArrayList<String> parameters) throws PQException {
         try {
             checkQuery(parameters);
             return preparedStatement.executeUpdate();
@@ -137,12 +124,12 @@ public class PreparedQuery {
     }
 
     /**
-     * checks incoming parameters for the query
-     * @param parameters list of the desired parameters for the next execution
+     * Checks incoming parameters for the {@link PreparedQuery}
+     * @param parameters {@link ArrayList} of parameters
      * @throws PQTooMuchParameterException when there is too much parameters
      * @throws PQTooFewParameterException when there is too few parameters
-     * @throws PQUnderlyingException when there is a problem with the prepared statement (usually, the connection is closed
-     * @throws PQWrongParameterException when a wrong-type parameter was given to the query
+     * @throws PQUnderlyingException when there is a problem with the {@link PreparedStatement} (usually, the {@link java.sql.Connection} is closed
+     * @throws PQWrongParameterException when a wrong-type parameter was given to the {@link PreparedQuery}
      */
     private void checkQuery(ArrayList<String> parameters) throws PQTooMuchParameterException, PQTooFewParameterException, PQUnderlyingException, PQWrongParameterException {
         if(parameters.size() > expectedParameterTypes.size()) {
@@ -162,9 +149,9 @@ public class PreparedQuery {
     }
 
     /**
-     * enforces type check on the query’s parameters
-     * @param parameters given parameters
-     * @throws PQWrongParameterException usually, occurs when the parameter’s type is wrong, but can also occur if the connection is closed
+     * Enforces type check on the query’s parameters
+     * @param parameters {@link ArrayList} of parameters
+     * @throws PQWrongParameterException usually, occurs when at least one parameter type is wrong, but can also occur if the connection is closed
      */
     private void treatParameters(ArrayList<String> parameters) throws PQWrongParameterException {
         try {
@@ -200,9 +187,9 @@ public class PreparedQuery {
     }
 
     /**
-     * checks if a query has one parameter (id targeted queries)
-     * @param query target query
-     * @return true if the query as one or zero parameter
+     * Checks if a {@link String}-contained query has one parameter or less (for id-related queries)
+     * @param query target {@link PreparedQuery}
+     * @return true if the {@link PreparedQuery} as one or zero parameter
      * todo proper system
      */
     public static boolean doesQueryMatchesExpectedParameters(String query) {
