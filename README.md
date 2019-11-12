@@ -6,6 +6,8 @@ It consists of a simple application that aims to manage an employee list.
 
 # Versions
 
+Each of the three versions resides on a separate branch. They are conveniently named « v1 », « v2 » and « v3 ».
+
 ## 1
 
 - [x] JSP, Java Beans, Servlet and JDBC
@@ -14,7 +16,7 @@ It consists of a simple application that aims to manage an employee list.
 - [x] JSPs in /WEB-INF
 - [x] Java DB
 
-To pull this particular version, use `git`
+To pull this particular version, use `git checkout v1`
 
 ## 2
 
@@ -25,7 +27,7 @@ To pull this particular version, use `git`
 - [x] JPA Persistence
 - [x] MySQL DB
 
-To pull this particular version, use `git`
+To pull this particular version, use `git checkout v2`
 
 ## 3
 - [x] RESTful Services
@@ -33,7 +35,7 @@ To pull this particular version, use `git`
 - [ ] Sonarqube
 - [ ] JUnit
 
-To pull this particular version, use `git`
+To pull this particular version, use `git checkout v3`
 
 ## Bonus
 
@@ -58,6 +60,8 @@ Password:jee
 ```
 
 - V1 & V2 : 
+
+The EMPLOYEE table :
 ```
 ID int(32) AUTO_INCREMENT
 FIRSTNAME varchar(128)
@@ -72,8 +76,29 @@ EMAIL varchar(128)
 ```
 
 - V3 : 
-
-Modification of the DB : adding of a field named "ADMINSTATUS" : 
+Modification of the DB : adding of a field named "ADMINSTATUS" in the CREDENTIAL table : 
 ```
 ADMINSTATUS tinyint
 ```
+
+# Technical choices
+
+## DBLink (version 1)
+
+Knowing the benefits of persistence, we thought it would be a good idea to replicate these mecanisms, which we did in the first version using PreparedQueries and Reflection. 
+
+The result works quite well even though it is quite massive.
+
+## Dark theme (version 2)
+
+We worked on this project very hard and usually quite late at night ; we did not like scraching our eyes over blank pages so we made this dark theme.
+
+## Multi-module (version 3)
+
+We decided it would be better to separate the different parts of the application ; with this goal in mind, we broke it into three different Maven modules.
+
+- api represents the REST API part
+- web represents the webapp part
+- common is what is shared between the two others
+
+Common does not produce any WAR package.
