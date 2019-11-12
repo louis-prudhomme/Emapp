@@ -47,7 +47,7 @@ public class Controller extends HttpServlet {
         }
 
         if (request.getParameter("action") == null) {
-            request.getRequestDispatcher(JSP_ERROR_PAGE).forward(request, response);
+            request.getRequestDispatcher(JSP_HOME_PAGE).forward(request, response);
         } else {
             action = request.getParameter("action");
             session = request.getSession();
@@ -120,7 +120,7 @@ public class Controller extends HttpServlet {
                                 request.getParameter("inputLastName"), request.getParameter("inputHomePhone"),
                                 request.getParameter("inputMobilePhone"), request.getParameter("inputWorkPhone"),
                                 request.getParameter("inputAddress"), request.getParameter("inputPostalCode"),
-                                request.getParameter("inputCity"), request.getParameter("inputEmail"), false);
+                                request.getParameter("inputCity"), request.getParameter("inputEmail"));
                         try {
                             employee.update();
                             session.setAttribute("empList", DBObject.selectAll(dbLink, Employee.class));
@@ -133,7 +133,7 @@ public class Controller extends HttpServlet {
                                 request.getParameter("inputLastName"), request.getParameter("inputHomePhone"),
                                 request.getParameter("inputMobilePhone"), request.getParameter("inputWorkPhone"),
                                 request.getParameter("inputAddress"), request.getParameter("inputPostalCode"),
-                                request.getParameter("inputCity"), request.getParameter("inputEmail"), false);
+                                request.getParameter("inputCity"), request.getParameter("inputEmail"));
                         try {
                             employee.create();
                         } catch (DatabaseCommunicationException e) {

@@ -13,13 +13,12 @@ public class Employee extends DBObject {
     private String postalCode;
     private String city;
     private String email;
-    private boolean adminStatus;
 
     public Employee(DBLink dbLink, Integer id) {
         super(dbLink, id);
     }
 
-    public Employee(DBLink dbLink, Integer id, String firstName, String lastName, String homePhone, String mobilePhone, String workPhone, String address, String postalCode, String city, String email, boolean adminStatus) {
+    public Employee(DBLink dbLink, Integer id, String firstName, String lastName, String homePhone, String mobilePhone, String workPhone, String address, String postalCode, String city, String email) {
         super(dbLink, id);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,10 +29,9 @@ public class Employee extends DBObject {
         this.postalCode = postalCode;
         this.city = city;
         this.email = email;
-        this.adminStatus = adminStatus;
     }
 
-    public Employee(DBLink dbLink, String firstName, String lastName, String homePhone, String mobilePhone, String workPhone, String address, String postalCode, String city, String email, boolean adminStatus) {
+    public Employee(DBLink dbLink, String firstName, String lastName, String homePhone, String mobilePhone, String workPhone, String address, String postalCode, String city, String email) {
         super(dbLink);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -44,7 +42,6 @@ public class Employee extends DBObject {
         this.postalCode = postalCode;
         this.city = city;
         this.email = email;
-        this.adminStatus = adminStatus;
     }
 
     public String getFirstName() {
@@ -117,13 +114,5 @@ public class Employee extends DBObject {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean getAdminStatus() {
-        return adminStatus;
-    }
-
-    public void setAdminStatus(boolean adminStatus) {
-        this.adminStatus = adminStatus;
     }
 }

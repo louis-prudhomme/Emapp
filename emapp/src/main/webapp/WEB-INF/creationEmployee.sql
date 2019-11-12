@@ -10,6 +10,5 @@ CREATE TABLE employee (
   postalCode varchar(128),
   city varchar(128),
   email varchar(128),
-  adminStatus BOOLEAN,
   CONSTRAINT primary_key_employee PRIMARY KEY (id)
 );

@@ -29,10 +29,6 @@
                     <input type='text' name='pwdField' class="fadeIn third" placeholder="Password">
                     <input type='submit' class="fadeIn fourth" name='action' value='Login'>
                 </form>
-
-                <div id="formFooter">
-                    <a class="underlineHover" href="#">Forgot Password?</a>
-                </div>
             </div>
         </div>
     </body>
