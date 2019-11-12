@@ -1,8 +1,8 @@
 package fr.efrei.se.emapp.common.model;
 
 /**
- * serves as a common ground for the json serialization in the rest api ↔ web app communication
- * represents credentials
+ * This class serves as common ground for the web application to REST API communication
+ * Specifically, this class represents Credentials to allow their serialization
  */
 public class CredentialTranscript {
     private int id;

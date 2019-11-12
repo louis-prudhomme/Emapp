@@ -13,23 +13,26 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * this class is the rest api entry point for every credentials-related request
- * its primary purpose is to authenticate the user and return its profile, including his token
+ * This class is the REST API entry point for every {@link Credential}-related request
+ * Its primary purpose is to authenticate the user and return its profile, including his security token
  */
 @Path("credentials")
 public class CredentialResource {
     /**
-     * serialize classes to json
+     * {@link Gson} class to serialize and deserialize the incoming parameters and the answers
      */
     private Gson gson = new Gson();
 
+    /**
+     * {@link JPAManager} class to manage the {@link fr.efrei.se.emapp.api.model} classes
+     */
     @EJB
     private JPAManager jpaManager = new JPAManager();
 
     /**
-     * authenticates the user using his login and password
-     * @param user incoming credential
-     * @return returns a json serizialized profile of the user, including its autorization token level
+     * Authenticates an incoming user’s login and password against the database
+     * @param user {@link CredentialTranscript} containing the login and the password intel
+     * @return a JSON-serialized version of a {@link CredentialTranscript} containing all the user’s information if he exists
      */
     @POST
     @Path("/")

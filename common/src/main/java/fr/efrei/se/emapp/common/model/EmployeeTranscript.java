@@ -1,8 +1,8 @@
 package fr.efrei.se.emapp.common.model;
 
 /**
- * serves as a common ground for the json serialization in the rest api ↔ web app communication
- * represents employees
+ * This class serves as common ground for the web application to REST API communication
+ * Specifically, this class represents Employees to allow their serialization
  */
 public class EmployeeTranscript {
     private int id;

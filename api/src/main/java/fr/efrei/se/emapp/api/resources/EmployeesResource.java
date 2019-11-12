@@ -18,18 +18,26 @@ import java.util.ArrayList;
 import static fr.efrei.se.emapp.api.resources.ResourceHelper.*;
 
 /**
- * handles all employees-related requests
+ * Handles all the {@link Employee}-related requests
+ * Makes the CRUD
  */
 @Path("employees")
 public class EmployeesResource {
+    /**
+     * {@link Gson} class to serialize and deserialize the incoming parameters and the answers
+     */
     private Gson gson = new Gson();
 
+    /**
+     * {@link JPAManager} class to manage the {@link fr.efrei.se.emapp.api.model} classes
+     */
     @EJB
     private JPAManager jpaManager = new JPAManager();
 
     /**
-     * handles a general get request by returning all the employees in database
-     * @return json-serialized list of all the employees
+     * Handles an {@link HttpMethod} GET request without further parameters
+     * Returns all the employees in database
+     * @return JSON-serialized list of all {@link EmployeeTranscript}
      */
     @GET
     @Secured({Role.USER, Role.ADMIN})
@@ -37,6 +45,7 @@ public class EmployeesResource {
     public Response getAll() {
         ArrayList<EmployeeTranscript> transcripts = new ArrayList<>();
         try {
+            //conversion between {@link Employee} and {@link EmployeeTranscript}
             jpaManager.getAll().forEach(e -> transcripts.add(ResourceHelper.convertEmployee(e)));
             return Response.ok(gson.toJson(transcripts)).build();
         } catch (EmptyResultException e) {
@@ -45,9 +54,10 @@ public class EmployeesResource {
     }
 
     /**
-     * handles specialized get request and returns the one matching employee
-     * @param id of the wanted employee
-     * @return json-serialized employee
+     * Handles an {@link HttpMethod} GET request with an URL-specified ID
+     * Returns the one matching {@link Employee}
+     * @param id of the desired {@link Employee}
+     * @return a JSON-serialized {@link EmployeeTranscript} representing the desired {@link Employee} if it exists
      */
     @GET
     @Path("/{id}")
@@ -64,8 +74,9 @@ public class EmployeesResource {
     }
 
     /**
-     * handles delete requests on a particular id
-     * @param id of the employee one wants to delete
+     * Handles an {@link HttpMethod} DELETE request with an URL-specified ID
+     * Deletes the one matching {@link Employee}
+     * @param id of the desired {@link Employee}
      * @return http 200 all cases //todo faire un truc stylé pour la valeur de retour
      */
     @DELETE
@@ -84,8 +95,9 @@ public class EmployeesResource {
     }
 
     /**
-     * handles put requests
-     * semanticaly, should update employees
+     * Handles an {@link HttpMethod} PUT request with an URL-specified ID
+     * Updates the one matching {@link Employee}
+     * @param employee {@link EmployeeTranscript} representation of the {@link Employee} to update
      * @return http 200 all cases //todo faire un truc stylé pour la valeur de retour
      */
     @PUT
@@ -99,9 +111,10 @@ public class EmployeesResource {
     }
 
     /**
-     * handles post requests
-     * semanticaly, should create employees
-     * @return http 200 in all cases //todo faire un truc stylé pour la valeur de retour
+     * Handles an {@link HttpMethod} POST request with an URL-specified ID
+     * Creates the corresponding {@link Employee}
+     * @param employee {@link EmployeeTranscript} representation of the {@link Employee} to create
+     * @return http 200 all cases //todo faire un truc stylé pour la valeur de retour
      */
     @POST
     @Secured(Role.ADMIN)

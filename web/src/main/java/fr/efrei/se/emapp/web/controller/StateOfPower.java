@@ -1,7 +1,8 @@
 package fr.efrei.se.emapp.web.controller;
 
 /**
- * basic state of the application
+ * Represents the state of the application
+ * It is non-dependant of the user’s will
  */
 public enum StateOfPower {
     SESSION,

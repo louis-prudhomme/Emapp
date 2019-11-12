@@ -1,5 +1,8 @@
 package fr.efrei.se.emapp.api.model.exception;
 
+/**
+ * This exception should fire every time a {@link fr.efrei.se.emapp.api.model}-related operation is executed without parameters
+ */
 public class EmptyParameterException extends Exception {
     public EmptyParameterException() {
     }

@@ -1,5 +1,8 @@
 package fr.efrei.se.emapp.api.model.exception;
 
+/**
+ * This exception should fire every time a {@link fr.efrei.se.emapp.api.model}-related operation fails to return a result
+ */
 public class EmptyResultException extends Exception {
     public EmptyResultException() {
     }

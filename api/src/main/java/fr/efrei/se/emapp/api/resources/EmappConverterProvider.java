@@ -36,7 +36,7 @@ public class EmappConverterProvider implements ParamConverterProvider {
     }
 
     /**
-     * static class which effectively converts {@link String} json to {@link EmployeeTranscript}
+     * Static class which effectively converts {@link String} json to {@link EmployeeTranscript}
      */
     private static class EmployeeConverter implements ParamConverter<EmployeeTranscript> {
         Gson cypher = new Gson();
@@ -52,7 +52,7 @@ public class EmappConverterProvider implements ParamConverterProvider {
     }
 
     /**
-     * static class which effectively converts {@link String} json to {@link CredentialTranscript}
+     * Static class which effectively converts {@link String} json to {@link CredentialTranscript}
      */
     private static class CredentialConverter implements ParamConverter<CredentialTranscript> {
         Gson cypher = new Gson();

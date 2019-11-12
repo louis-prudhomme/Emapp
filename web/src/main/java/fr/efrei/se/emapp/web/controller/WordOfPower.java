@@ -1,7 +1,8 @@
 package fr.efrei.se.emapp.web.controller;
 
 /**
- * wanted user action, not dependant of the application’s state
+ * Represents the user input
+ * It is non-dependant of the application’s state
  */
 public enum WordOfPower {
     ADD,
@@ -14,9 +15,9 @@ public enum WordOfPower {
     NULL;
 
     /**
-     * parses from string
-     * @param s string
-     * @return a word
+     * Parses a {@link WordOfPower} from a {@link String} by trying to match it with enums names
+     * @param s {@link String} representing the name of the desired {@link WordOfPower}
+     * @return a matching {@link WordOfPower}
      */
     public static WordOfPower fromString(String s) {
         if(s == null) return NULL;

@@ -4,14 +4,13 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 
 /**
- * this interface specifies what should the application expect from a controller
- * a controller should be able to handle a request
+ * This interface specifies what should the application expect from a controller
  */
 public interface IController {
     /**
-     * tells the controller to handle user’s request
+     * Tells the controller to handle user’s request
      * @param action user's request
-     * @return a string representing the page to serve
+     * @return a {@link String} representing the page to serve
      * @throws ServletException unexpected, usually a database problem
      * @throws IOException unexpected
      */

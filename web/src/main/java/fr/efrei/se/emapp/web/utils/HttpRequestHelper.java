@@ -1,7 +1,6 @@
 package fr.efrei.se.emapp.web.utils;
 
 import com.google.gson.Gson;
-import com.google.gson.internal.$Gson$Preconditions;
 import com.google.gson.reflect.TypeToken;
 
 import javax.ws.rs.core.HttpHeaders;

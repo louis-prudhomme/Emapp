@@ -1,15 +1,15 @@
 package fr.efrei.se.emapp.common.security;
 
 /**
- * roles of the credentials
- * serves in the user authorization in the rest api
+ * Represents the roles attached to the {@link fr.efrei.se.emapp.common.model.CredentialTranscript}
+ * Allows the application to authorize users around
  */
 public enum Role {
     ADMIN("admin_token"),
     USER("user_token");
 
     /**
-     * name of the token in the file
+     * Name of the corresponding token in the token property file
      */
     public String tokenName;
 
@@ -18,9 +18,9 @@ public enum Role {
     }
 
     /**
-     * parses a role from a token name
-     * @param t token name
-     * @return a role
+     * Parses a {@link Role} from a {@link String} by trying to match it with enums names
+     * @param t {@link String} representing the name of the desired {@link Role}
+     * @return a matching {@link Role}
      */
     public static Role fromString(String t) {
         for (Role r : Role.values()) {
