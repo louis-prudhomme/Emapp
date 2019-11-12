@@ -50,9 +50,9 @@ This imposed us to start the project with Maven
 We also used MySQL (via XAMPP and MAMP), on port 8889
 
 # Database evolution according to versions : 
-```
-- V1 & V2 : 
 
+- V1 & V2 : 
+```
 ID int(32) AUTO_INCREMENT
 FIRSTNAME varchar(128)
 LASTNAME varchar(128)
@@ -68,5 +68,6 @@ EMAIL varchar(128)
 - V3 : 
 
 Modification of the DB : adding of a field named "ADMINSTATUS" : 
-
-- ADMINSTATUS tinyint
+```
+ADMINSTATUS tinyint
+```
