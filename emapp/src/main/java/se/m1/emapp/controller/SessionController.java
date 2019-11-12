@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import javax.ejb.EJBException;
 import se.m1.emapp.model.core.JPAManager;
 
 import static se.m1.emapp.utils.Constants.*;
@@ -50,9 +51,10 @@ public class SessionController implements IController {
      * @return a string representing the view to serve
      * @throws ServletException unexpected
      * @throws IOException unexpected
+     * @throws EJBException
      */
     @Override
-    public String handle(WordOfPower action) throws ServletException, IOException {
+    public String handle(WordOfPower action) throws ServletException, IOException,EJBException {
         switch (action) {
             case LOGIN:
                 return logUser();
@@ -69,8 +71,9 @@ public class SessionController implements IController {
      * @return either welcome page if the user was successfully logged in, or an error page
      * @throws ServletException unexpected
      * @throws IOException unexpected
+     * @throws EJBException
      */
-    private String logUser() throws ServletException, IOException {
+    private String logUser() throws ServletException, IOException,EJBException {
                     String login = request.getParameter("loginField");
                     String password = request.getParameter("pwdField");
                     user = null;

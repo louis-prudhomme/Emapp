@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import javax.ejb.EJB;
-import javax.servlet.http.HttpSession;
+import javax.ejb.EJBException;
 import se.m1.emapp.model.core.JPAManager;
 
 import static se.m1.emapp.utils.Constants.*;
@@ -35,7 +35,7 @@ public class TheOneServlet extends HttpServlet {
      * @param request
      * @param response
      * @throws ServletException
-     * @throws IOException 
+     * @throws IOException, ServletException
      */
      private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //parses the action parameter into a WordOfPower enum
@@ -51,10 +51,16 @@ public class TheOneServlet extends HttpServlet {
         //gets controller
         controller = ControllerFactory.dispatch(request, response,jpa, state);
         if(controller == null) {
-            
+            setErrorMessage(request,null,"404");
             nextPage = JSP_ERROR_PAGE;
         } else {
-            nextPage = controller.handle((WordOfPower)request.getAttribute("action"));
+            try{
+                nextPage = controller.handle((WordOfPower)request.getAttribute("action"));
+            }catch(EJBException e){
+                setErrorMessage(request,"DATABASE CONNECTION ERROR",DB_COM_ERROR_CODE);
+                request.setAttribute("commit", true);
+                nextPage = JSP_ERROR_PAGE;
+            }
         }
 
         //if the next page is welcome.jsp we load the list containing all the employees
@@ -64,7 +70,7 @@ public class TheOneServlet extends HttpServlet {
             request.removeAttribute("action");
         }
 
-        if(request.getParameter("action") != null && request.getParameter("action").equalsIgnoreCase(WordOfPower.COMMIT.name())) {
+        if(request.getParameter("action") != null && request.getParameter("action").equalsIgnoreCase(WordOfPower.COMMIT.name())&&request.getAttribute("commit")==null) {
             response.sendRedirect("se.m1.emapp.controller");
         } else {
             request.getRequestDispatcher(nextPage).forward(request, response);
@@ -78,8 +84,8 @@ public class TheOneServlet extends HttpServlet {
      * @param error exception raised during application execution
      * @param errorCode 404, 50x…
      */
-    public static void setErrorMessage(HttpServletRequest request, Exception error, String errorCode) {
-        request.setAttribute("errorMessage", error.getMessage());
+    public static void setErrorMessage(HttpServletRequest request, String error, String errorCode) {
+        request.setAttribute("errorMessage", error);
         request.setAttribute("firstDigit", errorCode.charAt(0));
         request.setAttribute("secondDigit",  errorCode.charAt(1));
         request.setAttribute("thirdDigit",  errorCode.charAt(2));
