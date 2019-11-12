@@ -50,6 +50,12 @@ This imposed us to start the project with Maven
 We also used MySQL (via XAMPP and MAMP), on port 8889
 
 # Database evolution according to versions : 
+- Database settings :
+```
+Name:JEEPRJ
+User:jee
+Password:jee
+```
 
 - V1 & V2 : 
 ```
