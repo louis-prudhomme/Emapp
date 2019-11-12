@@ -102,3 +102,7 @@ We decided it would be better to separate the different parts of the application
 - common is what is shared between the two others
 
 Common does not produce any WAR package.
+
+## Multi-branch organization
+
+Throghout the project we made heavy use of git branches.
